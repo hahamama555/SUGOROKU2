@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>自由設定すごろく</title>
+
+<title>ギフトすごろく</title>
 
 <style>
+
 *{
   box-sizing:border-box;
   -webkit-tap-highlight-color:transparent;
@@ -13,693 +15,1132 @@
 
 html,body{
   margin:0;
+  padding:0;
   width:100%;
   height:100%;
   overflow:hidden;
   background:#111;
-  font-family:-apple-system,BlinkMacSystemFont,
-  "Noto Sans JP","Hiragino Kaku Gothic ProN",
-  Meiryo,sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Noto Sans JP",
+    "Hiragino Kaku Gothic ProN",
+    Meiryo,
+    sans-serif;
 }
 
 body{
   display:flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
 }
 
 .app{
+
   position:relative;
+
   width:min(100vw,56.25vh);
+
   height:min(100vh,177.7778vw);
-  aspect-ratio:9/16;
+
+  aspect-ratio:9 / 16;
+
   overflow:hidden;
-  background:linear-gradient(180deg,#fff8fb,#f5f1ff 55%,#eef8ff);
+
+  background:
+    linear-gradient(
+      180deg,
+      #fff7fb 0%,
+      #f5f1ff 55%,
+      #edf8ff 100%
+    );
 }
 
+
 /* =========================
-上部
+タイトル
 ========================= */
 
 .header{
+
   height:8%;
+
+  padding:
+    1.5%
+    2%
+    0;
+
   text-align:center;
-  padding:1% 2% 0;
+
 }
 
 .title{
+
   margin:0;
-  font-size:clamp(14px,4.2vw,22px);
+
+  font-size:
+    clamp(14px,4.3vw,22px);
+
   line-height:1.08;
+
   font-weight:1000;
+
 }
 
 .subtitle{
-  margin-top:.5%;
-  font-size:clamp(7px,1.8vw,10px);
+
+  margin-top:1%;
+
+  font-size:
+    clamp(7px,1.9vw,10px);
+
   color:#666;
-  font-weight:800;
+
+  font-weight:900;
+
 }
 
+
 /* =========================
-ランキング
+TOP3
 ========================= */
 
 .rank{
-  height:7.5%;
-  margin:0 2.3%;
+
+  height:7%;
+
+  margin:
+    0
+    2.5%;
+
   padding:1%;
+
   background:#fff;
-  border-radius:11px;
-  box-shadow:0 3px 10px rgba(0,0,0,.08);
+
+  border-radius:12px;
+
+  box-shadow:
+    0 3px 12px rgba(0,0,0,.08);
+
 }
 
 .rank-title{
+
   height:23%;
+
   text-align:center;
-  font-size:clamp(7px,1.9vw,10px);
+
+  font-size:
+    clamp(7px,1.8vw,10px);
+
   font-weight:1000;
+
 }
 
 .rank-list{
-  height:72%;
+
+  height:73%;
+
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:4px;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:5px;
+
 }
 
 .rank-item{
+
   min-width:0;
-  border-radius:8px;
+
+  border-radius:9px;
+
   display:flex;
+
   flex-direction:column;
+
   align-items:center;
+
   justify-content:center;
+
   overflow:hidden;
-  background:#eee;
+
 }
 
-.rank-item:nth-child(1){background:#fff0a5;}
-.rank-item:nth-child(2){background:#eee;}
-.rank-item:nth-child(3){background:#efdcc7;}
+.rank-item:nth-child(1){
+  background:#fff0a5;
+}
+
+.rank-item:nth-child(2){
+  background:#eeeeee;
+}
+
+.rank-item:nth-child(3){
+  background:#efdcc7;
+}
 
 .rank-medal{
-  font-size:clamp(10px,2.8vw,15px);
+
+  font-size:
+    clamp(10px,2.8vw,15px);
+
   line-height:1;
+
 }
 
 .rank-name{
-  max-width:95%;
+
+  max-width:94%;
+
   overflow:hidden;
+
   text-overflow:ellipsis;
+
   white-space:nowrap;
-  font-size:clamp(6px,1.8vw,9px);
+
+  font-size:
+    clamp(6px,1.9vw,10px);
+
   font-weight:1000;
+
 }
 
 .rank-pos{
-  font-size:clamp(5px,1.5vw,8px);
+
+  font-size:
+    clamp(5px,1.5vw,8px);
+
   color:#666;
+
   font-weight:900;
+
 }
+
+
+/* =========================
+コマ選択
+========================= */
+
+.select-area{
+
+  height:6%;
+
+  margin:
+    1%
+    2.5%
+    0;
+
+}
+
+.select-button{
+
+  width:100%;
+
+  height:100%;
+
+  border:0;
+
+  border-radius:11px;
+
+  background:#222;
+
+  color:#fff;
+
+  font-size:
+    clamp(10px,3vw,15px);
+
+  font-weight:1000;
+
+}
+
+.select-button:active{
+
+  transform:scale(.98);
+
+}
+
 
 /* =========================
 現在選択
 ========================= */
 
 .selected{
+
   height:5%;
-  margin:1% 2.3% 0;
+
+  margin:
+    1%
+    2.5%
+    0;
+
   background:#fff;
+
   border-radius:10px;
+
   display:flex;
-  justify-content:center;
+
   align-items:center;
-  gap:5px;
-  box-shadow:0 2px 7px rgba(0,0,0,.06);
+
+  justify-content:center;
+
+  gap:6px;
+
+  box-shadow:
+    0 2px 8px rgba(0,0,0,.06);
+
 }
 
-.selected-small{
+.selected-label{
+
   color:#777;
-  font-size:clamp(7px,1.7vw,9px);
-  font-weight:800;
+
+  font-size:
+    clamp(7px,1.8vw,9px);
+
+  font-weight:900;
+
 }
 
 .selected-name{
-  max-width:65%;
+
+  max-width:68%;
+
   overflow:hidden;
+
   text-overflow:ellipsis;
+
   white-space:nowrap;
-  font-size:clamp(10px,3vw,15px);
+
+  font-size:
+    clamp(10px,3vw,15px);
+
   font-weight:1000;
+
 }
 
+
 /* =========================
-すごろく
+すごろくエリア
 ========================= */
 
 .board-area{
-  height:30%;
-  margin:1% 2.3% 0;
-  padding:1.2%;
+
+  height:43%;
+
+  margin:
+    1%
+    2.5%
+    0;
+
+  padding:1.5%;
+
   background:#fff;
-  border-radius:11px;
-  box-shadow:0 3px 10px rgba(0,0,0,.08);
+
+  border-radius:13px;
+
+  box-shadow:
+    0 4px 14px rgba(0,0,0,.1);
+
 }
 
 .board-title{
-  height:9%;
-  text-align:center;
-  font-size:clamp(7px,1.9vw,10px);
+
+  height:8%;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  font-size:
+    clamp(8px,2.2vw,12px);
+
   font-weight:1000;
+
 }
+
+
+/* =========================
+盤面
+
+6列 × 5行
+========================= */
 
 .board{
-  height:90%;
+
+  height:92%;
+
   display:grid;
-  grid-template-columns:repeat(6,1fr);
-  grid-template-rows:repeat(5,1fr);
-  gap:3px;
+
+  grid-template-columns:
+    repeat(6,1fr);
+
+  grid-template-rows:
+    repeat(5,1fr);
+
+  gap:4px;
+
 }
 
+
+/* =========================
+マス
+========================= */
+
 .cell{
+
   position:relative;
+
   min-width:0;
+
   min-height:0;
-  border:1px solid #d5d5d5;
-  border-radius:5px;
+
+  border:
+    2px solid #d9d9d9;
+
+  border-radius:8px;
+
   background:#fafafa;
+
   overflow:hidden;
+
 }
 
 .cell.goal{
-  background:#fff0a5;
-  border-color:#d2a500;
+
+  background:#fff1a3;
+
+  border-color:#d4a900;
+
 }
 
 .cell-number{
+
   position:absolute;
-  left:3px;
-  top:2px;
-  z-index:4;
-  font-size:clamp(6px,1.6vw,9px);
-  font-weight:1000;
+
+  top:3px;
+
+  left:4px;
+
+  z-index:10;
+
+  font-size:
+    clamp(7px,2vw,11px);
+
+  line-height:1;
+
   color:#777;
+
+  font-weight:1000;
+
 }
 
 .goal-label{
+
   position:absolute;
-  right:3px;
-  top:2px;
-  z-index:4;
-  font-size:clamp(5px,1.5vw,8px);
+
+  top:3px;
+
+  right:4px;
+
+  z-index:10;
+
+  font-size:
+    clamp(6px,1.8vw,10px);
+
+  color:#896900;
+
   font-weight:1000;
-  color:#8a6800;
+
 }
 
+
 /* =========================
-コマ
+コマ置き場
 ========================= */
 
 .pieces{
+
   position:absolute;
-  left:0;
-  right:0;
-  top:17%;
-  bottom:1%;
-  padding:2px;
+
+  left:2px;
+
+  right:2px;
+
+  top:22%;
+
+  bottom:2px;
 
   display:flex;
+
   flex-wrap:wrap;
+
   align-content:center;
+
   justify-content:center;
 
-  gap:3px 2px;
+  gap:4px;
 
   overflow:hidden;
+
 }
 
-.piece{
-  min-width:0;
-  max-width:48%;
 
-  padding:3px 5px;
+/* =========================
+大型コマ
+========================= */
+
+.piece{
+
+  max-width:95%;
+
+  min-width:45%;
+
+  padding:
+    5px
+    7px;
 
   border-radius:20px;
 
   color:#fff;
 
-  font-size:clamp(6px,1.8vw,9px);
-  line-height:1.25;
+  font-size:
+    clamp(7px,2.1vw,11px);
+
+  line-height:1.1;
 
   font-weight:1000;
 
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-
   text-align:center;
 
-  border:1px solid rgba(255,255,255,.9);
+  white-space:nowrap;
 
-  box-shadow:0 2px 3px rgba(0,0,0,.25);
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+
+  border:
+    2px solid rgba(255,255,255,.95);
+
+  box-shadow:
+    0 2px 5px rgba(0,0,0,.3);
 
   cursor:pointer;
 
-  flex-shrink:0;
 }
 
 .piece.selected-piece{
-  outline:2px solid #111;
-  transform:scale(1.1);
-  z-index:10;
+
+  outline:
+    3px solid #111;
+
+  transform:scale(1.08);
+
+  z-index:50;
+
 }
 
-/* =========================
-一覧
-========================= */
-
-.status{
-  height:20%;
-  margin:1% 2.3% 0;
-  padding:1%;
-  background:#fff;
-  border-radius:11px;
-  box-shadow:0 3px 10px rgba(0,0,0,.08);
-}
-
-.status-title{
-  height:9%;
-  text-align:center;
-  font-size:clamp(7px,1.9vw,10px);
-  font-weight:1000;
-}
-
-.status-grid{
-  height:90%;
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  grid-auto-rows:1fr;
-  gap:2px;
-  overflow:hidden;
-}
-
-.status-item{
-  min-width:0;
-  min-height:0;
-
-  border:1px solid #ddd;
-  border-radius:4px;
-
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-
-  padding:0 3px;
-
-  background:#fafafa;
-
-  font-size:clamp(4.8px,1.4vw,7px);
-  font-weight:900;
-
-  cursor:pointer;
-}
-
-.status-item.active{
-  background:#222;
-  color:#fff;
-  border-color:#222;
-}
-
-.status-name{
-  min-width:0;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-
-.status-pos{
-  flex-shrink:0;
-  margin-left:2px;
-  color:#ff3158;
-}
-
-.status-item.active .status-pos{
-  color:#fff;
-}
 
 /* =========================
 ギフト
 ========================= */
 
 .gift-area{
-  height:11%;
-  margin:1% 2.3% 0;
+
+  height:10%;
+
+  margin:
+    1%
+    2.5%
+    0;
+
   padding:1%;
+
   background:#fff;
+
   border-radius:11px;
-  box-shadow:0 3px 10px rgba(0,0,0,.08);
+
+  box-shadow:
+    0 3px 10px rgba(0,0,0,.08);
+
 }
 
 .gift-title{
-  height:22%;
+
+  height:23%;
+
   text-align:center;
-  font-size:clamp(7px,1.9vw,10px);
+
+  font-size:
+    clamp(7px,1.9vw,10px);
+
   font-weight:1000;
+
 }
 
 .gifts{
+
   height:74%;
+
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:4px;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:5px;
+
 }
 
 .gift{
+
   border:0;
-  border-radius:8px;
-  background:#f1f1f1;
-  font-size:clamp(7px,2vw,10px);
+
+  border-radius:9px;
+
+  background:#f0f0f0;
+
+  font-size:
+    clamp(7px,2vw,10px);
+
+  line-height:1.15;
+
   font-weight:1000;
+
 }
 
 .gift:active{
+
   transform:scale(.94);
+
 }
 
+
 /* =========================
-下ボタン
+操作ボタン
 ========================= */
 
 .controls{
-  height:6%;
-  margin:1% 2.3% 0;
+
+  height:7%;
+
+  margin:
+    1%
+    2.5%
+    0;
+
   display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  gap:4px;
+
+  grid-template-columns:
+    1fr
+    1fr
+    1fr;
+
+  gap:5px;
+
 }
 
 .control{
+
   border:0;
-  border-radius:8px;
+
+  border-radius:9px;
+
   color:#fff;
-  font-size:clamp(7px,1.8vw,10px);
+
+  font-size:
+    clamp(6px,1.8vw,10px);
+
   font-weight:1000;
+
 }
 
 .project{
   background:#5e35b1;
 }
 
-.settings{
-  background:#555;
+.gift-setting{
+  background:#00897b;
 }
 
 .reset{
   background:#222;
 }
 
+
 /* =====================================================
-モーダル共通
+モーダル
 ===================================================== */
 
 .modal{
+
   position:absolute;
+
   inset:0;
+
   z-index:100;
 
-  background:rgba(20,20,25,.68);
-
   display:flex;
+
   align-items:center;
+
   justify-content:center;
 
+  background:
+    rgba(20,20,25,.7);
+
   opacity:0;
+
   pointer-events:none;
 
   transition:.2s;
+
 }
 
 .modal.show{
+
   opacity:1;
+
   pointer-events:auto;
+
 }
 
 .modal-box{
+
   width:94%;
+
   max-height:92%;
 
   background:#fff;
+
   border-radius:18px;
 
   padding:14px;
 
   display:flex;
+
   flex-direction:column;
 
   overflow:hidden;
+
 }
 
 .modal-head{
+
   min-height:42px;
 
   display:flex;
+
   align-items:center;
+
   justify-content:space-between;
+
 }
 
 .modal-title{
-  font-size:clamp(14px,4vw,20px);
+
+  font-size:
+    clamp(14px,4vw,20px);
+
   font-weight:1000;
+
 }
 
 .close{
+
   width:38px;
+
   height:38px;
 
   border:0;
+
   border-radius:50%;
 
   background:#eee;
 
-  font-size:18px;
+  font-size:20px;
+
   font-weight:1000;
+
 }
 
+
 /* =====================================================
-企画設定
+設定
 ===================================================== */
 
 .project-content{
+
+  flex:1;
+
   overflow:auto;
-  padding:5px 1px 10px;
+
+  padding:4px 1px 10px;
+
 }
 
 .setting-label{
+
   display:block;
-  margin:10px 0 4px;
+
+  margin:
+    10px
+    0
+    4px;
 
   font-size:11px;
+
   font-weight:1000;
+
 }
 
 .input{
+
   width:100%;
+
   height:40px;
 
-  border:1px solid #ddd;
+  border:
+    1px solid #ddd;
+
   border-radius:8px;
 
-  padding:0 9px;
+  padding:
+    0
+    9px;
 
   font-size:13px;
+
   font-weight:800;
+
   outline:none;
+
 }
 
 .small-row{
+
   display:grid;
-  grid-template-columns:1fr 100px;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
   gap:6px;
+
 }
 
 .help{
+
   margin-top:4px;
+
   color:#777;
+
   font-size:9px;
+
   line-height:1.4;
+
 }
 
 .pref-edit-grid{
+
   display:grid;
-  grid-template-columns:repeat(2,1fr);
+
+  grid-template-columns:
+    repeat(2,1fr);
+
   gap:5px;
 
   margin-top:5px;
+
 }
 
 .pref-edit{
+
   display:grid;
-  grid-template-columns:28px 1fr;
+
+  grid-template-columns:
+    28px
+    1fr;
+
   gap:4px;
+
 }
 
 .num{
+
   display:flex;
+
   align-items:center;
+
   justify-content:center;
 
   background:#eee;
+
   border-radius:6px;
 
   font-size:9px;
+
   font-weight:1000;
+
 }
 
 .pref-edit input{
+
+  width:100%;
+
   height:34px;
 
-  border:1px solid #ddd;
+  border:
+    1px solid #ddd;
+
   border-radius:7px;
 
   padding:0 5px;
 
   font-size:10px;
+
   font-weight:800;
+
 }
 
 .modal-buttons{
+
   display:grid;
-  grid-template-columns:1fr 1fr;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
   gap:6px;
 
   margin-top:8px;
+
 }
 
 .modal-button{
+
   height:42px;
+
   border:0;
+
   border-radius:9px;
+
   font-weight:1000;
+
 }
 
 .save{
+
   background:#222;
+
   color:#fff;
+
 }
 
 .cancel{
+
   background:#eee;
+
 }
 
+
 /* =====================================================
-都道府県/コマ選択
+コマ選択画面
 ===================================================== */
 
 .choose-content{
-  overflow:auto;
+
   flex:1;
+
+  overflow:auto;
+
 }
 
 .choose-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:5px;
 
-  padding:5px 1px;
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:7px;
+
+  padding:6px 1px;
+
 }
 
 .choose-btn{
-  min-height:42px;
 
-  border:1px solid #ddd;
-  border-radius:9px;
+  min-height:48px;
 
-  background:#f8f8f8;
+  border:
+    1px solid #ddd;
 
-  font-size:clamp(8px,2.5vw,12px);
+  border-radius:10px;
+
+  background:#f7f7f7;
+
+  font-size:
+    clamp(8px,2.6vw,13px);
+
   font-weight:1000;
+
 }
 
 .choose-btn.current{
+
   background:#222;
+
   color:#fff;
+
 }
+
+
+/* =====================================================
+ギフト設定
+===================================================== */
+
+.gift-setting-row{
+
+  margin-bottom:11px;
+
+}
+
+.gift-setting-title{
+
+  margin-bottom:4px;
+
+  font-size:10px;
+
+  font-weight:1000;
+
+}
+
+.gift-input-row{
+
+  display:grid;
+
+  grid-template-columns:
+    45px
+    1fr
+    70px;
+
+  gap:5px;
+
+}
+
 
 /* =====================================================
 POPUP
 ===================================================== */
 
 .popup{
+
   position:absolute;
+
   inset:0;
+
   z-index:300;
 
-  background:rgba(0,0,0,.45);
-
   display:flex;
-  justify-content:center;
+
   align-items:center;
 
+  justify-content:center;
+
+  background:
+    rgba(0,0,0,.45);
+
   opacity:0;
+
   pointer-events:none;
+
 }
 
 .popup.show{
+
   opacity:1;
+
   pointer-events:auto;
+
 }
 
 .popup-box{
-  width:76%;
+
+  width:78%;
+
   max-width:300px;
 
   background:#fff;
 
   border-radius:20px;
 
-  padding:22px 14px;
+  padding:22px 15px;
 
   text-align:center;
+
 }
 
 .popup-icon{
+
   font-size:44px;
+
 }
 
 .popup-title{
-  margin-top:3px;
+
+  margin-top:4px;
+
   font-size:19px;
+
   font-weight:1000;
+
 }
 
 .popup-text{
-  margin-top:5px;
+
+  margin-top:6px;
+
   font-size:12px;
+
+  line-height:1.5;
+
   color:#555;
+
   font-weight:800;
+
 }
 
 .popup-close{
-  width:100%;
-  height:40px;
 
-  margin-top:12px;
+  width:100%;
+
+  height:42px;
+
+  margin-top:13px;
 
   border:0;
-  border-radius:9px;
+
+  border-radius:10px;
 
   background:#222;
+
   color:#fff;
 
   font-weight:1000;
+
 }
+
 </style>
 </head>
 
+
 <body>
 
+
 <div class="app">
+
 
 <!-- =========================
 タイトル
@@ -707,11 +1148,15 @@ POPUP
 
 <div class="header">
 
-<h1 class="title" id="title">
+<h1
+class="title"
+id="title">
 🗾 出身県はどこ？県民パワーでGOALを目指せ！
 </h1>
 
-<div class="subtitle" id="subtitle">
+<div
+class="subtitle"
+id="subtitle">
 指定ギフトでコマを進めよう！
 </div>
 
@@ -719,7 +1164,7 @@ POPUP
 
 
 <!-- =========================
-ランキング
+TOP3
 ========================= -->
 
 <div class="rank">
@@ -728,29 +1173,22 @@ POPUP
 🏆 現在のTOP3
 </div>
 
-<div class="rank-list" id="rankList"></div>
+<div
+class="rank-list"
+id="rankList">
+</div>
 
 </div>
 
 
 <!-- =========================
-選択ボタン
+コマ選択
 ========================= -->
 
-<div style="height:6.5%;margin:1% 2.3% 0;">
+<div class="select-area">
 
 <button
 class="select-button"
-style="
-width:100%;
-height:100%;
-border:0;
-border-radius:11px;
-background:#222;
-color:#fff;
-font-size:clamp(11px,3.2vw,16px);
-font-weight:1000;
-"
 onclick="openChoose()">
 
 🎯 コマを選ぶ
@@ -766,43 +1204,39 @@ onclick="openChoose()">
 
 <div class="selected">
 
-<span class="selected-small">
+<span class="selected-label">
 現在選択中
 </span>
 
-<span class="selected-name" id="selectedName">
+<span
+class="selected-name"
+id="selectedName">
+
 まだ選択されていません
+
 </span>
 
 </div>
 
 
 <!-- =========================
-盤面
+大型すごろく
 ========================= -->
 
 <div class="board-area">
 
-<div class="board-title" id="boardTitle">
+<div
+class="board-title"
+id="boardTitle">
+
 🏁 30マス先がGOAL！
-</div>
-
-<div class="board" id="board"></div>
 
 </div>
 
-
-<!-- =========================
-コマ一覧
-========================= -->
-
-<div class="status">
-
-<div class="status-title" id="statusTitle">
-📊 全コマの現在位置
+<div
+class="board"
+id="board">
 </div>
-
-<div class="status-grid" id="statusGrid"></div>
 
 </div>
 
@@ -813,11 +1247,16 @@ onclick="openChoose()">
 
 <div class="gift-area">
 
-<div class="gift-title" id="giftTitle">
+<div class="gift-title">
+
 🎁 指定ギフトが来たらコマを進める！
+
 </div>
 
-<div class="gifts" id="giftButtons"></div>
+<div
+class="gifts"
+id="giftButtons">
+</div>
 
 </div>
 
@@ -837,7 +1276,7 @@ onclick="openProjectSettings()">
 </button>
 
 <button
-class="control settings"
+class="control gift-setting"
 onclick="openGiftSettings()">
 
 🎁 ギフト設定
@@ -856,10 +1295,12 @@ onclick="resetGame()">
 
 
 <!-- =====================================================
-企画設定モーダル
+企画設定
 ===================================================== -->
 
-<div class="modal" id="projectModal">
+<div
+class="modal"
+id="projectModal">
 
 <div class="modal-box">
 
@@ -872,9 +1313,7 @@ onclick="resetGame()">
 <button
 class="close"
 onclick="closeProjectSettings()">
-
 ×
-
 </button>
 
 </div>
@@ -882,14 +1321,14 @@ onclick="closeProjectSettings()">
 
 <div class="project-content">
 
+
 <label class="setting-label">
 企画タイトル
 </label>
 
 <input
 class="input"
-id="titleInput"
-value="🗾 出身県はどこ？県民パワーでGOALを目指せ！">
+id="titleInput">
 
 
 <label class="setting-label">
@@ -898,12 +1337,11 @@ value="🗾 出身県はどこ？県民パワーでGOALを目指せ！">
 
 <input
 class="input"
-id="subtitleInput"
-value="指定ギフトでコマを進めよう！">
+id="subtitleInput">
 
 
 <label class="setting-label">
-コマ数
+コマ数 ／ GOAL
 </label>
 
 <div class="small-row">
@@ -914,7 +1352,6 @@ id="pieceCountInput"
 type="number"
 min="1"
 max="47"
-value="47"
 onchange="buildPieceInputs()">
 
 <input
@@ -922,13 +1359,15 @@ class="input"
 id="goalInput"
 type="number"
 min="1"
-max="100"
-value="30">
+max="100">
 
 </div>
 
 <div class="help">
-左：コマ数　／　右：GOALまでのマス数
+
+コマ数は1～47個。
+GOALは1～100マス。
+
 </div>
 
 
@@ -940,6 +1379,7 @@ value="30">
 class="pref-edit-grid"
 id="pieceEditGrid">
 </div>
+
 
 </div>
 
@@ -973,9 +1413,13 @@ onclick="closeProjectSettings()">
 コマ選択
 ===================================================== -->
 
-<div class="modal" id="chooseModal">
+<div
+class="modal"
+id="chooseModal">
 
-<div class="modal-box" style="height:88%;">
+<div
+class="modal-box"
+style="height:88%;">
 
 <div class="modal-head">
 
@@ -992,6 +1436,7 @@ onclick="closeChoose()">
 </button>
 
 </div>
+
 
 <div class="choose-content">
 
@@ -1011,9 +1456,13 @@ id="chooseGrid">
 ギフト設定
 ===================================================== -->
 
-<div class="modal" id="giftModal">
+<div
+class="modal"
+id="giftModal">
 
-<div class="modal-box" style="height:88%;">
+<div
+class="modal-box"
+style="height:88%;">
 
 <div class="modal-head">
 
@@ -1031,15 +1480,12 @@ onclick="closeGiftSettings()">
 
 </div>
 
-<div class="project-content">
 
-<div id="giftSettingsRows"></div>
-
-<div class="help">
-ギフト名・アイコン・進むマス数を自由に変更できます。
+<div
+class="project-content"
+id="giftSettingsRows">
 </div>
 
-</div>
 
 <div class="modal-buttons">
 
@@ -1070,19 +1516,27 @@ onclick="closeGiftSettings()">
 POPUP
 ===================================================== -->
 
-<div class="popup" id="popup">
+<div
+class="popup"
+id="popup">
 
 <div class="popup-box">
 
-<div class="popup-icon" id="popupIcon">
+<div
+class="popup-icon"
+id="popupIcon">
 🎁
 </div>
 
-<div class="popup-title" id="popupTitle">
+<div
+class="popup-title"
+id="popupTitle">
 コマが進んだ！
 </div>
 
-<div class="popup-text" id="popupText">
+<div
+class="popup-text"
+id="popupText">
 </div>
 
 <button
@@ -1103,8 +1557,9 @@ onclick="closePopup()">
 
 <script>
 
+
 /* =====================================================
-初期設定
+基本設定
 ===================================================== */
 
 let projectTitle =
@@ -1117,7 +1572,7 @@ let GOAL=30;
 
 
 /* =====================================================
-初期47コマ
+47都道府県
 ===================================================== */
 
 let pieces=[
@@ -1181,7 +1636,7 @@ let pieces=[
 
 
 /* =====================================================
-カラフルカラー
+カラー
 ===================================================== */
 
 const colors=[
@@ -1217,7 +1672,6 @@ const colors=[
 "#00695c",
 "#689f38",
 "#9e9d24",
-"#ef6c00",
 "#ff6f00",
 "#e65100",
 "#b71c1c",
@@ -1244,6 +1698,7 @@ let positions={};
 
 let selectedPiece=null;
 
+
 function initializePositions(){
 
   const old=positions;
@@ -1253,7 +1708,7 @@ function initializePositions(){
   pieces.forEach(name=>{
 
     positions[name]=
-      old[name] || 0;
+      old[name] ?? 0;
 
   });
 
@@ -1267,47 +1722,40 @@ function initializePositions(){
 let gifts=[
 
 {
-icon:"❤️",
-name:"ハートミー",
-move:1
+  icon:"❤️",
+  name:"ハートミー",
+  move:1
 },
 
 {
-icon:"🍩",
-name:"ドーナツ",
-move:3
+  icon:"🍩",
+  name:"ドーナツ",
+  move:3
 },
 
 {
-icon:"🎁",
-name:"指定ギフト",
-move:5
+  icon:"🎁",
+  name:"指定ギフト",
+  move:5
 },
 
 {
-icon:"⭐",
-name:"スペシャル",
-move:10
+  icon:"⭐",
+  name:"スペシャル",
+  move:10
 },
 
 {
-icon:"🌟",
-name:"特大ギフト",
-move:20
+  icon:"🌟",
+  name:"特大ギフト",
+  move:20
 }
 
 ];
 
 
 /* =====================================================
-初期化
-===================================================== */
-
-initializePositions();
-
-
-/* =====================================================
-タイトル更新
+タイトル
 ===================================================== */
 
 function updateTitle(){
@@ -1331,7 +1779,7 @@ function updateTitle(){
 
 
 /* =====================================================
-盤面作成
+盤面
 ===================================================== */
 
 function createBoard(){
@@ -1342,6 +1790,50 @@ function createBoard(){
   board.innerHTML="";
 
 
+  /*
+    最大GOALが100でも画面内に
+    収まるように、表示マス数を
+    GOALに合わせる。
+    
+    ただし画面を大きく保つため、
+    25マスを基本表示。
+    
+    26マス以上は盤面をスクロール
+    できるようにする。
+  */
+
+  board.style.overflowY=
+    GOAL>30
+    ?
+    "auto"
+    :
+    "hidden";
+
+
+  /*
+    GOALが30以下なら
+    6×5の大型マス
+  */
+
+  if(GOAL<=30){
+
+    board.style.gridTemplateColumns=
+      "repeat(6,1fr)";
+
+    board.style.gridTemplateRows=
+      "repeat(5,1fr)";
+
+  }else{
+
+    board.style.gridTemplateColumns=
+      "repeat(6,1fr)";
+
+    board.style.gridAutoRows=
+      "minmax(52px,1fr)";
+
+  }
+
+
   for(let i=1;i<=GOAL;i++){
 
     const cell=
@@ -1349,40 +1841,48 @@ function createBoard(){
 
     cell.className="cell";
 
-    cell.id="cell-"+i;
+    cell.id=
+      "cell-"+i;
 
 
     const number=
       document.createElement("div");
 
-    number.className="cell-number";
+    number.className=
+      "cell-number";
 
     number.textContent=i;
 
 
-    const piecesArea=
+    const area=
       document.createElement("div");
 
-    piecesArea.className="pieces";
+    area.className=
+      "pieces";
 
-    piecesArea.id="pieces-"+i;
+    area.id=
+      "pieces-"+i;
 
 
     cell.appendChild(number);
 
-    cell.appendChild(piecesArea);
+    cell.appendChild(area);
 
 
     if(i===GOAL){
 
       cell.classList.add("goal");
 
+
       const label=
         document.createElement("div");
 
-      label.className="goal-label";
+      label.className=
+        "goal-label";
 
-      label.textContent="🏁GOAL";
+      label.textContent=
+        "🏁GOAL";
+
 
       cell.appendChild(label);
 
@@ -1397,25 +1897,26 @@ function createBoard(){
 
 
 /* =====================================================
-コマ名を短く表示
+コマ表示
 ===================================================== */
 
 function shortName(name){
 
-  if(name.length<=5){
+  /*
+    大きく表示するため、
+    省略を最小限にする。
+  */
+
+  if(name.length<=7){
 
     return name;
 
   }
 
-  return name.substring(0,5)+"…";
+  return name.substring(0,7)+"…";
 
 }
 
-
-/* =====================================================
-盤面コマ描画
-===================================================== */
 
 function renderPieces(){
 
@@ -1434,7 +1935,11 @@ function renderPieces(){
       positions[name] || 0;
 
 
-    if(pos<=0)return;
+    if(pos<=0){
+
+      return;
+
+    }
 
 
     const area=
@@ -1443,7 +1948,11 @@ function renderPieces(){
       );
 
 
-    if(!area)return;
+    if(!area){
+
+      return;
+
+    }
 
 
     const piece=
@@ -1467,19 +1976,15 @@ function renderPieces(){
 
 
     piece.style.background=
-      colors[index % colors.length];
+      colors[
+        index %
+        colors.length
+      ];
 
 
-    piece.title=
-      name+
-      " / "+
-      pos+
-      "マス";
+    piece.onclick=(event)=>{
 
-
-    piece.onclick=(e)=>{
-
-      e.stopPropagation();
+      event.stopPropagation();
 
       selectPiece(name);
 
@@ -1494,104 +1999,75 @@ function renderPieces(){
 
 
 /* =====================================================
-一覧作成
+TOP3
 ===================================================== */
 
-function createStatus(){
+function updateRanking(){
 
-  const grid=
+  const list=
     document.getElementById(
-      "statusGrid"
+      "rankList"
     );
 
-  grid.innerHTML="";
+  list.innerHTML="";
 
 
-  pieces.forEach(name=>{
+  const sorted=
+    pieces
+    .map(name=>({
 
-    const item=
-      document.createElement("div");
+      name:name,
 
+      pos:
+        positions[name] || 0
 
-    item.className="status-item";
-
-    item.id=
-      "status-"+name;
-
-
-    item.onclick=()=>{
-
-      selectPiece(name);
-
-    };
+    }))
+    .sort(
+      (a,b)=>b.pos-a.pos
+    )
+    .slice(0,3);
 
 
-    item.innerHTML=`
-
-      <span class="status-name">
-        ${name}
-      </span>
-
-      <span class="status-pos">
-        ${positions[name]}/${GOAL}
-      </span>
-
-    `;
+  const medals=[
+    "🥇",
+    "🥈",
+    "🥉"
+  ];
 
 
-    grid.appendChild(item);
+  sorted.forEach(
+    (item,index)=>{
 
-  });
+      const div=
+        document.createElement(
+          "div"
+        );
 
-}
-
-
-/* =====================================================
-一覧更新
-===================================================== */
-
-function updateStatus(){
-
-  const grid=
-    document.getElementById(
-      "statusGrid"
-    );
+      div.className=
+        "rank-item";
 
 
-  pieces.forEach(name=>{
+      div.innerHTML=`
 
-    const item=
-      document.getElementById(
-        "status-"+name
-      );
+        <div class="rank-medal">
+          ${medals[index]}
+        </div>
 
+        <div class="rank-name">
+          ${item.name}
+        </div>
 
-    if(!item)return;
+        <div class="rank-pos">
+          ${item.pos}/${GOAL}マス
+        </div>
 
-
-    const pos=
-      positions[name] || 0;
-
-
-    item.innerHTML=`
-
-      <span class="status-name">
-        ${name}
-      </span>
-
-      <span class="status-pos">
-        ${pos}/${GOAL}
-      </span>
-
-    `;
+      `;
 
 
-    item.classList.toggle(
-      "active",
-      name===selectedPiece
-    );
+      list.appendChild(div);
 
-  });
+    }
+  );
 
 }
 
@@ -1604,22 +2080,38 @@ function selectPiece(name){
 
   selectedPiece=name;
 
-
   document.getElementById(
     "selectedName"
   ).textContent=name;
-
-
-  updateStatus();
 
   renderPieces();
 
 }
 
 
-/* =====================================================
-選択画面
-===================================================== */
+function openChoose(){
+
+  createChoose();
+
+  document
+    .getElementById(
+      "chooseModal"
+    )
+    .classList.add("show");
+
+}
+
+
+function closeChoose(){
+
+  document
+    .getElementById(
+      "chooseModal"
+    )
+    .classList.remove("show");
+
+}
+
 
 function createChoose(){
 
@@ -1634,19 +2126,25 @@ function createChoose(){
   pieces.forEach(name=>{
 
     const btn=
-      document.createElement("button");
+      document.createElement(
+        "button"
+      );
 
 
-    btn.className="choose-btn";
-
-    btn.textContent=name;
+    btn.className=
+      "choose-btn";
 
 
     if(name===selectedPiece){
 
-      btn.classList.add("current");
+      btn.classList.add(
+        "current"
+      );
 
     }
+
+
+    btn.textContent=name;
 
 
     btn.onclick=()=>{
@@ -1665,121 +2163,8 @@ function createChoose(){
 }
 
 
-function openChoose(){
-
-  createChoose();
-
-  document
-    .getElementById("chooseModal")
-    .classList.add("show");
-
-}
-
-
-function closeChoose(){
-
-  document
-    .getElementById("chooseModal")
-    .classList.remove("show");
-
-}
-
-
 /* =====================================================
-ランキング
-===================================================== */
-
-function updateRanking(){
-
-  const list=
-    document.getElementById(
-      "rankList"
-    );
-
-  list.innerHTML="";
-
-
-  const sorted=
-    pieces
-      .map(name=>({
-
-        name:name,
-        pos:positions[name] || 0
-
-      }))
-      .sort(
-        (a,b)=>b.pos-a.pos
-      )
-      .slice(0,3);
-
-
-  const medals=[
-    "🥇",
-    "🥈",
-    "🥉"
-  ];
-
-
-  sorted.forEach((item,index)=>{
-
-    const div=
-      document.createElement("div");
-
-
-    div.className="rank-item";
-
-
-    div.innerHTML=`
-
-      <div class="rank-medal">
-        ${medals[index]}
-      </div>
-
-      <div class="rank-name">
-        ${item.name}
-      </div>
-
-      <div class="rank-pos">
-        ${item.pos}/${GOAL}マス
-      </div>
-
-    `;
-
-
-    list.appendChild(div);
-
-  });
-
-}
-
-
-/* =====================================================
-全更新
-===================================================== */
-
-function updateAll(){
-
-  updateTitle();
-
-  createBoard();
-
-  createStatus();
-
-  createChoose();
-
-  renderPieces();
-
-  updateStatus();
-
-  updateRanking();
-
-  createGiftButtons();
-
-}
-
-
-/* =====================================================
-ギフトボタン
+ギフト
 ===================================================== */
 
 function createGiftButtons(){
@@ -1789,21 +2174,23 @@ function createGiftButtons(){
       "giftButtons"
     );
 
-
   area.innerHTML="";
 
 
-  gifts.slice(0,3)
+  gifts
+  .slice(0,3)
   .forEach(gift=>{
 
-    const btn=
-      document.createElement("button");
+    const button=
+      document.createElement(
+        "button"
+      );
 
 
-    btn.className="gift";
+    button.className="gift";
 
 
-    btn.innerHTML=
+    button.innerHTML=
       gift.icon+
       " "+
       gift.name+
@@ -1812,7 +2199,7 @@ function createGiftButtons(){
       "マス";
 
 
-    btn.onclick=()=>{
+    button.onclick=()=>{
 
       moveSelected(
         gift.move,
@@ -1822,7 +2209,7 @@ function createGiftButtons(){
     };
 
 
-    area.appendChild(btn);
+    area.appendChild(button);
 
   });
 
@@ -1840,7 +2227,7 @@ function moveSelected(move,icon){
     showPopup(
       "⚠️",
       "コマを選んでね！",
-      "「🎯 コマを選ぶ」から動かしたいコマを選択してください。"
+      "先に「🎯 コマを選ぶ」からコマを選択してください。"
     );
 
     return;
@@ -1858,7 +2245,7 @@ function moveSelected(move,icon){
       "🏁",
       "すでにGOAL！",
       selectedPiece+
-      " はすでにゴールしています。"
+      "はゴールしています。"
     );
 
     return;
@@ -1885,9 +2272,7 @@ function moveSelected(move,icon){
       "🏆",
       "GOAL！",
       selectedPiece+
-      " が "+
-      GOAL+
-      "マスを完走しました！"
+      "がゴールしました！"
     );
 
   }else{
@@ -1896,7 +2281,7 @@ function moveSelected(move,icon){
       icon,
       "コマが進んだ！",
       selectedPiece+
-      " が "+
+      "が"+
       (next-old)+
       "マス進みました！"
     );
@@ -1955,10 +2340,6 @@ function closeProjectSettings(){
 }
 
 
-/* =====================================================
-コマ入力欄
-===================================================== */
-
 function buildPieceInputs(){
 
   const count=
@@ -1980,15 +2361,15 @@ function buildPieceInputs(){
       "pieceEditGrid"
     );
 
-
   grid.innerHTML="";
 
 
   for(let i=0;i<count;i++){
 
     const wrapper=
-      document.createElement("div");
-
+      document.createElement(
+        "div"
+      );
 
     wrapper.className=
       "pref-edit";
@@ -2002,7 +2383,11 @@ function buildPieceInputs(){
 
       <input
         id="pieceInput-${i}"
-        value="${pieces[i] || "コマ"+(i+1)}"
+        value="${
+          pieces[i]
+          ||
+          "コマ"+(i+1)
+        }"
         maxlength="20">
 
     `;
@@ -2016,18 +2401,18 @@ function buildPieceInputs(){
 
 
 /* =====================================================
-企画設定保存
+企画保存
 ===================================================== */
 
 function saveProjectSettings(){
 
-  const newTitle=
+  const title=
     document.getElementById(
       "titleInput"
     ).value.trim();
 
 
-  const newSubtitle=
+  const subtitle=
     document.getElementById(
       "subtitleInput"
     ).value.trim();
@@ -2047,7 +2432,7 @@ function saveProjectSettings(){
     );
 
 
-  const newGoal=
+  const goal=
     Math.max(
       1,
       Math.min(
@@ -2082,17 +2467,19 @@ function saveProjectSettings(){
 
     if(!name){
 
-      name="コマ"+(i+1);
+      name=
+        "コマ"+(i+1);
 
     }
 
 
     /*
-      同じ名称がある場合は
-      自動的に番号を付ける
+      重複防止
     */
 
-    if(newPieces.includes(name)){
+    if(
+      newPieces.includes(name)
+    ){
 
       name=
         name+
@@ -2106,32 +2493,48 @@ function saveProjectSettings(){
   }
 
 
+  const oldPositions=
+    {...positions};
+
+
   projectTitle=
-    newTitle ||
+    title ||
     "すごろく企画";
 
 
   projectSubtitle=
-    newSubtitle ||
+    subtitle ||
     "指定ギフトでコマを進めよう！";
 
 
-  GOAL=newGoal;
+  GOAL=goal;
 
 
   pieces=newPieces;
 
 
-  initializePositions();
+  positions={};
 
 
-  /*
-    選択中のコマがなくなった場合
-  */
+  pieces.forEach(name=>{
+
+    positions[name]=
+      oldPositions[name] ?? 0;
+
+    positions[name]=
+      Math.min(
+        positions[name],
+        GOAL
+      );
+
+  });
+
 
   if(
     !selectedPiece ||
-    !pieces.includes(selectedPiece)
+    !pieces.includes(
+      selectedPiece
+    )
   ){
 
     selectedPiece=null;
@@ -2151,8 +2554,8 @@ function saveProjectSettings(){
 
   showPopup(
     "🎯",
-    "企画設定を保存！",
-    "テーマ・コマ数・コマ名称を変更しました。"
+    "設定を保存しました！",
+    "企画内容を変更しました。"
   );
 
 }
@@ -2164,68 +2567,63 @@ function saveProjectSettings(){
 
 function openGiftSettings(){
 
-  const rows=
+  const area=
     document.getElementById(
       "giftSettingsRows"
     );
 
-
-  rows.innerHTML="";
-
-
-  gifts.forEach((gift,index)=>{
-
-    const wrapper=
-      document.createElement("div");
+  area.innerHTML="";
 
 
-    wrapper.style.marginBottom="10px";
+  gifts.forEach(
+    (gift,index)=>{
+
+      const row=
+        document.createElement(
+          "div"
+        );
+
+      row.className=
+        "gift-setting-row";
 
 
-    wrapper.innerHTML=`
+      row.innerHTML=`
 
-      <div style="
-        font-size:10px;
-        font-weight:1000;
-        margin-bottom:3px;
-      ">
-        ギフト${index+1}
-      </div>
+        <div class="gift-setting-title">
+          🎁 ギフト${index+1}
+        </div>
 
-      <div style="
-        display:grid;
-        grid-template-columns:42px 1fr 65px;
-        gap:5px;
-      ">
+        <div class="gift-input-row">
 
-        <input
-          class="input"
-          id="giftIcon-${index}"
-          value="${gift.icon}"
-          maxlength="3">
+          <input
+            class="input"
+            id="giftIcon-${index}"
+            value="${gift.icon}"
+            maxlength="3">
 
-        <input
-          class="input"
-          id="giftName-${index}"
-          value="${gift.name}"
-          maxlength="12">
+          <input
+            class="input"
+            id="giftName-${index}"
+            value="${gift.name}"
+            maxlength="12">
 
-        <input
-          class="input"
-          id="giftMove-${index}"
-          type="number"
-          min="0"
-          max="100"
-          value="${gift.move}">
+          <input
+            class="input"
+            id="giftMove-${index}"
+            type="number"
+            min="0"
+            max="100"
+            value="${gift.move}">
 
-      </div>
+        </div>
 
-    `;
+      `;
 
 
-    rows.appendChild(wrapper);
+      area.appendChild(row);
 
-  });
+    }
+  );
 
 
   document
@@ -2248,56 +2646,54 @@ function closeGiftSettings(){
 }
 
 
-/* =====================================================
-ギフト設定保存
-===================================================== */
-
 function saveGiftSettings(){
 
-  gifts.forEach((gift,index)=>{
+  gifts.forEach(
+    (gift,index)=>{
 
-    const icon=
-      document.getElementById(
-        "giftIcon-"+index
-      ).value.trim();
-
-
-    const name=
-      document.getElementById(
-        "giftName-"+index
-      ).value.trim();
-
-
-    const move=
-      Number(
+      const icon=
         document.getElementById(
-          "giftMove-"+index
-        ).value
-      );
+          "giftIcon-"+index
+        ).value.trim();
 
 
-    gift.icon=
-      icon || "🎁";
+      const name=
+        document.getElementById(
+          "giftName-"+index
+        ).value.trim();
 
 
-    gift.name=
-      name || "ギフト";
+      const move=
+        Number(
+          document.getElementById(
+            "giftMove-"+index
+          ).value
+        );
 
 
-    gift.move=
-      Math.max(
-        0,
-        Math.min(
-          100,
-          isNaN(move)
-          ?
-          0
-          :
-          move
-        )
-      );
+      gift.icon=
+        icon || "🎁";
 
-  });
+
+      gift.name=
+        name || "ギフト";
+
+
+      gift.move=
+        Math.max(
+          0,
+          Math.min(
+            100,
+            isNaN(move)
+            ?
+            0
+            :
+            move
+          )
+        );
+
+    }
+  );
 
 
   closeGiftSettings();
@@ -2396,8 +2792,29 @@ function closePopup(){
 
 
 /* =====================================================
-初期起動
+全更新
 ===================================================== */
+
+function updateAll(){
+
+  updateTitle();
+
+  createBoard();
+
+  renderPieces();
+
+  updateRanking();
+
+  createGiftButtons();
+
+}
+
+
+/* =====================================================
+起動
+===================================================== */
+
+initializePositions();
 
 updateAll();
 
