@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
 <title>都道府県すごろく</title>
 
 <style>
@@ -13,7 +14,6 @@
 
 html,body{
   margin:0;
-  padding:0;
   width:100%;
   height:100%;
   overflow:hidden;
@@ -27,66 +27,75 @@ html,body{
   background:#222;
 }
 
-button,input{
+button,input,select{
   font-family:inherit;
 }
 
-/* =========================================
+button{
+  cursor:pointer;
+}
+
+/* ========================================
    9:16 メイン画面
-========================================= */
+======================================== */
 
 #app{
   position:relative;
   width:100vw;
   height:100dvh;
-  max-width:100vw;
-  max-height:100dvh;
   overflow:hidden;
-  background:linear-gradient(
-    180deg,
-    #fff7fb 0%,
-    #f4f1ff 55%,
-    #eefaff 100%
-  );
+
+  background:
+    linear-gradient(
+      180deg,
+      #fff8fc 0%,
+      #f4f0ff 55%,
+      #eefaff 100%
+    );
 }
 
-/* =========================================
+/* ========================================
    タイトル
-   ★ ここは固定高さ
-========================================= */
+======================================== */
 
 #header{
   position:absolute;
+  top:0;
   left:0;
   right:0;
-  top:0;
-  height:12dvh;
-  min-height:72px;
-  max-height:110px;
-  z-index:50;
+
+  height:11dvh;
+  min-height:65px;
 
   display:flex;
   flex-direction:column;
-  align-items:center;
   justify-content:center;
+  align-items:center;
 
-  padding:6px 10px;
+  padding:5px 8px;
 
-  background:#ffffff;
+  background:#fff;
+
   border-bottom:3px solid #222;
+
+  z-index:50;
+
   box-shadow:0 2px 8px rgba(0,0,0,.12);
 }
 
 #title{
   width:100%;
+
   margin:0;
-  padding:0;
+
+  text-align:center;
+
+  font-size:clamp(15px,4.8vw,27px);
+  line-height:1.15;
+
+  font-weight:1000;
 
   color:#111;
-  font-size:clamp(16px,5vw,28px);
-  font-weight:1000;
-  line-height:1.15;
-  text-align:center;
 
   white-space:nowrap;
   overflow:hidden;
@@ -94,150 +103,87 @@ button,input{
 }
 
 #subtitle{
+  margin-top:4px;
+
   width:100%;
-  margin-top:5px;
+
+  text-align:center;
+
+  font-size:clamp(8px,2.5vw,13px);
 
   color:#666;
-  font-size:clamp(9px,2.7vw,14px);
-  font-weight:800;
-  line-height:1.1;
-  text-align:center;
+
+  font-weight:900;
 
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
 }
 
-/* =========================================
-   メインコンテンツ
-========================================= */
+/* ========================================
+   メイン
+======================================== */
 
 #main{
   position:absolute;
+
+  top:11dvh;
   left:0;
   right:0;
-  top:12dvh;
   bottom:0;
 
-  padding:
-    7px
-    7px
-    max(7px, env(safe-area-inset-bottom))
-    7px;
+  padding:5px;
 
   display:flex;
   flex-direction:column;
-  gap:6px;
+
+  gap:5px;
 
   overflow:hidden;
 }
 
-/* =========================================
-   TOP3
-========================================= */
-
-#ranking{
-  flex:0 0 7.5%;
-  min-height:52px;
-
-  background:#fff;
-  border-radius:12px;
-  box-shadow:0 2px 8px rgba(0,0,0,.09);
-
-  padding:4px;
-}
-
-#rankingTitle{
-  height:25%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  font-size:clamp(8px,2.5vw,13px);
-  font-weight:1000;
-}
-
-#rankingList{
-  height:75%;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:4px;
-}
-
-.rank{
-  min-width:0;
-  border-radius:8px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:3px;
-
-  overflow:hidden;
-  font-weight:1000;
-}
-
-.rank:nth-child(1){
-  background:#fff0a0;
-}
-
-.rank:nth-child(2){
-  background:#eeeeee;
-}
-
-.rank:nth-child(3){
-  background:#efd8c0;
-}
-
-.rankMedal{
-  font-size:clamp(10px,3vw,16px);
-}
-
-.rankName{
-  max-width:65%;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-
-  font-size:clamp(7px,2.1vw,12px);
-}
-
-/* =========================================
-   コマ選択
-========================================= */
+/* ========================================
+   操作エリア
+======================================== */
 
 #selectRow{
   flex:0 0 6%;
-  min-height:42px;
+  min-height:38px;
 
   display:grid;
   grid-template-columns:1fr 1fr;
+
   gap:5px;
 }
 
 .actionButton{
   border:0;
-  border-radius:10px;
+  border-radius:9px;
 
-  color:#fff;
   background:#222;
+  color:#fff;
 
   font-size:clamp(9px,2.8vw,14px);
   font-weight:1000;
 }
 
+/* ========================================
+   選択中
+======================================== */
+
 #selectedBox{
   flex:0 0 5%;
-  min-height:34px;
-
-  border-radius:9px;
-  background:#fff;
+  min-height:31px;
 
   display:flex;
   align-items:center;
   justify-content:center;
 
-  box-shadow:0 2px 7px rgba(0,0,0,.06);
+  background:#fff;
+
+  border-radius:8px;
+
+  box-shadow:0 2px 6px rgba(0,0,0,.07);
 
   font-size:clamp(8px,2.5vw,13px);
   font-weight:1000;
@@ -245,54 +191,65 @@ button,input{
 
 #selectedLabel{
   color:#777;
-  margin-right:6px;
+  margin-right:5px;
 }
 
 #selectedName{
-  max-width:65%;
+  max-width:72%;
+
   overflow:hidden;
-  text-overflow:ellipsis;
   white-space:nowrap;
+  text-overflow:ellipsis;
 }
 
-/* =========================================
-   すごろく盤
-   ★ 一番大きく確保
-========================================= */
+/* ========================================
+   すごろく盤面
+======================================== */
 
 #boardBox{
   flex:1 1 auto;
   min-height:0;
 
+  display:flex;
+  flex-direction:column;
+
   background:#fff;
-  border-radius:13px;
+
+  border-radius:12px;
 
   padding:5px;
 
-  box-shadow:0 3px 12px rgba(0,0,0,.1);
+  box-shadow:0 3px 12px rgba(0,0,0,.10);
 
-  display:flex;
-  flex-direction:column;
   overflow:hidden;
 }
 
 #boardHeader{
-  flex:0 0 8%;
-  min-height:28px;
+  flex:0 0 7%;
+  min-height:25px;
 
   display:flex;
-  align-items:center;
   justify-content:center;
+  align-items:center;
 
-  font-size:clamp(9px,2.8vw,14px);
+  font-size:clamp(8px,2.7vw,14px);
+
   font-weight:1000;
+
+  color:#222;
 }
+
+/* ========================================
+   盤面
+======================================== */
 
 #board{
   flex:1;
+
   min-height:0;
 
   display:grid;
+
   grid-template-columns:repeat(6,1fr);
   grid-template-rows:repeat(5,1fr);
 
@@ -301,9 +258,9 @@ button,input{
   overflow:hidden;
 }
 
-/* =========================================
+/* ========================================
    マス
-========================================= */
+======================================== */
 
 .cell{
   position:relative;
@@ -311,53 +268,93 @@ button,input{
   min-width:0;
   min-height:0;
 
-  border:2px solid #d7d7d7;
-  border-radius:9px;
-
   background:#fafafa;
+
+  border:2px solid #cfcfcf;
+
+  border-radius:10px;
 
   overflow:hidden;
 }
 
 .cell.goal{
-  background:#fff0a0;
-  border-color:#d4aa00;
+  background:#fff0a5;
+
+  border-color:#d4a600;
+}
+
+.cell.start{
+  background:#dff5ff;
+
+  border-color:#168bc4;
 }
 
 .cellNumber{
   position:absolute;
+
   top:2px;
   left:4px;
 
-  font-size:clamp(6px,1.9vw,10px);
-  color:#777;
-  font-weight:1000;
+  z-index:20;
 
-  z-index:5;
+  color:#666;
+
+  font-size:clamp(7px,2vw,11px);
+
+  font-weight:1000;
 }
 
-.goalText{
+/* ========================================
+   仕掛け
+======================================== */
+
+.trick{
   position:absolute;
-  top:2px;
-  right:3px;
 
-  font-size:clamp(5px,1.6vw,9px);
-  color:#8a6900;
+  top:17px;
+  left:2px;
+  right:2px;
+
+  z-index:15;
+
+  padding:3px 2px;
+
+  border-radius:5px;
+
+  background:#ffe1e1;
+
+  color:#c40000;
+
+  text-align:center;
+
+  font-size:clamp(5px,1.65vw,9px);
+
   font-weight:1000;
 
-  z-index:5;
+  line-height:1.05;
+
+  overflow:hidden;
 }
+
+/* ========================================
+   コマ置き場
+======================================== */
 
 .cellPieces{
   position:absolute;
+
   left:2px;
   right:2px;
-  top:18%;
+
+  top:36%;
   bottom:2px;
 
   display:flex;
+
   flex-wrap:wrap;
+
   align-content:center;
+
   justify-content:center;
 
   gap:3px;
@@ -365,10 +362,9 @@ button,input{
   overflow:hidden;
 }
 
-/* =========================================
-   コマ
-   ★ 大きめ
-========================================= */
+/* ========================================
+   大きめカラフルコマ
+======================================== */
 
 .piece{
   min-width:47%;
@@ -377,102 +373,114 @@ button,input{
   padding:5px 6px;
 
   border:2px solid #fff;
+
   border-radius:18px;
 
   color:#fff;
 
   font-size:clamp(6px,2vw,11px);
+
   font-weight:1000;
-  line-height:1.05;
+
+  line-height:1;
 
   text-align:center;
 
   white-space:nowrap;
+
   overflow:hidden;
+
   text-overflow:ellipsis;
 
-  box-shadow:0 2px 5px rgba(0,0,0,.28);
-
-  cursor:pointer;
+  box-shadow:
+    0 2px 5px rgba(0,0,0,.3);
 }
 
 .piece.active{
   outline:3px solid #111;
-  transform:scale(1.05);
-  z-index:10;
+
+  transform:scale(1.06);
+
+  z-index:30;
 }
 
-/* =========================================
+/* ========================================
    ギフト
-========================================= */
+======================================== */
 
 #giftBox{
-  flex:0 0 11%;
-  min-height:65px;
+  flex:0 0 10%;
+  min-height:56px;
 
   background:#fff;
-  border-radius:11px;
+
+  border-radius:10px;
 
   padding:4px;
 
-  box-shadow:0 2px 8px rgba(0,0,0,.08);
+  box-shadow:0 2px 7px rgba(0,0,0,.08);
 }
 
 #giftTitle{
-  height:27%;
+  height:28%;
 
   display:flex;
-  align-items:center;
   justify-content:center;
+  align-items:center;
 
-  font-size:clamp(7px,2.2vw,11px);
+  font-size:clamp(7px,2.3vw,12px);
+
   font-weight:1000;
 }
 
 #giftButtons{
-  height:73%;
+  height:72%;
 
   display:grid;
+
   grid-template-columns:repeat(3,1fr);
+
   gap:4px;
 }
 
 .giftButton{
   border:0;
+
   border-radius:8px;
 
-  background:#f1f1f1;
+  background:#f0f0f0;
 
   font-size:clamp(6px,2vw,10px);
+
   line-height:1.1;
 
   font-weight:1000;
 }
 
-.giftButton:active{
-  transform:scale(.96);
-}
-
-/* =========================================
-   下部操作
-========================================= */
+/* ========================================
+   下部設定
+======================================== */
 
 #bottomButtons{
   flex:0 0 6%;
-  min-height:40px;
+  min-height:38px;
 
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+
+  grid-template-columns:repeat(4,1fr);
+
   gap:4px;
 }
 
 .bottomButton{
   border:0;
-  border-radius:9px;
+
+  border-radius:8px;
 
   color:#fff;
 
-  font-size:clamp(6px,2vw,10px);
+  font-size:clamp(6px,1.9vw,10px);
+
   font-weight:1000;
 }
 
@@ -484,27 +492,33 @@ button,input{
   background:#00897b;
 }
 
+#trickSettingButton{
+  background:#e65100;
+}
+
 #resetButton{
   background:#222;
 }
 
-/* =========================================
+/* ========================================
    モーダル
-========================================= */
+======================================== */
 
 .modal{
   position:absolute;
+
   inset:0;
 
   z-index:100;
 
   display:none;
+
   align-items:center;
   justify-content:center;
 
-  padding:12px;
+  padding:10px;
 
-  background:rgba(0,0,0,.7);
+  background:rgba(0,0,0,.72);
 }
 
 .modal.show{
@@ -513,13 +527,15 @@ button,input{
 
 .modalBox{
   width:100%;
-  max-width:430px;
-  max-height:92%;
+  max-width:440px;
+
+  max-height:95%;
 
   background:#fff;
+
   border-radius:17px;
 
-  padding:12px;
+  padding:11px;
 
   display:flex;
   flex-direction:column;
@@ -528,59 +544,71 @@ button,input{
 }
 
 .modalHeader{
-  flex:0 0 42px;
+  flex:0 0 40px;
 
   display:flex;
+
   align-items:center;
   justify-content:space-between;
 }
 
 .modalTitle{
-  font-size:clamp(15px,4.5vw,21px);
+  font-size:clamp(14px,4.3vw,21px);
+
   font-weight:1000;
 }
 
 .closeButton{
-  width:36px;
-  height:36px;
+  width:34px;
+  height:34px;
 
   border:0;
+
   border-radius:50%;
 
   background:#eee;
 
   font-size:20px;
+
   font-weight:1000;
 }
 
 .modalScroll{
   flex:1;
+
   min-height:0;
 
   overflow:auto;
 
-  padding:2px 1px;
+  padding:2px;
 }
 
 .settingLabel{
   display:block;
 
-  margin:10px 0 4px;
+  margin:9px 0 4px;
 
-  font-size:11px;
+  font-size:10px;
+
   font-weight:1000;
 }
 
-.input{
+.input,
+.select{
   width:100%;
-  height:40px;
+
+  height:38px;
 
   border:1px solid #ddd;
+
   border-radius:8px;
 
-  padding:0 9px;
+  padding:0 8px;
 
-  font-size:12px;
+  background:#fff;
+
+  font-size:11px;
+
   font-weight:800;
 
   outline:none;
@@ -588,58 +616,31 @@ button,input{
 
 .row2{
   display:grid;
+
   grid-template-columns:1fr 1fr;
-  gap:6px;
-}
 
-.smallHelp{
-  margin-top:3px;
-
-  color:#777;
-
-  font-size:9px;
-  font-weight:700;
-}
-
-.pieceInputs{
-  display:grid;
-  grid-template-columns:1fr 1fr;
   gap:5px;
 }
 
-.pieceInput{
-  display:grid;
-  grid-template-columns:27px 1fr;
-  gap:4px;
-}
-
-.pieceNumber{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  background:#eee;
-  border-radius:6px;
-
-  font-size:9px;
-  font-weight:1000;
-}
-
 .modalButtons{
-  flex:0 0 43px;
+  flex:0 0 42px;
 
-  margin-top:8px;
+  margin-top:7px;
 
   display:grid;
+
   grid-template-columns:1fr 1fr;
-  gap:6px;
+
+  gap:5px;
 }
 
 .modalButton{
   border:0;
-  border-radius:9px;
 
-  font-size:12px;
+  border-radius:8px;
+
+  font-size:11px;
+
   font-weight:1000;
 }
 
@@ -652,69 +653,158 @@ button,input{
   background:#eee;
 }
 
-/* =========================================
+/* ========================================
    コマ選択
-========================================= */
+======================================== */
 
 .chooseGrid{
   display:grid;
+
   grid-template-columns:repeat(3,1fr);
-  gap:6px;
+
+  gap:5px;
 }
 
 .chooseButton{
-  min-height:48px;
+  min-height:46px;
 
   border:1px solid #ddd;
-  border-radius:9px;
+
+  border-radius:8px;
 
   background:#f7f7f7;
 
-  font-size:clamp(8px,2.6vw,13px);
+  font-size:clamp(7px,2.4vw,12px);
+
   font-weight:1000;
 }
 
 .chooseButton.current{
   background:#222;
+
   color:#fff;
 }
 
-/* =========================================
+/* ========================================
+   コマ設定
+======================================== */
+
+.pieceInputs{
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:5px;
+}
+
+.pieceInput{
+  display:grid;
+
+  grid-template-columns:25px 1fr;
+
+  gap:3px;
+}
+
+.pieceNumber{
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  background:#eee;
+
+  border-radius:6px;
+
+  font-size:9px;
+
+  font-weight:1000;
+}
+
+/* ========================================
    ギフト設定
-========================================= */
+======================================== */
 
 .giftSettingRow{
-  margin-bottom:11px;
+  margin-bottom:10px;
 }
 
 .giftSettingTitle{
-  margin-bottom:4px;
+  margin-bottom:3px;
 
   font-size:10px;
+
   font-weight:1000;
 }
 
 .giftSettingInputs{
   display:grid;
-  grid-template-columns:45px 1fr 70px;
-  gap:5px;
+
+  grid-template-columns:45px 1fr 65px;
+
+  gap:4px;
 }
 
-/* =========================================
+/* ========================================
+   仕掛け設定
+======================================== */
+
+.trickRow{
+  margin-bottom:7px;
+
+  padding:7px;
+
+  background:#f7f7f7;
+
+  border-radius:8px;
+}
+
+.trickRowTitle{
+  margin-bottom:4px;
+
+  font-size:10px;
+
+  font-weight:1000;
+}
+
+.trickInputs{
+  display:grid;
+
+  grid-template-columns:42px 1fr 58px;
+
+  gap:4px;
+}
+
+.trickMessage{
+  margin-top:4px;
+}
+
+.trickDescription{
+  margin-top:3px;
+
+  color:#777;
+
+  font-size:8px;
+
+  font-weight:700;
+}
+
+/* ========================================
    ポップアップ
-========================================= */
+======================================== */
 
 #popup{
   position:absolute;
+
   inset:0;
 
   z-index:300;
 
   display:none;
+
   align-items:center;
   justify-content:center;
 
-  background:rgba(0,0,0,.5);
+  background:rgba(0,0,0,.55);
 }
 
 #popup.show{
@@ -722,25 +812,31 @@ button,input{
 }
 
 .popupBox{
-  width:80%;
-  max-width:310px;
+  width:82%;
+
+  max-width:330px;
+
+  padding:18px 14px;
 
   background:#fff;
+
   border-radius:18px;
 
-  padding:20px 15px;
-
   text-align:center;
+
+  box-shadow:
+    0 8px 30px rgba(0,0,0,.3);
 }
 
 .popupIcon{
-  font-size:40px;
+  font-size:42px;
 }
 
 .popupTitle{
-  margin-top:4px;
+  margin-top:3px;
 
   font-size:18px;
+
   font-weight:1000;
 }
 
@@ -750,6 +846,7 @@ button,input{
   color:#555;
 
   font-size:12px;
+
   line-height:1.5;
 
   font-weight:800;
@@ -757,22 +854,27 @@ button,input{
 
 .popupClose{
   width:100%;
-  height:42px;
 
-  margin-top:14px;
+  height:40px;
+
+  margin-top:13px;
 
   border:0;
+
   border-radius:9px;
 
   background:#222;
+
   color:#fff;
+
+  font-size:12px;
 
   font-weight:1000;
 }
 
-/* =========================================
-   横幅が極端に小さい端末
-========================================= */
+/* ========================================
+   小さい画面
+======================================== */
 
 @media(max-width:340px){
 
@@ -782,6 +884,10 @@ button,input{
 
   #main{
     top:11dvh;
+
+    padding:3px;
+
+    gap:3px;
   }
 
   #board{
@@ -790,404 +896,513 @@ button,input{
 
   .cell{
     border-width:1px;
+
     border-radius:6px;
   }
 
   .piece{
     padding:3px 4px;
-    border-radius:13px;
   }
 
 }
 </style>
 </head>
 
+
 <body>
 
 <div id="app">
 
-  <!-- =====================================
-       ★ タイトル固定
-  ====================================== -->
+<!-- ======================================
+     タイトル
+====================================== -->
 
-  <header id="header">
+<header id="header">
 
-    <h1 id="title">
-      🗾 出身県はどこ？県民パワーでGOALを目指せ！
-    </h1>
+  <h1 id="title">
+    🗾 出身県はどこ？県民パワーでGOALを目指せ！
+  </h1>
 
-    <div id="subtitle">
-      指定ギフトでコマを進めよう！
+  <div id="subtitle">
+    指定ギフトでコマを進めよう！
+  </div>
+
+</header>
+
+
+<!-- ======================================
+     メイン
+====================================== -->
+
+<main id="main">
+
+
+  <!-- コマ選択・1マス -->
+  <section id="selectRow">
+
+    <button
+      class="actionButton"
+      onclick="openChooseModal()">
+
+      🎯 コマを選ぶ
+
+    </button>
+
+
+    <button
+      class="actionButton"
+      onclick="moveSelected(1,'🎲')">
+
+      🎲 1マス進む
+
+    </button>
+
+  </section>
+
+
+  <!-- 選択中 -->
+  <div id="selectedBox">
+
+    <span id="selectedLabel">
+      選択中：
+    </span>
+
+    <span id="selectedName">
+      コマを選んでください
+    </span>
+
+  </div>
+
+
+  <!-- ====================================
+       すごろく
+  ===================================== -->
+
+  <section id="boardBox">
+
+    <div id="boardHeader">
+      🏁 GOALまであと30マス
     </div>
 
-  </header>
+    <div id="board"></div>
+
+  </section>
 
 
-  <!-- =====================================
-       メイン
-  ====================================== -->
+  <!-- ====================================
+       ギフト
+  ===================================== -->
 
-  <main id="main">
+  <section id="giftBox">
 
-
-    <!-- TOP3 -->
-
-    <section id="ranking">
-
-      <div id="rankingTitle">
-        🏆 現在のTOP3
-      </div>
-
-      <div id="rankingList"></div>
-
-    </section>
-
-
-    <!-- コマ操作 -->
-
-    <section id="selectRow">
-
-      <button
-        class="actionButton"
-        onclick="openChooseModal()">
-        🎯 コマを選ぶ
-      </button>
-
-      <button
-        class="actionButton"
-        onclick="moveSelected(1,'🎲')">
-        🎲 1マス進む
-      </button>
-
-    </section>
-
-
-    <!-- 選択中 -->
-
-    <div id="selectedBox">
-
-      <span id="selectedLabel">
-        選択中：
-      </span>
-
-      <span id="selectedName">
-        コマを選んでください
-      </span>
-
+    <div id="giftTitle">
+      🎁 指定ギフトが来たらコマを進めよう！
     </div>
 
+    <div id="giftButtons"></div>
 
-    <!-- =================================
-         すごろく
-    ================================== -->
-
-    <section id="boardBox">
-
-      <div id="boardHeader">
-        🏁 GOALまであと0マス
-      </div>
-
-      <div id="board"></div>
-
-    </section>
+  </section>
 
 
-    <!-- =================================
-         ギフト
-    ================================== -->
+  <!-- ====================================
+       設定
+  ===================================== -->
 
-    <section id="giftBox">
+  <section id="bottomButtons">
 
-      <div id="giftTitle">
-        🎁 指定ギフトが来たらコマを進めよう！
-      </div>
+    <button
+      id="projectButton"
+      class="bottomButton"
+      onclick="openProjectModal()">
 
-      <div id="giftButtons"></div>
+      ⚙️ 企画
 
-    </section>
+    </button>
 
 
-    <!-- =================================
-         下部ボタン
-    ================================== -->
+    <button
+      id="giftSettingButton"
+      class="bottomButton"
+      onclick="openGiftModal()">
 
-    <section id="bottomButtons">
+      🎁 ギフト
 
-      <button
-        id="projectButton"
-        class="bottomButton"
-        onclick="openProjectModal()">
+    </button>
+
+
+    <button
+      id="trickSettingButton"
+      class="bottomButton"
+      onclick="openTrickModal()">
+
+      💥 仕掛け
+
+    </button>
+
+
+    <button
+      id="resetButton"
+      class="bottomButton"
+      onclick="resetGame()">
+
+      🔄 リセット
+
+    </button>
+
+  </section>
+
+</main>
+
+
+<!-- ======================================
+     企画設定
+====================================== -->
+
+<div
+  id="projectModal"
+  class="modal">
+
+  <div class="modalBox">
+
+    <div class="modalHeader">
+
+      <div class="modalTitle">
         ⚙️ 企画設定
-      </button>
+      </div>
 
       <button
-        id="giftSettingButton"
-        class="bottomButton"
-        onclick="openGiftModal()">
+        class="closeButton"
+        onclick="closeProjectModal()">
+
+        ×
+
+      </button>
+
+    </div>
+
+
+    <div class="modalScroll">
+
+      <label class="settingLabel">
+        企画タイトル
+      </label>
+
+      <input
+        id="titleInput"
+        class="input"
+        type="text">
+
+
+      <label class="settingLabel">
+        サブタイトル
+      </label>
+
+      <input
+        id="subtitleInput"
+        class="input"
+        type="text">
+
+
+      <label class="settingLabel">
+        コマ数 ／ GOAL
+      </label>
+
+      <div class="row2">
+
+        <input
+          id="pieceCountInput"
+          class="input"
+          type="number"
+          min="1"
+          max="47"
+          onchange="buildPieceInputs()">
+
+        <input
+          id="goalInput"
+          class="input"
+          type="number"
+          min="1"
+          max="30">
+
+      </div>
+
+
+      <label class="settingLabel">
+        コマの名称
+      </label>
+
+      <div
+        id="pieceInputs"
+        class="pieceInputs">
+      </div>
+
+    </div>
+
+
+    <div class="modalButtons">
+
+      <button
+        class="modalButton saveButton"
+        onclick="saveProjectSettings()">
+
+        保存
+
+      </button>
+
+
+      <button
+        class="modalButton cancelButton"
+        onclick="closeProjectModal()">
+
+        キャンセル
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ======================================
+     コマ選択
+====================================== -->
+
+<div
+  id="chooseModal"
+  class="modal">
+
+  <div
+    class="modalBox"
+    style="height:90%;">
+
+    <div class="modalHeader">
+
+      <div class="modalTitle">
+        🎯 コマを選ぶ
+      </div>
+
+      <button
+        class="closeButton"
+        onclick="closeChooseModal()">
+
+        ×
+
+      </button>
+
+    </div>
+
+
+    <div class="modalScroll">
+
+      <div
+        id="chooseGrid"
+        class="chooseGrid">
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ======================================
+     ギフト設定
+====================================== -->
+
+<div
+  id="giftModal"
+  class="modal">
+
+  <div
+    class="modalBox"
+    style="height:90%;">
+
+    <div class="modalHeader">
+
+      <div class="modalTitle">
         🎁 ギフト設定
-      </button>
-
-      <button
-        id="resetButton"
-        class="bottomButton"
-        onclick="resetGame()">
-        🔄 リセット
-      </button>
-
-    </section>
-
-
-  </main>
-
-
-  <!-- =====================================
-       企画設定
-  ====================================== -->
-
-  <div
-    id="projectModal"
-    class="modal">
-
-    <div class="modalBox">
-
-      <div class="modalHeader">
-
-        <div class="modalTitle">
-          ⚙️ 企画設定
-        </div>
-
-        <button
-          class="closeButton"
-          onclick="closeProjectModal()">
-          ×
-        </button>
-
-      </div>
-
-
-      <div class="modalScroll">
-
-
-        <label class="settingLabel">
-          企画タイトル
-        </label>
-
-        <input
-          id="titleInput"
-          class="input"
-          type="text">
-
-
-        <label class="settingLabel">
-          サブタイトル
-        </label>
-
-        <input
-          id="subtitleInput"
-          class="input"
-          type="text">
-
-
-        <label class="settingLabel">
-          コマ数 ／ GOAL
-        </label>
-
-        <div class="row2">
-
-          <input
-            id="pieceCountInput"
-            class="input"
-            type="number"
-            min="1"
-            max="47"
-            onchange="buildPieceInputs()">
-
-          <input
-            id="goalInput"
-            class="input"
-            type="number"
-            min="1"
-            max="30">
-
-        </div>
-
-        <div class="smallHelp">
-          コマ数は1～47、GOALは1～30マス。
-        </div>
-
-
-        <label class="settingLabel">
-          コマの名称
-        </label>
-
-        <div
-          id="pieceInputs"
-          class="pieceInputs">
-        </div>
-
-
-      </div>
-
-
-      <div class="modalButtons">
-
-        <button
-          class="modalButton saveButton"
-          onclick="saveProjectSettings()">
-          保存
-        </button>
-
-        <button
-          class="modalButton cancelButton"
-          onclick="closeProjectModal()">
-          キャンセル
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- =====================================
-       コマ選択
-  ====================================== -->
-
-  <div
-    id="chooseModal"
-    class="modal">
-
-    <div
-      class="modalBox"
-      style="height:90%;">
-
-      <div class="modalHeader">
-
-        <div class="modalTitle">
-          🎯 コマを選ぶ
-        </div>
-
-        <button
-          class="closeButton"
-          onclick="closeChooseModal()">
-          ×
-        </button>
-
-      </div>
-
-      <div class="modalScroll">
-
-        <div
-          id="chooseGrid"
-          class="chooseGrid">
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- =====================================
-       ギフト設定
-  ====================================== -->
-
-  <div
-    id="giftModal"
-    class="modal">
-
-    <div
-      class="modalBox"
-      style="height:90%;">
-
-      <div class="modalHeader">
-
-        <div class="modalTitle">
-          🎁 ギフト設定
-        </div>
-
-        <button
-          class="closeButton"
-          onclick="closeGiftModal()">
-          ×
-        </button>
-
-      </div>
-
-
-      <div
-        id="giftSettingRows"
-        class="modalScroll">
-      </div>
-
-
-      <div class="modalButtons">
-
-        <button
-          class="modalButton saveButton"
-          onclick="saveGiftSettings()">
-          保存
-        </button>
-
-        <button
-          class="modalButton cancelButton"
-          onclick="closeGiftModal()">
-          キャンセル
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- =====================================
-       ポップアップ
-  ====================================== -->
-
-  <div id="popup">
-
-    <div class="popupBox">
-
-      <div
-        id="popupIcon"
-        class="popupIcon">
-        🎁
-      </div>
-
-      <div
-        id="popupTitle"
-        class="popupTitle">
-        コマが進んだ！
-      </div>
-
-      <div
-        id="popupText"
-        class="popupText">
       </div>
 
       <button
-        class="popupClose"
-        onclick="closePopup()">
-        閉じる
+        class="closeButton"
+        onclick="closeGiftModal()">
+
+        ×
+
+      </button>
+
+    </div>
+
+
+    <div
+      id="giftSettingRows"
+      class="modalScroll">
+    </div>
+
+
+    <div class="modalButtons">
+
+      <button
+        class="modalButton saveButton"
+        onclick="saveGiftSettings()">
+
+        保存
+
+      </button>
+
+
+      <button
+        class="modalButton cancelButton"
+        onclick="closeGiftModal()">
+
+        キャンセル
+
       </button>
 
     </div>
 
   </div>
 
+</div>
+
+
+<!-- ======================================
+     仕掛け設定
+====================================== -->
+
+<div
+  id="trickModal"
+  class="modal">
+
+  <div
+    class="modalBox"
+    style="height:94%;">
+
+    <div class="modalHeader">
+
+      <div class="modalTitle">
+        💥 仕掛けマス設定
+      </div>
+
+      <button
+        class="closeButton"
+        onclick="closeTrickModal()">
+
+        ×
+
+      </button>
+
+    </div>
+
+
+    <div class="modalScroll">
+
+      <div
+        style="
+        padding:8px;
+        background:#fff4e8;
+        border-radius:8px;
+        margin-bottom:7px;
+        font-size:9px;
+        font-weight:800;
+        line-height:1.45;
+        ">
+
+        <b>仕掛けを設定したいマスだけON。</b><br>
+
+        「表示だけ」の仕掛けはコマを動かさず、
+        メッセージだけ表示します。<br>
+
+        「一つ前の県」は、そのコマより前の位置にいる
+        一番近い県が対象です。
+
+      </div>
+
+
+      <div id="trickSettingRows"></div>
+
+    </div>
+
+
+    <div class="modalButtons">
+
+      <button
+        class="modalButton saveButton"
+        onclick="saveTrickSettings()">
+
+        保存
+
+      </button>
+
+
+      <button
+        class="modalButton cancelButton"
+        onclick="closeTrickModal()">
+
+        キャンセル
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ======================================
+     ポップアップ
+====================================== -->
+
+<div id="popup">
+
+  <div class="popupBox">
+
+    <div
+      id="popupIcon"
+      class="popupIcon">
+
+      🎁
+
+    </div>
+
+
+    <div
+      id="popupTitle"
+      class="popupTitle">
+
+      コマが進んだ！
+
+    </div>
+
+
+    <div
+      id="popupText"
+      class="popupText">
+    </div>
+
+
+    <button
+      class="popupClose"
+      onclick="closePopup()">
+
+      閉じる
+
+    </button>
+
+  </div>
 
 </div>
 
 
 <script>
 
-/* =====================================================
-   初期設定
-===================================================== */
+/* ==================================================
+   基本設定
+================================================== */
 
 let projectTitle =
   "🗾 出身県はどこ？県民パワーでGOALを目指せ！";
@@ -1195,14 +1410,14 @@ let projectTitle =
 let projectSubtitle =
   "指定ギフトでコマを進めよう！";
 
-let GOAL = 30;
+let GOAL=30;
 
 
-/* =====================================================
+/* ==================================================
    47都道府県
-===================================================== */
+================================================== */
 
-let pieces = [
+let pieces=[
 
   "北海道",
 
@@ -1262,11 +1477,11 @@ let pieces = [
 ];
 
 
-/* =====================================================
-   カラフルなコマ
-===================================================== */
+/* ==================================================
+   カラフルコマ
+================================================== */
 
-const colors = [
+const colors=[
 
   "#e53935",
   "#8e24aa",
@@ -1319,37 +1534,27 @@ const colors = [
 ];
 
 
-/* =====================================================
+/* ==================================================
    位置
-===================================================== */
+================================================== */
 
-let positions = {};
+let positions={};
 
-let selectedPiece = null;
-
-
-/* =====================================================
-   位置を初期化
-===================================================== */
-
-function initializePositions(){
-
-  positions = {};
-
-  pieces.forEach(function(name){
-
-    positions[name] = 0;
-
-  });
-
-}
+let selectedPiece=null;
 
 
-/* =====================================================
+/* ==================================================
+   仕掛け
+================================================== */
+
+let tricks={};
+
+
+/* ==================================================
    ギフト
-===================================================== */
+================================================== */
 
-let gifts = [
+let gifts=[
 
   {
     icon:"❤️",
@@ -1384,95 +1589,165 @@ let gifts = [
 ];
 
 
-/* =====================================================
-   タイトル更新
-===================================================== */
+/* ==================================================
+   初期化
+================================================== */
 
-function updateTitle(){
+function initializePositions(){
 
-  document.getElementById("title").textContent =
-    projectTitle;
+  positions={};
 
-  document.getElementById("subtitle").textContent =
-    projectSubtitle;
+  pieces.forEach(function(name){
+
+    positions[name]=0;
+
+  });
 
 }
 
 
-/* =====================================================
-   盤面作成
-===================================================== */
+function initializeTricks(){
 
-function createBoard(){
-
-  const board =
-    document.getElementById("board");
-
-  board.innerHTML = "";
-
-  /*
-    30マスまでなら
-    6列 × 5行で表示
-  */
+  tricks={};
 
   for(
-    let i = 1;
-    i <= GOAL;
+    let i=1;
+    i<=GOAL;
     i++
   ){
 
-    const cell =
+    tricks[i]={
+
+      enabled:false,
+
+      type:"none",
+
+      value:2,
+
+      text:""
+
+    };
+
+  }
+
+}
+
+
+/* ==================================================
+   HTMLエスケープ
+================================================== */
+
+function escapeHTML(str){
+
+  return String(str)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* ==================================================
+   タイトル
+================================================== */
+
+function updateTitle(){
+
+  document.getElementById("title")
+    .textContent=projectTitle;
+
+  document.getElementById("subtitle")
+    .textContent=projectSubtitle;
+
+}
+
+
+/* ==================================================
+   盤面作成
+================================================== */
+
+function createBoard(){
+
+  const board=
+    document.getElementById("board");
+
+  board.innerHTML="";
+
+
+  for(
+    let i=1;
+    i<=GOAL;
+    i++
+  ){
+
+    const cell=
       document.createElement("div");
 
-    cell.className = "cell";
+    cell.className="cell";
 
-    cell.id = "cell-" + i;
-
-
-    /* マス番号 */
-
-    const number =
-      document.createElement("div");
-
-    number.className = "cellNumber";
-
-    number.textContent = i;
+    cell.id="cell-"+i;
 
 
-    /* コマ置き場 */
-
-    const piecesArea =
-      document.createElement("div");
-
-    piecesArea.className =
-      "cellPieces";
-
-    piecesArea.id =
-      "cellPieces-" + i;
-
-
-    cell.appendChild(number);
-
-    cell.appendChild(piecesArea);
-
-
-    /* GOAL */
-
-    if(i === GOAL){
+    if(i===GOAL){
 
       cell.classList.add("goal");
 
-      const goal =
-        document.createElement("div");
+    }
 
-      goal.className = "goalText";
 
-      goal.textContent = "🏁GOAL";
+    if(i===1){
 
-      cell.appendChild(goal);
+      cell.classList.add("start");
 
     }
 
+
+    const number=
+      document.createElement("div");
+
+    number.className="cellNumber";
+
+    number.textContent=
+      i===1
+        ? "START"
+        : i;
+
+    cell.appendChild(number);
+
+
+    const trick=
+      tricks[i];
+
+
+    if(
+      trick &&
+      trick.enabled &&
+      trick.type!=="none"
+    ){
+
+      const trickEl=
+        document.createElement("div");
+
+      trickEl.className="trick";
+
+      trickEl.textContent=
+        getTrickDisplay(trick);
+
+      cell.appendChild(trickEl);
+
+    }
+
+
+    const area=
+      document.createElement("div");
+
+    area.className="cellPieces";
+
+    area.id="cellPieces-"+i;
+
+    cell.appendChild(area);
 
     board.appendChild(cell);
 
@@ -1481,9 +1756,68 @@ function createBoard(){
 }
 
 
-/* =====================================================
-   コマを描画
-===================================================== */
+/* ==================================================
+   仕掛け表示
+================================================== */
+
+function getTrickDisplay(trick){
+
+  if(
+    trick.text &&
+    trick.text.trim()
+  ){
+
+    return trick.text.trim();
+
+  }
+
+
+  switch(trick.type){
+
+    case "forward":
+      return "🚀 +"+trick.value;
+
+    case "back":
+      return "↩️ -"+trick.value;
+
+    case "start":
+      return "💥 START";
+
+    case "goal":
+      return "🏆 GOAL";
+
+    case "again":
+      return "🔄 もう1回";
+
+    case "display":
+      return "🎁 お楽しみ";
+
+    case "previousBack":
+      return "🗾 前の県 -"+trick.value;
+
+    case "previousStart":
+      return "💥 前の県→START";
+
+    case "swapPrevious":
+      return "🔁 前の県と交換";
+
+    case "leaderBack":
+      return "🥇 1位 -"+trick.value;
+
+    case "lastForward":
+      return "🥉 最下位 +"+trick.value;
+
+    default:
+      return "";
+
+  }
+
+}
+
+
+/* ==================================================
+   コマ描画
+================================================== */
 
 function renderPieces(){
 
@@ -1491,58 +1825,57 @@ function renderPieces(){
     .querySelectorAll(".cellPieces")
     .forEach(function(el){
 
-      el.innerHTML = "";
+      el.innerHTML="";
 
     });
 
 
   pieces.forEach(function(name,index){
 
-    const position =
+    const position=
       positions[name] || 0;
 
 
-    /*
-      START位置0の場合は
-      盤面には表示しない
-    */
+    if(position<=0){
 
-    if(position <= 0){
       return;
+
     }
 
 
-    const area =
+    const area=
       document.getElementById(
-        "cellPieces-" + position
+        "cellPieces-"+position
       );
 
+
     if(!area){
+
       return;
+
     }
 
 
-    const piece =
+    const piece=
       document.createElement("div");
 
-    piece.className = "piece";
+    piece.className="piece";
 
 
-    if(name === selectedPiece){
+    if(name===selectedPiece){
 
       piece.classList.add("active");
 
     }
 
 
-    piece.textContent = name;
+    piece.textContent=name;
 
-
-    piece.style.background =
+    piece.style.background=
       colors[index % colors.length];
 
 
-    piece.onclick = function(){
+    piece.onclick=function(){
 
       selectPiece(name);
 
@@ -1559,196 +1892,115 @@ function renderPieces(){
 }
 
 
-/* =====================================================
-   盤面ヘッダー
-===================================================== */
+/* ==================================================
+   ボードヘッダー
+================================================== */
 
 function updateBoardHeader(){
 
   if(!selectedPiece){
 
-    document.getElementById("boardHeader").textContent =
-      "🏁 GOALまであと" + GOAL + "マス";
+    document.getElementById("boardHeader")
+      .textContent=
+      "🏁 GOALまであと"+GOAL+"マス";
 
     return;
 
   }
 
 
-  const position =
+  const position=
     positions[selectedPiece] || 0;
 
 
-  const remaining =
+  const remaining=
     Math.max(
       0,
-      GOAL - position
+      GOAL-position
     );
 
 
-  document.getElementById("boardHeader").textContent =
-    "🎯 " +
-    selectedPiece +
-    "　｜　GOALまであと" +
-    remaining +
+  document.getElementById("boardHeader")
+    .textContent=
+    "🎯 "+
+    selectedPiece+
+    " ｜ GOALまであと"+
+    remaining+
     "マス";
 
 }
 
 
-/* =====================================================
-   ランキング
-===================================================== */
-
-function updateRanking(){
-
-  const list =
-    document.getElementById("rankingList");
-
-  list.innerHTML = "";
-
-
-  const sorted =
-    pieces
-      .map(function(name){
-
-        return {
-          name:name,
-          position:positions[name] || 0
-        };
-
-      })
-      .sort(function(a,b){
-
-        return b.position - a.position;
-
-      });
-
-
-  const top =
-    sorted.slice(0,3);
-
-
-  const medals = [
-    "🥇",
-    "🥈",
-    "🥉"
-  ];
-
-
-  top.forEach(function(item,index){
-
-    const div =
-      document.createElement("div");
-
-    div.className = "rank";
-
-
-    div.innerHTML =
-      '<span class="rankMedal">' +
-      medals[index] +
-      '</span>' +
-
-      '<span class="rankName">' +
-      escapeHTML(item.name) +
-      '</span>';
-
-
-    list.appendChild(div);
-
-  });
-
-}
-
-
-/* =====================================================
-   HTMLエスケープ
-===================================================== */
-
-function escapeHTML(str){
-
-  return String(str)
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
-
-
-/* =====================================================
+/* ==================================================
    コマ選択
-===================================================== */
+================================================== */
 
 function selectPiece(name){
 
-  selectedPiece = name;
+  selectedPiece=name;
 
-
-  document.getElementById("selectedName")
-    .textContent = name;
-
+  document.getElementById(
+    "selectedName"
+  ).textContent=name;
 
   renderPieces();
-
-  updateRanking();
 
 }
 
 
-/* =====================================================
+/* ==================================================
    コマ選択画面
-===================================================== */
+================================================== */
 
 function openChooseModal(){
 
   createChooseButtons();
 
-  document
-    .getElementById("chooseModal")
-    .classList.add("show");
+  document.getElementById(
+    "chooseModal"
+  ).classList.add("show");
 
 }
 
 
 function closeChooseModal(){
 
-  document
-    .getElementById("chooseModal")
-    .classList.remove("show");
+  document.getElementById(
+    "chooseModal"
+  ).classList.remove("show");
 
 }
 
 
 function createChooseButtons(){
 
-  const grid =
-    document.getElementById("chooseGrid");
+  const grid=
+    document.getElementById(
+      "chooseGrid"
+    );
 
-  grid.innerHTML = "";
+  grid.innerHTML="";
 
 
   pieces.forEach(function(name){
 
-    const button =
+    const button=
       document.createElement("button");
 
-    button.className =
-      "chooseButton";
+    button.className="chooseButton";
 
 
-    if(name === selectedPiece){
+    if(name===selectedPiece){
 
       button.classList.add("current");
 
     }
 
 
-    button.textContent = name;
+    button.textContent=name;
 
 
-    button.onclick = function(){
+    button.onclick=function(){
 
       selectPiece(name);
 
@@ -1764,43 +2016,39 @@ function createChooseButtons(){
 }
 
 
-/* =====================================================
+/* ==================================================
    ギフトボタン
-===================================================== */
+================================================== */
 
 function createGiftButtons(){
 
-  const area =
-    document.getElementById("giftButtons");
+  const area=
+    document.getElementById(
+      "giftButtons"
+    );
 
-  area.innerHTML = "";
+  area.innerHTML="";
 
-
-  /*
-    画面には3種類表示
-  */
 
   gifts
     .slice(0,3)
     .forEach(function(gift){
 
-      const button =
+      const button=
         document.createElement("button");
 
-      button.className =
-        "giftButton";
+      button.className="giftButton";
 
-
-      button.innerHTML =
-        escapeHTML(gift.icon) +
-        " " +
-        escapeHTML(gift.name) +
-        "<br>＋" +
-        gift.move +
+      button.innerHTML=
+        escapeHTML(gift.icon)+
+        " "+
+        escapeHTML(gift.name)+
+        "<br>＋"+
+        gift.move+
         "マス";
 
 
-      button.onclick = function(){
+      button.onclick=function(){
 
         moveSelected(
           gift.move,
@@ -1817,21 +2065,18 @@ function createGiftButtons(){
 }
 
 
-/* =====================================================
-   コマを進める
-===================================================== */
+/* ==================================================
+   コマ移動
+================================================== */
 
-function moveSelected(
-  move,
-  icon
-){
+function moveSelected(move,icon){
 
   if(!selectedPiece){
 
     showPopup(
       "⚠️",
       "コマを選んでね！",
-      "先に「🎯 コマを選ぶ」から都道府県を選択してください。"
+      "「🎯 コマを選ぶ」から都道府県を選択してください。"
     );
 
     return;
@@ -1839,16 +2084,17 @@ function moveSelected(
   }
 
 
-  const oldPosition =
+  const oldPosition=
     positions[selectedPiece] || 0;
 
 
-  if(oldPosition >= GOAL){
+  if(oldPosition>=GOAL){
 
     showPopup(
       "🏁",
       "GOAL済み！",
-      selectedPiece + "はすでにゴールしています。"
+      selectedPiece+
+      "はすでにゴールしています。"
     );
 
     return;
@@ -1856,93 +2102,652 @@ function moveSelected(
   }
 
 
-  const nextPosition =
+  const nextPosition=
     Math.min(
       GOAL,
-      oldPosition + move
+      oldPosition+
+      Number(move)
     );
 
 
-  positions[selectedPiece] =
+  positions[selectedPiece]=
     nextPosition;
 
 
   renderPieces();
 
-  updateRanking();
 
-
-  if(nextPosition >= GOAL){
+  if(nextPosition>=GOAL){
 
     showPopup(
       "🏆",
       "GOAL！",
-      selectedPiece +
+      selectedPiece+
       "がゴールしました！"
     );
 
+    return;
+
   }
-  else{
+
+
+  triggerTrick(
+    selectedPiece,
+    nextPosition,
+    icon
+  );
+
+}
+
+
+/* ==================================================
+   仕掛け発動
+================================================== */
+
+function triggerTrick(
+  name,
+  position,
+  giftIcon
+){
+
+  const trick=
+    tricks[position];
+
+
+  if(
+    !trick ||
+    !trick.enabled ||
+    trick.type==="none"
+  ){
 
     showPopup(
-      icon,
+      giftIcon,
       "コマが進んだ！",
-      selectedPiece +
-      "が" +
-      (nextPosition-oldPosition) +
-      "マス進みました！"
+      name+
+      "が"+
+      position+
+      "番マスに到着しました。"
     );
+
+    return;
+
+  }
+
+
+  let message="";
+
+  const popupIcon=
+    getTrickIcon(trick.type);
+
+
+  switch(trick.type){
+
+    /* 自分が進む */
+
+    case "forward":
+
+      positions[name]=
+        Math.min(
+          GOAL,
+          position+
+          Number(trick.value)
+        );
+
+      message=
+        name+
+        "は"+
+        trick.value+
+        "マス進みます！";
+
+      break;
+
+
+    /* 自分が戻る */
+
+    case "back":
+
+      positions[name]=
+        Math.max(
+          0,
+          position-
+          Number(trick.value)
+        );
+
+      message=
+        name+
+        "は"+
+        trick.value+
+        "マス戻ります！";
+
+      break;
+
+
+    /* START */
+
+    case "start":
+
+      positions[name]=0;
+
+      message=
+        name+
+        "はSTARTに戻ります！";
+
+      break;
+
+
+    /* GOAL */
+
+    case "goal":
+
+      positions[name]=GOAL;
+
+      message=
+        name+
+        "はGOALへ！";
+
+      break;
+
+
+    /* もう一度 */
+
+    case "again":
+
+      message=
+        name+
+        "はもう一度進めます！";
+
+      break;
+
+
+    /* 表示だけ */
+
+    case "display":
+
+      message=
+        name+
+        "にイベント発生！";
+
+      break;
+
+
+    /* 一つ前の県を戻す */
+
+    case "previousBack":
+
+      {
+
+        const previous=
+          findPreviousPiece(name);
+
+
+        if(previous){
+
+          positions[previous]=
+            Math.max(
+              0,
+              positions[previous]-
+              Number(trick.value)
+            );
+
+          message=
+            "一つ前の県「"+
+            previous+
+            "」が"+
+            trick.value+
+            "マス戻ります！";
+
+        }
+        else{
+
+          message=
+            "一つ前の県がいません！";
+
+        }
+
+      }
+
+      break;
+
+
+    /* 一つ前の県をSTART */
+
+    case "previousStart":
+
+      {
+
+        const previous=
+          findPreviousPiece(name);
+
+
+        if(previous){
+
+          positions[previous]=0;
+
+          message=
+            "一つ前の県「"+
+            previous+
+            "」がSTARTに戻ります！";
+
+        }
+        else{
+
+          message=
+            "一つ前の県がいません！";
+
+        }
+
+      }
+
+      break;
+
+
+    /* 一つ前と交換 */
+
+    case "swapPrevious":
+
+      {
+
+        const previous=
+          findPreviousPiece(name);
+
+
+        if(previous){
+
+          const currentPos=
+            positions[name];
+
+          const previousPos=
+            positions[previous];
+
+
+          positions[name]=
+            previousPos;
+
+          positions[previous]=
+            currentPos;
+
+
+          message=
+            name+
+            "と"+
+            previous+
+            "の位置を交換！";
+
+        }
+        else{
+
+          message=
+            "一つ前の県がいません！";
+
+        }
+
+      }
+
+      break;
+
+
+    /* 1位を戻す */
+
+    case "leaderBack":
+
+      {
+
+        const leader=
+          getLeader(name);
+
+
+        if(leader){
+
+          positions[leader]=
+            Math.max(
+              0,
+              positions[leader]-
+              Number(trick.value)
+            );
+
+
+          message=
+            "1位の「"+
+            leader+
+            "」が"+
+            trick.value+
+            "マス戻ります！";
+
+        }
+        else{
+
+          message=
+            "1位の県がいません！";
+
+        }
+
+      }
+
+      break;
+
+
+    /* 最下位を進める */
+
+    case "lastForward":
+
+      {
+
+        const last=
+          getLast(name);
+
+
+        if(last){
+
+          positions[last]=
+            Math.min(
+              GOAL,
+              positions[last]+
+              Number(trick.value)
+            );
+
+
+          message=
+            "最下位の「"+
+            last+
+            "」が"+
+            trick.value+
+            "マス進みます！";
+
+        }
+        else{
+
+          message=
+            "最下位の県がいません！";
+
+        }
+
+      }
+
+      break;
+
+  }
+
+
+  renderPieces();
+
+
+  const displayText=
+    trick.text &&
+    trick.text.trim()
+      ? trick.text.trim()
+      : getTrickDisplay(trick);
+
+
+  showPopup(
+    popupIcon,
+    displayText,
+    message
+  );
+
+
+  if(
+    positions[name]>=GOAL &&
+    trick.type!=="display"
+  ){
+
+    setTimeout(function(){
+
+      showPopup(
+        "🏆",
+        "GOAL！",
+        name+
+        "がGOALしました！"
+      );
+
+    },400);
 
   }
 
 }
 
 
-/* =====================================================
+/* ==================================================
+   前の県
+================================================== */
+
+function findPreviousPiece(name){
+
+  const current=
+    positions[name] || 0;
+
+
+  const candidates=
+    pieces
+      .filter(function(piece){
+
+        return(
+          piece!==name &&
+          positions[piece]>0 &&
+          positions[piece]<current
+        );
+
+      })
+      .sort(function(a,b){
+
+        return(
+          positions[b]-
+          positions[a]
+        );
+
+      });
+
+
+  return candidates.length
+    ? candidates[0]
+    : null;
+
+}
+
+
+/* ==================================================
+   1位
+================================================== */
+
+function getLeader(excludeName){
+
+  const list=
+    pieces.filter(function(name){
+
+      return name!==excludeName;
+
+    });
+
+
+  list.sort(function(a,b){
+
+    return(
+      positions[b]-
+      positions[a]
+    );
+
+  });
+
+
+  return list.length
+    ? list[0]
+    : null;
+
+}
+
+
+/* ==================================================
+   最下位
+================================================== */
+
+function getLast(excludeName){
+
+  const list=
+    pieces.filter(function(name){
+
+      return name!==excludeName;
+
+    });
+
+
+  list.sort(function(a,b){
+
+    return(
+      positions[a]-
+      positions[b]
+    );
+
+  });
+
+
+  return list.length
+    ? list[0]
+    : null;
+
+}
+
+
+/* ==================================================
+   仕掛けアイコン
+================================================== */
+
+function getTrickIcon(type){
+
+  switch(type){
+
+    case "forward":
+      return "🚀";
+
+    case "back":
+      return "↩️";
+
+    case "start":
+      return "💥";
+
+    case "goal":
+      return "🏆";
+
+    case "again":
+      return "🔄";
+
+    case "display":
+      return "🎁";
+
+    case "previousBack":
+      return "🗾";
+
+    case "previousStart":
+      return "💥";
+
+    case "swapPrevious":
+      return "🔁";
+
+    case "leaderBack":
+      return "🥇";
+
+    case "lastForward":
+      return "🥉";
+
+    default:
+      return "💥";
+
+  }
+
+}
+
+
+/* ==================================================
+   ポップアップ
+================================================== */
+
+function showPopup(
+  icon,
+  title,
+  text
+){
+
+  document.getElementById(
+    "popupIcon"
+  ).textContent=icon;
+
+
+  document.getElementById(
+    "popupTitle"
+  ).textContent=title;
+
+
+  document.getElementById(
+    "popupText"
+  ).textContent=text;
+
+
+  document.getElementById(
+    "popup"
+  ).classList.add("show");
+
+}
+
+
+function closePopup(){
+
+  document.getElementById(
+    "popup"
+  ).classList.remove("show");
+
+}
+
+
+/* ==================================================
    企画設定
-===================================================== */
+================================================== */
 
 function openProjectModal(){
 
-  document.getElementById("titleInput").value =
-    projectTitle;
+  document.getElementById(
+    "titleInput"
+  ).value=projectTitle;
 
-  document.getElementById("subtitleInput").value =
-    projectSubtitle;
 
-  document.getElementById("pieceCountInput").value =
-    pieces.length;
+  document.getElementById(
+    "subtitleInput"
+  ).value=projectSubtitle;
 
-  document.getElementById("goalInput").value =
-    GOAL;
+
+  document.getElementById(
+    "pieceCountInput"
+  ).value=pieces.length;
+
+
+  document.getElementById(
+    "goalInput"
+  ).value=GOAL;
 
 
   buildPieceInputs();
 
 
-  document
-    .getElementById("projectModal")
-    .classList.add("show");
+  document.getElementById(
+    "projectModal"
+  ).classList.add("show");
 
 }
 
 
 function closeProjectModal(){
 
-  document
-    .getElementById("projectModal")
-    .classList.remove("show");
+  document.getElementById(
+    "projectModal"
+  ).classList.remove("show");
 
 }
 
 
-/* =====================================================
-   コマ名称入力欄
-===================================================== */
+/* ==================================================
+   コマ名称
+================================================== */
 
 function buildPieceInputs(){
 
-  let count =
+  let count=
     Number(
       document.getElementById(
         "pieceCountInput"
@@ -1950,57 +2755,57 @@ function buildPieceInputs(){
     );
 
 
-  if(!count || count < 1){
-    count = 1;
-  }
-
-  if(count > 47){
-    count = 47;
-  }
+  count=
+    Math.max(
+      1,
+      Math.min(47,count||1)
+    );
 
 
-  const area =
-    document.getElementById("pieceInputs");
+  const area=
+    document.getElementById(
+      "pieceInputs"
+    );
 
-  area.innerHTML = "";
+  area.innerHTML="";
 
 
-  for(let i=0;i<count;i++){
+  for(
+    let i=0;
+    i<count;
+    i++
+  ){
 
-    const row =
+    const row=
       document.createElement("div");
 
-    row.className = "pieceInput";
+    row.className="pieceInput";
 
 
-    const number =
+    const num=
       document.createElement("div");
 
-    number.className =
-      "pieceNumber";
+    num.className="pieceNumber";
 
-    number.textContent =
-      i+1;
+    num.textContent=i+1;
 
 
-    const input =
+    const input=
       document.createElement("input");
 
-    input.className = "input";
+    input.className="input";
 
-    input.id =
-      "pieceInput-" + i;
+    input.id=
+      "pieceInput-"+i;
 
-    input.type = "text";
+    input.type="text";
 
-    input.maxLength = 20;
-
-    input.value =
+    input.value=
       pieces[i] ||
-      "コマ" + (i+1);
+      "コマ"+(i+1);
 
 
-    row.appendChild(number);
+    row.appendChild(num);
 
     row.appendChild(input);
 
@@ -2011,25 +2816,25 @@ function buildPieceInputs(){
 }
 
 
-/* =====================================================
-   企画設定保存
-===================================================== */
+/* ==================================================
+   企画保存
+================================================== */
 
 function saveProjectSettings(){
 
-  const title =
-    document.getElementById("titleInput")
-      .value
-      .trim();
+  const title=
+    document.getElementById(
+      "titleInput"
+    ).value.trim();
 
 
-  const subtitle =
-    document.getElementById("subtitleInput")
-      .value
-      .trim();
+  const subtitle=
+    document.getElementById(
+      "subtitleInput"
+    ).value.trim();
 
 
-  let count =
+  let count=
     Number(
       document.getElementById(
         "pieceCountInput"
@@ -2037,68 +2842,68 @@ function saveProjectSettings(){
     );
 
 
-  if(!count || count < 1){
-    count = 1;
-  }
-
-  if(count > 47){
-    count = 47;
-  }
-
-
-  let goal =
+  let goal=
     Number(
-      document.getElementById("goalInput")
-        .value
+      document.getElementById(
+        "goalInput"
+      ).value
     );
 
 
-  if(!goal || goal < 1){
-    goal = 1;
-  }
-
-  if(goal > 30){
-    goal = 30;
-  }
+  count=
+    Math.max(
+      1,
+      Math.min(47,count||1)
+    );
 
 
-  const oldPositions =
+  goal=
+    Math.max(
+      1,
+      Math.min(30,goal||1)
+    );
+
+
+  const oldPositions=
     {...positions};
 
 
-  const newPieces = [];
+  const oldTricks=
+    {...tricks};
 
 
-  for(let i=0;i<count;i++){
+  const newPieces=[];
 
-    const input =
+
+  for(
+    let i=0;
+    i<count;
+    i++
+  ){
+
+    const input=
       document.getElementById(
-        "pieceInput-" + i
+        "pieceInput-"+i
       );
 
 
-    let name =
+    let name=
       input
-      ? input.value.trim()
-      : "";
+        ? input.value.trim()
+        : "";
 
 
     if(!name){
 
-      name =
-        "コマ" + (i+1);
+      name="コマ"+(i+1);
 
     }
 
 
-    /*
-      同名を防止
-    */
-
     if(newPieces.includes(name)){
 
-      name =
-        name + " " + (i+1);
+      name=
+        name+" "+(i+1);
 
     }
 
@@ -2108,33 +2913,54 @@ function saveProjectSettings(){
   }
 
 
-  projectTitle =
+  projectTitle=
     title ||
     "すごろく企画";
 
 
-  projectSubtitle =
+  projectSubtitle=
     subtitle ||
     "指定ギフトでコマを進めよう！";
 
 
-  GOAL = goal;
+  GOAL=goal;
 
-  pieces = newPieces;
+  pieces=newPieces;
 
 
-  positions = {};
+  positions={};
 
 
   pieces.forEach(function(name){
 
-    positions[name] =
+    positions[name]=
       Math.min(
-        oldPositions[name] || 0,
+        oldPositions[name]||0,
         GOAL
       );
 
   });
+
+
+  tricks={};
+
+
+  for(
+    let i=1;
+    i<=GOAL;
+    i++
+  ){
+
+    tricks[i]=
+      oldTricks[i] ||
+      {
+        enabled:false,
+        type:"none",
+        value:2,
+        text:""
+      };
+
+  }
 
 
   if(
@@ -2142,11 +2968,11 @@ function saveProjectSettings(){
     !pieces.includes(selectedPiece)
   ){
 
-    selectedPiece = null;
+    selectedPiece=null;
 
     document.getElementById(
       "selectedName"
-    ).textContent =
+    ).textContent=
       "コマを選んでください";
 
   }
@@ -2154,67 +2980,68 @@ function saveProjectSettings(){
 
   closeProjectModal();
 
-
   updateAll();
 
 
   showPopup(
     "⚙️",
     "設定完了！",
-    "企画内容を変更しました。"
+    "企画設定を変更しました。"
   );
 
 }
 
 
-/* =====================================================
+/* ==================================================
    ギフト設定
-===================================================== */
+================================================== */
 
 function openGiftModal(){
 
-  const area =
+  const area=
     document.getElementById(
       "giftSettingRows"
     );
 
-  area.innerHTML = "";
+  area.innerHTML="";
 
 
   gifts.forEach(function(gift,index){
 
-    const row =
+    const row=
       document.createElement("div");
 
-    row.className =
+    row.className=
       "giftSettingRow";
 
 
-    row.innerHTML =
+    row.innerHTML=
 
-      '<div class="giftSettingTitle">' +
-      '🎁 ギフト ' + (index+1) +
-      '</div>' +
+      '<div class="giftSettingTitle">'+
+      "🎁 ギフト "+(index+1)+
+      "</div>"+
 
-      '<div class="giftSettingInputs">' +
+      '<div class="giftSettingInputs">'+
 
-      '<input ' +
-      'class="input" ' +
-      'id="giftIcon-' + index + '" ' +
-      'value="' + escapeHTML(gift.icon) + '">' +
+      '<input class="input" '+
+      'id="giftIcon-'+index+'" '+
+      'value="'+
+      escapeHTML(gift.icon)+
+      '">'+
 
-      '<input ' +
-      'class="input" ' +
-      'id="giftName-' + index + '" ' +
-      'value="' + escapeHTML(gift.name) + '">' +
+      '<input class="input" '+
+      'id="giftName-'+index+'" '+
+      'value="'+
+      escapeHTML(gift.name)+
+      '">'+
 
-      '<input ' +
-      'class="input" ' +
-      'id="giftMove-' + index + '" ' +
-      'type="number" ' +
-      'min="0" ' +
-      'max="100" ' +
-      'value="' + gift.move + '">' +
+      '<input class="input" '+
+      'id="giftMove-'+index+'" '+
+      'type="number" '+
+      'min="0" '+
+      'value="'+
+      gift.move+
+      '">'+
 
       '</div>';
 
@@ -2224,70 +3051,60 @@ function openGiftModal(){
   });
 
 
-  document
-    .getElementById("giftModal")
-    .classList.add("show");
+  document.getElementById(
+    "giftModal"
+  ).classList.add("show");
 
 }
 
 
 function closeGiftModal(){
 
-  document
-    .getElementById("giftModal")
-    .classList.remove("show");
+  document.getElementById(
+    "giftModal"
+  ).classList.remove("show");
 
 }
 
-
-/* =====================================================
-   ギフト設定保存
-===================================================== */
 
 function saveGiftSettings(){
 
   gifts.forEach(function(gift,index){
 
-    const icon =
+    const icon=
       document.getElementById(
-        "giftIcon-" + index
+        "giftIcon-"+index
       ).value.trim();
 
 
-    const name =
+    const name=
       document.getElementById(
-        "giftName-" + index
+        "giftName-"+index
       ).value.trim();
 
 
-    let move =
+    let move=
       Number(
         document.getElementById(
-          "giftMove-" + index
+          "giftMove-"+index
         ).value
       );
 
 
-    if(isNaN(move)){
-      move = 0;
-    }
+    if(isNaN(move)||move<0){
 
-    if(move < 0){
-      move = 0;
-    }
+      move=0;
 
-    if(move > 100){
-      move = 100;
     }
 
 
-    gift.icon =
-      icon || "🎁";
+    gift.icon=
+      icon||"🎁";
 
-    gift.name =
-      name || "ギフト";
+    gift.name=
+      name||"ギフト";
 
-    gift.move =
+    gift.move=
       move;
 
   });
@@ -2307,26 +3124,283 @@ function saveGiftSettings(){
 }
 
 
-/* =====================================================
+/* ==================================================
+   仕掛け設定
+================================================== */
+
+function openTrickModal(){
+
+  createTrickInputs();
+
+  document.getElementById(
+    "trickModal"
+  ).classList.add("show");
+
+}
+
+
+function closeTrickModal(){
+
+  document.getElementById(
+    "trickModal"
+  ).classList.remove("show");
+
+}
+
+
+/* ==================================================
+   仕掛け入力
+================================================== */
+
+function createTrickInputs(){
+
+  const area=
+    document.getElementById(
+      "trickSettingRows"
+    );
+
+  area.innerHTML="";
+
+
+  for(
+    let i=1;
+    i<=GOAL;
+    i++
+  ){
+
+    if(!tricks[i]){
+
+      tricks[i]={
+        enabled:false,
+        type:"none",
+        value:2,
+        text:""
+      };
+
+    }
+
+
+    const t=
+      tricks[i];
+
+
+    const row=
+      document.createElement("div");
+
+    row.className="trickRow";
+
+
+    row.innerHTML=
+
+      '<div class="trickRowTitle">'+
+      "マス "+i+
+      "</div>"+
+
+      '<div class="trickInputs">'+
+
+      '<select class="select" '+
+      'id="trickEnabled-'+i+'">'+
+
+      '<option value="off">OFF</option>'+
+      '<option value="on">ON</option>'+
+
+      '</select>'+
+
+      '<select class="select" '+
+      'id="trickType-'+i+'">'+
+
+      '<option value="none">'+
+      "仕掛けなし"+
+      "</option>"+
+
+      '<option value="forward">'+
+      "🚀 自分が○マス進む"+
+      "</option>"+
+
+      '<option value="back">'+
+      "↩️ 自分が○マス戻る"+
+      "</option>"+
+
+      '<option value="start">'+
+      "💥 自分がSTARTへ"+
+      "</option>"+
+
+      '<option value="goal">'+
+      "🏆 自分がGOALへ"+
+      "</option>"+
+
+      '<option value="again">'+
+      "🔄 もう一度進む"+
+      "</option>"+
+
+      '<option value="display">'+
+      "🎁 表示だけ・動かない"+
+      "</option>"+
+
+      '<option value="previousBack">'+
+      "🗾 一つ前の県を○マス戻す"+
+      "</option>"+
+
+      '<option value="previousStart">'+
+      "💥 一つ前の県をSTARTへ"+
+      "</option>"+
+
+      '<option value="swapPrevious">'+
+      "🔁 一つ前の県と位置交換"+
+      "</option>"+
+
+      '<option value="leaderBack">'+
+      "🥇 1位の県を○マス戻す"+
+      "</option>"+
+
+      '<option value="lastForward">'+
+      "🥉 最下位の県を○マス進める"+
+      "</option>"+
+
+      '</select>'+
+
+      '<input class="input" '+
+      'id="trickValue-'+i+'" '+
+      'type="number" '+
+      'min="1" '+
+      'max="100" '+
+      'value="'+
+      t.value+
+      '">'+
+
+      '</div>'+
+
+      '<input class="input trickMessage" '+
+      'id="trickText-'+i+'" '+
+      'placeholder="表示文字（任意）" '+
+      'value="'+
+      escapeHTML(t.text)+
+      '">';
+
+
+    area.appendChild(row);
+
+
+    document.getElementById(
+      "trickEnabled-"+i
+    ).value=
+      t.enabled
+        ? "on"
+        : "off";
+
+
+    document.getElementById(
+      "trickType-"+i
+    ).value=
+      t.type;
+
+  }
+
+}
+
+
+/* ==================================================
+   仕掛け保存
+================================================== */
+
+function saveTrickSettings(){
+
+  const newTricks={};
+
+
+  for(
+    let i=1;
+    i<=GOAL;
+    i++
+  ){
+
+    const enabled=
+      document.getElementById(
+        "trickEnabled-"+i
+      ).value==="on";
+
+
+    const type=
+      document.getElementById(
+        "trickType-"+i
+      ).value;
+
+
+    let value=
+      Number(
+        document.getElementById(
+          "trickValue-"+i
+        ).value
+      );
+
+
+    if(!value||value<1){
+
+      value=1;
+
+    }
+
+
+    const text=
+      document.getElementById(
+        "trickText-"+i
+      ).value.trim();
+
+
+    newTricks[i]={
+
+      enabled:
+        enabled &&
+        type!=="none",
+
+      type:type,
+
+      value:value,
+
+      text:text
+
+    };
+
+  }
+
+
+  tricks=newTricks;
+
+
+  closeTrickModal();
+
+  updateAll();
+
+
+  showPopup(
+    "💥",
+    "仕掛け設定完了！",
+    "仕掛けマスを更新しました。"
+  );
+
+}
+
+
+/* ==================================================
    リセット
-===================================================== */
+================================================== */
 
 function resetGame(){
 
-  const ok =
-    confirm(
+  if(
+    !confirm(
       "全てのコマをSTARTに戻しますか？"
-    );
+    )
+  ){
 
-
-  if(!ok){
     return;
+
   }
 
 
   pieces.forEach(function(name){
 
-    positions[name] = 0;
+    positions[name]=0;
 
   });
 
@@ -2343,50 +3417,9 @@ function resetGame(){
 }
 
 
-/* =====================================================
-   ポップアップ
-===================================================== */
-
-function showPopup(
-  icon,
-  title,
-  text
-){
-
-  document.getElementById(
-    "popupIcon"
-  ).textContent = icon;
-
-
-  document.getElementById(
-    "popupTitle"
-  ).textContent = title;
-
-
-  document.getElementById(
-    "popupText"
-  ).textContent = text;
-
-
-  document
-    .getElementById("popup")
-    .classList.add("show");
-
-}
-
-
-function closePopup(){
-
-  document
-    .getElementById("popup")
-    .classList.remove("show");
-
-}
-
-
-/* =====================================================
+/* ==================================================
    全更新
-===================================================== */
+================================================== */
 
 function updateAll(){
 
@@ -2396,18 +3429,18 @@ function updateAll(){
 
   renderPieces();
 
-  updateRanking();
-
   createGiftButtons();
 
 }
 
 
-/* =====================================================
-   初期起動
-===================================================== */
+/* ==================================================
+   起動
+================================================== */
 
 initializePositions();
+
+initializeTricks();
 
 updateAll();
 
