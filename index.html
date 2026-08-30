@@ -1,1 +1,2407 @@
-# SUGOROKU2
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>自由設定すごろく</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#111;
+  font-family:-apple-system,BlinkMacSystemFont,
+  "Noto Sans JP","Hiragino Kaku Gothic ProN",
+  Meiryo,sans-serif;
+}
+
+body{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.app{
+  position:relative;
+  width:min(100vw,56.25vh);
+  height:min(100vh,177.7778vw);
+  aspect-ratio:9/16;
+  overflow:hidden;
+  background:linear-gradient(180deg,#fff8fb,#f5f1ff 55%,#eef8ff);
+}
+
+/* =========================
+上部
+========================= */
+
+.header{
+  height:8%;
+  text-align:center;
+  padding:1% 2% 0;
+}
+
+.title{
+  margin:0;
+  font-size:clamp(14px,4.2vw,22px);
+  line-height:1.08;
+  font-weight:1000;
+}
+
+.subtitle{
+  margin-top:.5%;
+  font-size:clamp(7px,1.8vw,10px);
+  color:#666;
+  font-weight:800;
+}
+
+/* =========================
+ランキング
+========================= */
+
+.rank{
+  height:7.5%;
+  margin:0 2.3%;
+  padding:1%;
+  background:#fff;
+  border-radius:11px;
+  box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+.rank-title{
+  height:23%;
+  text-align:center;
+  font-size:clamp(7px,1.9vw,10px);
+  font-weight:1000;
+}
+
+.rank-list{
+  height:72%;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:4px;
+}
+
+.rank-item{
+  min-width:0;
+  border-radius:8px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  background:#eee;
+}
+
+.rank-item:nth-child(1){background:#fff0a5;}
+.rank-item:nth-child(2){background:#eee;}
+.rank-item:nth-child(3){background:#efdcc7;}
+
+.rank-medal{
+  font-size:clamp(10px,2.8vw,15px);
+  line-height:1;
+}
+
+.rank-name{
+  max-width:95%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:clamp(6px,1.8vw,9px);
+  font-weight:1000;
+}
+
+.rank-pos{
+  font-size:clamp(5px,1.5vw,8px);
+  color:#666;
+  font-weight:900;
+}
+
+/* =========================
+現在選択
+========================= */
+
+.selected{
+  height:5%;
+  margin:1% 2.3% 0;
+  background:#fff;
+  border-radius:10px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:5px;
+  box-shadow:0 2px 7px rgba(0,0,0,.06);
+}
+
+.selected-small{
+  color:#777;
+  font-size:clamp(7px,1.7vw,9px);
+  font-weight:800;
+}
+
+.selected-name{
+  max-width:65%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:clamp(10px,3vw,15px);
+  font-weight:1000;
+}
+
+/* =========================
+すごろく
+========================= */
+
+.board-area{
+  height:30%;
+  margin:1% 2.3% 0;
+  padding:1.2%;
+  background:#fff;
+  border-radius:11px;
+  box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+.board-title{
+  height:9%;
+  text-align:center;
+  font-size:clamp(7px,1.9vw,10px);
+  font-weight:1000;
+}
+
+.board{
+  height:90%;
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  grid-template-rows:repeat(5,1fr);
+  gap:3px;
+}
+
+.cell{
+  position:relative;
+  min-width:0;
+  min-height:0;
+  border:1px solid #d5d5d5;
+  border-radius:5px;
+  background:#fafafa;
+  overflow:hidden;
+}
+
+.cell.goal{
+  background:#fff0a5;
+  border-color:#d2a500;
+}
+
+.cell-number{
+  position:absolute;
+  left:3px;
+  top:2px;
+  z-index:4;
+  font-size:clamp(6px,1.6vw,9px);
+  font-weight:1000;
+  color:#777;
+}
+
+.goal-label{
+  position:absolute;
+  right:3px;
+  top:2px;
+  z-index:4;
+  font-size:clamp(5px,1.5vw,8px);
+  font-weight:1000;
+  color:#8a6800;
+}
+
+/* =========================
+コマ
+========================= */
+
+.pieces{
+  position:absolute;
+  left:0;
+  right:0;
+  top:17%;
+  bottom:1%;
+  padding:2px;
+
+  display:flex;
+  flex-wrap:wrap;
+  align-content:center;
+  justify-content:center;
+
+  gap:3px 2px;
+
+  overflow:hidden;
+}
+
+.piece{
+  min-width:0;
+  max-width:48%;
+
+  padding:3px 5px;
+
+  border-radius:20px;
+
+  color:#fff;
+
+  font-size:clamp(6px,1.8vw,9px);
+  line-height:1.25;
+
+  font-weight:1000;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+
+  text-align:center;
+
+  border:1px solid rgba(255,255,255,.9);
+
+  box-shadow:0 2px 3px rgba(0,0,0,.25);
+
+  cursor:pointer;
+
+  flex-shrink:0;
+}
+
+.piece.selected-piece{
+  outline:2px solid #111;
+  transform:scale(1.1);
+  z-index:10;
+}
+
+/* =========================
+一覧
+========================= */
+
+.status{
+  height:20%;
+  margin:1% 2.3% 0;
+  padding:1%;
+  background:#fff;
+  border-radius:11px;
+  box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+.status-title{
+  height:9%;
+  text-align:center;
+  font-size:clamp(7px,1.9vw,10px);
+  font-weight:1000;
+}
+
+.status-grid{
+  height:90%;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  grid-auto-rows:1fr;
+  gap:2px;
+  overflow:hidden;
+}
+
+.status-item{
+  min-width:0;
+  min-height:0;
+
+  border:1px solid #ddd;
+  border-radius:4px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:0 3px;
+
+  background:#fafafa;
+
+  font-size:clamp(4.8px,1.4vw,7px);
+  font-weight:900;
+
+  cursor:pointer;
+}
+
+.status-item.active{
+  background:#222;
+  color:#fff;
+  border-color:#222;
+}
+
+.status-name{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.status-pos{
+  flex-shrink:0;
+  margin-left:2px;
+  color:#ff3158;
+}
+
+.status-item.active .status-pos{
+  color:#fff;
+}
+
+/* =========================
+ギフト
+========================= */
+
+.gift-area{
+  height:11%;
+  margin:1% 2.3% 0;
+  padding:1%;
+  background:#fff;
+  border-radius:11px;
+  box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+.gift-title{
+  height:22%;
+  text-align:center;
+  font-size:clamp(7px,1.9vw,10px);
+  font-weight:1000;
+}
+
+.gifts{
+  height:74%;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:4px;
+}
+
+.gift{
+  border:0;
+  border-radius:8px;
+  background:#f1f1f1;
+  font-size:clamp(7px,2vw,10px);
+  font-weight:1000;
+}
+
+.gift:active{
+  transform:scale(.94);
+}
+
+/* =========================
+下ボタン
+========================= */
+
+.controls{
+  height:6%;
+  margin:1% 2.3% 0;
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:4px;
+}
+
+.control{
+  border:0;
+  border-radius:8px;
+  color:#fff;
+  font-size:clamp(7px,1.8vw,10px);
+  font-weight:1000;
+}
+
+.project{
+  background:#5e35b1;
+}
+
+.settings{
+  background:#555;
+}
+
+.reset{
+  background:#222;
+}
+
+/* =====================================================
+モーダル共通
+===================================================== */
+
+.modal{
+  position:absolute;
+  inset:0;
+  z-index:100;
+
+  background:rgba(20,20,25,.68);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  opacity:0;
+  pointer-events:none;
+
+  transition:.2s;
+}
+
+.modal.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.modal-box{
+  width:94%;
+  max-height:92%;
+
+  background:#fff;
+  border-radius:18px;
+
+  padding:14px;
+
+  display:flex;
+  flex-direction:column;
+
+  overflow:hidden;
+}
+
+.modal-head{
+  min-height:42px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.modal-title{
+  font-size:clamp(14px,4vw,20px);
+  font-weight:1000;
+}
+
+.close{
+  width:38px;
+  height:38px;
+
+  border:0;
+  border-radius:50%;
+
+  background:#eee;
+
+  font-size:18px;
+  font-weight:1000;
+}
+
+/* =====================================================
+企画設定
+===================================================== */
+
+.project-content{
+  overflow:auto;
+  padding:5px 1px 10px;
+}
+
+.setting-label{
+  display:block;
+  margin:10px 0 4px;
+
+  font-size:11px;
+  font-weight:1000;
+}
+
+.input{
+  width:100%;
+  height:40px;
+
+  border:1px solid #ddd;
+  border-radius:8px;
+
+  padding:0 9px;
+
+  font-size:13px;
+  font-weight:800;
+  outline:none;
+}
+
+.small-row{
+  display:grid;
+  grid-template-columns:1fr 100px;
+  gap:6px;
+}
+
+.help{
+  margin-top:4px;
+  color:#777;
+  font-size:9px;
+  line-height:1.4;
+}
+
+.pref-edit-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:5px;
+
+  margin-top:5px;
+}
+
+.pref-edit{
+  display:grid;
+  grid-template-columns:28px 1fr;
+  gap:4px;
+}
+
+.num{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:#eee;
+  border-radius:6px;
+
+  font-size:9px;
+  font-weight:1000;
+}
+
+.pref-edit input{
+  height:34px;
+
+  border:1px solid #ddd;
+  border-radius:7px;
+
+  padding:0 5px;
+
+  font-size:10px;
+  font-weight:800;
+}
+
+.modal-buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+
+  margin-top:8px;
+}
+
+.modal-button{
+  height:42px;
+  border:0;
+  border-radius:9px;
+  font-weight:1000;
+}
+
+.save{
+  background:#222;
+  color:#fff;
+}
+
+.cancel{
+  background:#eee;
+}
+
+/* =====================================================
+都道府県/コマ選択
+===================================================== */
+
+.choose-content{
+  overflow:auto;
+  flex:1;
+}
+
+.choose-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:5px;
+
+  padding:5px 1px;
+}
+
+.choose-btn{
+  min-height:42px;
+
+  border:1px solid #ddd;
+  border-radius:9px;
+
+  background:#f8f8f8;
+
+  font-size:clamp(8px,2.5vw,12px);
+  font-weight:1000;
+}
+
+.choose-btn.current{
+  background:#222;
+  color:#fff;
+}
+
+/* =====================================================
+POPUP
+===================================================== */
+
+.popup{
+  position:absolute;
+  inset:0;
+  z-index:300;
+
+  background:rgba(0,0,0,.45);
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  opacity:0;
+  pointer-events:none;
+}
+
+.popup.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.popup-box{
+  width:76%;
+  max-width:300px;
+
+  background:#fff;
+
+  border-radius:20px;
+
+  padding:22px 14px;
+
+  text-align:center;
+}
+
+.popup-icon{
+  font-size:44px;
+}
+
+.popup-title{
+  margin-top:3px;
+  font-size:19px;
+  font-weight:1000;
+}
+
+.popup-text{
+  margin-top:5px;
+  font-size:12px;
+  color:#555;
+  font-weight:800;
+}
+
+.popup-close{
+  width:100%;
+  height:40px;
+
+  margin-top:12px;
+
+  border:0;
+  border-radius:9px;
+
+  background:#222;
+  color:#fff;
+
+  font-weight:1000;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- =========================
+タイトル
+========================= -->
+
+<div class="header">
+
+<h1 class="title" id="title">
+🗾 出身県はどこ？県民パワーでGOALを目指せ！
+</h1>
+
+<div class="subtitle" id="subtitle">
+指定ギフトでコマを進めよう！
+</div>
+
+</div>
+
+
+<!-- =========================
+ランキング
+========================= -->
+
+<div class="rank">
+
+<div class="rank-title">
+🏆 現在のTOP3
+</div>
+
+<div class="rank-list" id="rankList"></div>
+
+</div>
+
+
+<!-- =========================
+選択ボタン
+========================= -->
+
+<div style="height:6.5%;margin:1% 2.3% 0;">
+
+<button
+class="select-button"
+style="
+width:100%;
+height:100%;
+border:0;
+border-radius:11px;
+background:#222;
+color:#fff;
+font-size:clamp(11px,3.2vw,16px);
+font-weight:1000;
+"
+onclick="openChoose()">
+
+🎯 コマを選ぶ
+
+</button>
+
+</div>
+
+
+<!-- =========================
+現在選択
+========================= -->
+
+<div class="selected">
+
+<span class="selected-small">
+現在選択中
+</span>
+
+<span class="selected-name" id="selectedName">
+まだ選択されていません
+</span>
+
+</div>
+
+
+<!-- =========================
+盤面
+========================= -->
+
+<div class="board-area">
+
+<div class="board-title" id="boardTitle">
+🏁 30マス先がGOAL！
+</div>
+
+<div class="board" id="board"></div>
+
+</div>
+
+
+<!-- =========================
+コマ一覧
+========================= -->
+
+<div class="status">
+
+<div class="status-title" id="statusTitle">
+📊 全コマの現在位置
+</div>
+
+<div class="status-grid" id="statusGrid"></div>
+
+</div>
+
+
+<!-- =========================
+ギフト
+========================= -->
+
+<div class="gift-area">
+
+<div class="gift-title" id="giftTitle">
+🎁 指定ギフトが来たらコマを進める！
+</div>
+
+<div class="gifts" id="giftButtons"></div>
+
+</div>
+
+
+<!-- =========================
+操作
+========================= -->
+
+<div class="controls">
+
+<button
+class="control project"
+onclick="openProjectSettings()">
+
+🎯 企画設定
+
+</button>
+
+<button
+class="control settings"
+onclick="openGiftSettings()">
+
+🎁 ギフト設定
+
+</button>
+
+<button
+class="control reset"
+onclick="resetGame()">
+
+🔄 リセット
+
+</button>
+
+</div>
+
+
+<!-- =====================================================
+企画設定モーダル
+===================================================== -->
+
+<div class="modal" id="projectModal">
+
+<div class="modal-box">
+
+<div class="modal-head">
+
+<div class="modal-title">
+🎯 企画設定
+</div>
+
+<button
+class="close"
+onclick="closeProjectSettings()">
+
+×
+
+</button>
+
+</div>
+
+
+<div class="project-content">
+
+<label class="setting-label">
+企画タイトル
+</label>
+
+<input
+class="input"
+id="titleInput"
+value="🗾 出身県はどこ？県民パワーでGOALを目指せ！">
+
+
+<label class="setting-label">
+サブタイトル
+</label>
+
+<input
+class="input"
+id="subtitleInput"
+value="指定ギフトでコマを進めよう！">
+
+
+<label class="setting-label">
+コマ数
+</label>
+
+<div class="small-row">
+
+<input
+class="input"
+id="pieceCountInput"
+type="number"
+min="1"
+max="47"
+value="47"
+onchange="buildPieceInputs()">
+
+<input
+class="input"
+id="goalInput"
+type="number"
+min="1"
+max="100"
+value="30">
+
+</div>
+
+<div class="help">
+左：コマ数　／　右：GOALまでのマス数
+</div>
+
+
+<label class="setting-label">
+コマの名称
+</label>
+
+<div
+class="pref-edit-grid"
+id="pieceEditGrid">
+</div>
+
+</div>
+
+
+<div class="modal-buttons">
+
+<button
+class="modal-button save"
+onclick="saveProjectSettings()">
+
+保存
+
+</button>
+
+<button
+class="modal-button cancel"
+onclick="closeProjectSettings()">
+
+キャンセル
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+コマ選択
+===================================================== -->
+
+<div class="modal" id="chooseModal">
+
+<div class="modal-box" style="height:88%;">
+
+<div class="modal-head">
+
+<div class="modal-title">
+🎯 コマを選ぶ
+</div>
+
+<button
+class="close"
+onclick="closeChoose()">
+
+×
+
+</button>
+
+</div>
+
+<div class="choose-content">
+
+<div
+class="choose-grid"
+id="chooseGrid">
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+ギフト設定
+===================================================== -->
+
+<div class="modal" id="giftModal">
+
+<div class="modal-box" style="height:88%;">
+
+<div class="modal-head">
+
+<div class="modal-title">
+🎁 ギフト設定
+</div>
+
+<button
+class="close"
+onclick="closeGiftSettings()">
+
+×
+
+</button>
+
+</div>
+
+<div class="project-content">
+
+<div id="giftSettingsRows"></div>
+
+<div class="help">
+ギフト名・アイコン・進むマス数を自由に変更できます。
+</div>
+
+</div>
+
+<div class="modal-buttons">
+
+<button
+class="modal-button save"
+onclick="saveGiftSettings()">
+
+保存
+
+</button>
+
+<button
+class="modal-button cancel"
+onclick="closeGiftSettings()">
+
+キャンセル
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+POPUP
+===================================================== -->
+
+<div class="popup" id="popup">
+
+<div class="popup-box">
+
+<div class="popup-icon" id="popupIcon">
+🎁
+</div>
+
+<div class="popup-title" id="popupTitle">
+コマが進んだ！
+</div>
+
+<div class="popup-text" id="popupText">
+</div>
+
+<button
+class="popup-close"
+onclick="closePopup()">
+
+閉じる
+
+</button>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+<script>
+
+/* =====================================================
+初期設定
+===================================================== */
+
+let projectTitle =
+"🗾 出身県はどこ？県民パワーでGOALを目指せ！";
+
+let projectSubtitle =
+"指定ギフトでコマを進めよう！";
+
+let GOAL=30;
+
+
+/* =====================================================
+初期47コマ
+===================================================== */
+
+let pieces=[
+
+"北海道",
+
+"青森県",
+"岩手県",
+"宮城県",
+"秋田県",
+"山形県",
+"福島県",
+
+"茨城県",
+"栃木県",
+"群馬県",
+"埼玉県",
+"千葉県",
+"東京都",
+"神奈川県",
+
+"新潟県",
+"富山県",
+"石川県",
+"福井県",
+"山梨県",
+"長野県",
+"岐阜県",
+"静岡県",
+"愛知県",
+
+"三重県",
+"滋賀県",
+"京都府",
+"大阪府",
+"兵庫県",
+"奈良県",
+"和歌山県",
+
+"鳥取県",
+"島根県",
+"岡山県",
+"広島県",
+"山口県",
+
+"徳島県",
+"香川県",
+"愛媛県",
+"高知県",
+
+"福岡県",
+"佐賀県",
+"長崎県",
+"熊本県",
+"大分県",
+"宮崎県",
+"鹿児島県",
+"沖縄県"
+
+];
+
+
+/* =====================================================
+カラフルカラー
+===================================================== */
+
+const colors=[
+
+"#e53935",
+"#8e24aa",
+"#3949ab",
+"#1e88e5",
+"#00897b",
+"#43a047",
+"#7cb342",
+"#c0ca33",
+"#f9a825",
+"#ff8f00",
+"#fb8c00",
+"#f4511e",
+"#d81b60",
+"#ad1457",
+"#6d4c41",
+"#546e7a",
+"#5e35b1",
+"#00acc1",
+"#00838f",
+"#2e7d32",
+"#558b2f",
+"#827717",
+"#ef6c00",
+"#bf360c",
+"#c62828",
+"#6a1b9a",
+"#283593",
+"#1565c0",
+"#00695c",
+"#689f38",
+"#9e9d24",
+"#ef6c00",
+"#ff6f00",
+"#e65100",
+"#b71c1c",
+"#880e4f",
+"#4527a0",
+"#311b92",
+"#0277bd",
+"#00838f",
+"#00695c",
+"#33691e",
+"#827717",
+"#ff8f00",
+"#e65100",
+"#4e342e"
+
+];
+
+
+/* =====================================================
+位置
+===================================================== */
+
+let positions={};
+
+let selectedPiece=null;
+
+function initializePositions(){
+
+  const old=positions;
+
+  positions={};
+
+  pieces.forEach(name=>{
+
+    positions[name]=
+      old[name] || 0;
+
+  });
+
+}
+
+
+/* =====================================================
+ギフト
+===================================================== */
+
+let gifts=[
+
+{
+icon:"❤️",
+name:"ハートミー",
+move:1
+},
+
+{
+icon:"🍩",
+name:"ドーナツ",
+move:3
+},
+
+{
+icon:"🎁",
+name:"指定ギフト",
+move:5
+},
+
+{
+icon:"⭐",
+name:"スペシャル",
+move:10
+},
+
+{
+icon:"🌟",
+name:"特大ギフト",
+move:20
+}
+
+];
+
+
+/* =====================================================
+初期化
+===================================================== */
+
+initializePositions();
+
+
+/* =====================================================
+タイトル更新
+===================================================== */
+
+function updateTitle(){
+
+  document.getElementById(
+    "title"
+  ).textContent=projectTitle;
+
+  document.getElementById(
+    "subtitle"
+  ).textContent=projectSubtitle;
+
+  document.getElementById(
+    "boardTitle"
+  ).textContent=
+    "🏁 "+
+    GOAL+
+    "マス先がGOAL！";
+
+}
+
+
+/* =====================================================
+盤面作成
+===================================================== */
+
+function createBoard(){
+
+  const board=
+    document.getElementById("board");
+
+  board.innerHTML="";
+
+
+  for(let i=1;i<=GOAL;i++){
+
+    const cell=
+      document.createElement("div");
+
+    cell.className="cell";
+
+    cell.id="cell-"+i;
+
+
+    const number=
+      document.createElement("div");
+
+    number.className="cell-number";
+
+    number.textContent=i;
+
+
+    const piecesArea=
+      document.createElement("div");
+
+    piecesArea.className="pieces";
+
+    piecesArea.id="pieces-"+i;
+
+
+    cell.appendChild(number);
+
+    cell.appendChild(piecesArea);
+
+
+    if(i===GOAL){
+
+      cell.classList.add("goal");
+
+      const label=
+        document.createElement("div");
+
+      label.className="goal-label";
+
+      label.textContent="🏁GOAL";
+
+      cell.appendChild(label);
+
+    }
+
+
+    board.appendChild(cell);
+
+  }
+
+}
+
+
+/* =====================================================
+コマ名を短く表示
+===================================================== */
+
+function shortName(name){
+
+  if(name.length<=5){
+
+    return name;
+
+  }
+
+  return name.substring(0,5)+"…";
+
+}
+
+
+/* =====================================================
+盤面コマ描画
+===================================================== */
+
+function renderPieces(){
+
+  document
+    .querySelectorAll(".pieces")
+    .forEach(el=>{
+
+      el.innerHTML="";
+
+    });
+
+
+  pieces.forEach((name,index)=>{
+
+    const pos=
+      positions[name] || 0;
+
+
+    if(pos<=0)return;
+
+
+    const area=
+      document.getElementById(
+        "pieces-"+pos
+      );
+
+
+    if(!area)return;
+
+
+    const piece=
+      document.createElement("div");
+
+
+    piece.className="piece";
+
+
+    if(name===selectedPiece){
+
+      piece.classList.add(
+        "selected-piece"
+      );
+
+    }
+
+
+    piece.textContent=
+      shortName(name);
+
+
+    piece.style.background=
+      colors[index % colors.length];
+
+
+    piece.title=
+      name+
+      " / "+
+      pos+
+      "マス";
+
+
+    piece.onclick=(e)=>{
+
+      e.stopPropagation();
+
+      selectPiece(name);
+
+    };
+
+
+    area.appendChild(piece);
+
+  });
+
+}
+
+
+/* =====================================================
+一覧作成
+===================================================== */
+
+function createStatus(){
+
+  const grid=
+    document.getElementById(
+      "statusGrid"
+    );
+
+  grid.innerHTML="";
+
+
+  pieces.forEach(name=>{
+
+    const item=
+      document.createElement("div");
+
+
+    item.className="status-item";
+
+    item.id=
+      "status-"+name;
+
+
+    item.onclick=()=>{
+
+      selectPiece(name);
+
+    };
+
+
+    item.innerHTML=`
+
+      <span class="status-name">
+        ${name}
+      </span>
+
+      <span class="status-pos">
+        ${positions[name]}/${GOAL}
+      </span>
+
+    `;
+
+
+    grid.appendChild(item);
+
+  });
+
+}
+
+
+/* =====================================================
+一覧更新
+===================================================== */
+
+function updateStatus(){
+
+  const grid=
+    document.getElementById(
+      "statusGrid"
+    );
+
+
+  pieces.forEach(name=>{
+
+    const item=
+      document.getElementById(
+        "status-"+name
+      );
+
+
+    if(!item)return;
+
+
+    const pos=
+      positions[name] || 0;
+
+
+    item.innerHTML=`
+
+      <span class="status-name">
+        ${name}
+      </span>
+
+      <span class="status-pos">
+        ${pos}/${GOAL}
+      </span>
+
+    `;
+
+
+    item.classList.toggle(
+      "active",
+      name===selectedPiece
+    );
+
+  });
+
+}
+
+
+/* =====================================================
+コマ選択
+===================================================== */
+
+function selectPiece(name){
+
+  selectedPiece=name;
+
+
+  document.getElementById(
+    "selectedName"
+  ).textContent=name;
+
+
+  updateStatus();
+
+  renderPieces();
+
+}
+
+
+/* =====================================================
+選択画面
+===================================================== */
+
+function createChoose(){
+
+  const grid=
+    document.getElementById(
+      "chooseGrid"
+    );
+
+  grid.innerHTML="";
+
+
+  pieces.forEach(name=>{
+
+    const btn=
+      document.createElement("button");
+
+
+    btn.className="choose-btn";
+
+    btn.textContent=name;
+
+
+    if(name===selectedPiece){
+
+      btn.classList.add("current");
+
+    }
+
+
+    btn.onclick=()=>{
+
+      selectPiece(name);
+
+      closeChoose();
+
+    };
+
+
+    grid.appendChild(btn);
+
+  });
+
+}
+
+
+function openChoose(){
+
+  createChoose();
+
+  document
+    .getElementById("chooseModal")
+    .classList.add("show");
+
+}
+
+
+function closeChoose(){
+
+  document
+    .getElementById("chooseModal")
+    .classList.remove("show");
+
+}
+
+
+/* =====================================================
+ランキング
+===================================================== */
+
+function updateRanking(){
+
+  const list=
+    document.getElementById(
+      "rankList"
+    );
+
+  list.innerHTML="";
+
+
+  const sorted=
+    pieces
+      .map(name=>({
+
+        name:name,
+        pos:positions[name] || 0
+
+      }))
+      .sort(
+        (a,b)=>b.pos-a.pos
+      )
+      .slice(0,3);
+
+
+  const medals=[
+    "🥇",
+    "🥈",
+    "🥉"
+  ];
+
+
+  sorted.forEach((item,index)=>{
+
+    const div=
+      document.createElement("div");
+
+
+    div.className="rank-item";
+
+
+    div.innerHTML=`
+
+      <div class="rank-medal">
+        ${medals[index]}
+      </div>
+
+      <div class="rank-name">
+        ${item.name}
+      </div>
+
+      <div class="rank-pos">
+        ${item.pos}/${GOAL}マス
+      </div>
+
+    `;
+
+
+    list.appendChild(div);
+
+  });
+
+}
+
+
+/* =====================================================
+全更新
+===================================================== */
+
+function updateAll(){
+
+  updateTitle();
+
+  createBoard();
+
+  createStatus();
+
+  createChoose();
+
+  renderPieces();
+
+  updateStatus();
+
+  updateRanking();
+
+  createGiftButtons();
+
+}
+
+
+/* =====================================================
+ギフトボタン
+===================================================== */
+
+function createGiftButtons(){
+
+  const area=
+    document.getElementById(
+      "giftButtons"
+    );
+
+
+  area.innerHTML="";
+
+
+  gifts.slice(0,3)
+  .forEach(gift=>{
+
+    const btn=
+      document.createElement("button");
+
+
+    btn.className="gift";
+
+
+    btn.innerHTML=
+      gift.icon+
+      " "+
+      gift.name+
+      "<br>＋"+
+      gift.move+
+      "マス";
+
+
+    btn.onclick=()=>{
+
+      moveSelected(
+        gift.move,
+        gift.icon
+      );
+
+    };
+
+
+    area.appendChild(btn);
+
+  });
+
+}
+
+
+/* =====================================================
+移動
+===================================================== */
+
+function moveSelected(move,icon){
+
+  if(!selectedPiece){
+
+    showPopup(
+      "⚠️",
+      "コマを選んでね！",
+      "「🎯 コマを選ぶ」から動かしたいコマを選択してください。"
+    );
+
+    return;
+
+  }
+
+
+  const old=
+    positions[selectedPiece] || 0;
+
+
+  if(old>=GOAL){
+
+    showPopup(
+      "🏁",
+      "すでにGOAL！",
+      selectedPiece+
+      " はすでにゴールしています。"
+    );
+
+    return;
+
+  }
+
+
+  const next=
+    Math.min(
+      GOAL,
+      old+move
+    );
+
+
+  positions[selectedPiece]=next;
+
+
+  updateAll();
+
+
+  if(next>=GOAL){
+
+    showPopup(
+      "🏆",
+      "GOAL！",
+      selectedPiece+
+      " が "+
+      GOAL+
+      "マスを完走しました！"
+    );
+
+  }else{
+
+    showPopup(
+      icon,
+      "コマが進んだ！",
+      selectedPiece+
+      " が "+
+      (next-old)+
+      "マス進みました！"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+企画設定
+===================================================== */
+
+function openProjectSettings(){
+
+  document.getElementById(
+    "titleInput"
+  ).value=projectTitle;
+
+
+  document.getElementById(
+    "subtitleInput"
+  ).value=projectSubtitle;
+
+
+  document.getElementById(
+    "pieceCountInput"
+  ).value=pieces.length;
+
+
+  document.getElementById(
+    "goalInput"
+  ).value=GOAL;
+
+
+  buildPieceInputs();
+
+
+  document
+    .getElementById(
+      "projectModal"
+    )
+    .classList.add("show");
+
+}
+
+
+function closeProjectSettings(){
+
+  document
+    .getElementById(
+      "projectModal"
+    )
+    .classList.remove("show");
+
+}
+
+
+/* =====================================================
+コマ入力欄
+===================================================== */
+
+function buildPieceInputs(){
+
+  const count=
+    Math.max(
+      1,
+      Math.min(
+        47,
+        Number(
+          document.getElementById(
+            "pieceCountInput"
+          ).value
+        ) || 1
+      )
+    );
+
+
+  const grid=
+    document.getElementById(
+      "pieceEditGrid"
+    );
+
+
+  grid.innerHTML="";
+
+
+  for(let i=0;i<count;i++){
+
+    const wrapper=
+      document.createElement("div");
+
+
+    wrapper.className=
+      "pref-edit";
+
+
+    wrapper.innerHTML=`
+
+      <div class="num">
+        ${i+1}
+      </div>
+
+      <input
+        id="pieceInput-${i}"
+        value="${pieces[i] || "コマ"+(i+1)}"
+        maxlength="20">
+
+    `;
+
+
+    grid.appendChild(wrapper);
+
+  }
+
+}
+
+
+/* =====================================================
+企画設定保存
+===================================================== */
+
+function saveProjectSettings(){
+
+  const newTitle=
+    document.getElementById(
+      "titleInput"
+    ).value.trim();
+
+
+  const newSubtitle=
+    document.getElementById(
+      "subtitleInput"
+    ).value.trim();
+
+
+  const count=
+    Math.max(
+      1,
+      Math.min(
+        47,
+        Number(
+          document.getElementById(
+            "pieceCountInput"
+          ).value
+        ) || 1
+      )
+    );
+
+
+  const newGoal=
+    Math.max(
+      1,
+      Math.min(
+        100,
+        Number(
+          document.getElementById(
+            "goalInput"
+          ).value
+        ) || 30
+      )
+    );
+
+
+  const newPieces=[];
+
+
+  for(let i=0;i<count;i++){
+
+    const input=
+      document.getElementById(
+        "pieceInput-"+i
+      );
+
+
+    let name=
+      input
+      ?
+      input.value.trim()
+      :
+      "";
+
+
+    if(!name){
+
+      name="コマ"+(i+1);
+
+    }
+
+
+    /*
+      同じ名称がある場合は
+      自動的に番号を付ける
+    */
+
+    if(newPieces.includes(name)){
+
+      name=
+        name+
+        " "+(i+1);
+
+    }
+
+
+    newPieces.push(name);
+
+  }
+
+
+  projectTitle=
+    newTitle ||
+    "すごろく企画";
+
+
+  projectSubtitle=
+    newSubtitle ||
+    "指定ギフトでコマを進めよう！";
+
+
+  GOAL=newGoal;
+
+
+  pieces=newPieces;
+
+
+  initializePositions();
+
+
+  /*
+    選択中のコマがなくなった場合
+  */
+
+  if(
+    !selectedPiece ||
+    !pieces.includes(selectedPiece)
+  ){
+
+    selectedPiece=null;
+
+    document.getElementById(
+      "selectedName"
+    ).textContent=
+      "まだ選択されていません";
+
+  }
+
+
+  closeProjectSettings();
+
+  updateAll();
+
+
+  showPopup(
+    "🎯",
+    "企画設定を保存！",
+    "テーマ・コマ数・コマ名称を変更しました。"
+  );
+
+}
+
+
+/* =====================================================
+ギフト設定
+===================================================== */
+
+function openGiftSettings(){
+
+  const rows=
+    document.getElementById(
+      "giftSettingsRows"
+    );
+
+
+  rows.innerHTML="";
+
+
+  gifts.forEach((gift,index)=>{
+
+    const wrapper=
+      document.createElement("div");
+
+
+    wrapper.style.marginBottom="10px";
+
+
+    wrapper.innerHTML=`
+
+      <div style="
+        font-size:10px;
+        font-weight:1000;
+        margin-bottom:3px;
+      ">
+        ギフト${index+1}
+      </div>
+
+      <div style="
+        display:grid;
+        grid-template-columns:42px 1fr 65px;
+        gap:5px;
+      ">
+
+        <input
+          class="input"
+          id="giftIcon-${index}"
+          value="${gift.icon}"
+          maxlength="3">
+
+        <input
+          class="input"
+          id="giftName-${index}"
+          value="${gift.name}"
+          maxlength="12">
+
+        <input
+          class="input"
+          id="giftMove-${index}"
+          type="number"
+          min="0"
+          max="100"
+          value="${gift.move}">
+
+      </div>
+
+    `;
+
+
+    rows.appendChild(wrapper);
+
+  });
+
+
+  document
+    .getElementById(
+      "giftModal"
+    )
+    .classList.add("show");
+
+}
+
+
+function closeGiftSettings(){
+
+  document
+    .getElementById(
+      "giftModal"
+    )
+    .classList.remove("show");
+
+}
+
+
+/* =====================================================
+ギフト設定保存
+===================================================== */
+
+function saveGiftSettings(){
+
+  gifts.forEach((gift,index)=>{
+
+    const icon=
+      document.getElementById(
+        "giftIcon-"+index
+      ).value.trim();
+
+
+    const name=
+      document.getElementById(
+        "giftName-"+index
+      ).value.trim();
+
+
+    const move=
+      Number(
+        document.getElementById(
+          "giftMove-"+index
+        ).value
+      );
+
+
+    gift.icon=
+      icon || "🎁";
+
+
+    gift.name=
+      name || "ギフト";
+
+
+    gift.move=
+      Math.max(
+        0,
+        Math.min(
+          100,
+          isNaN(move)
+          ?
+          0
+          :
+          move
+        )
+      );
+
+  });
+
+
+  closeGiftSettings();
+
+  createGiftButtons();
+
+
+  showPopup(
+    "🎁",
+    "ギフト設定完了！",
+    "ギフト名と進むマス数を変更しました。"
+  );
+
+}
+
+
+/* =====================================================
+リセット
+===================================================== */
+
+function resetGame(){
+
+  if(
+    !confirm(
+      "全コマをSTARTに戻しますか？"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  pieces.forEach(name=>{
+
+    positions[name]=0;
+
+  });
+
+
+  updateAll();
+
+
+  showPopup(
+    "🔄",
+    "リセット完了",
+    "全コマがSTARTに戻りました。"
+  );
+
+}
+
+
+/* =====================================================
+POPUP
+===================================================== */
+
+function showPopup(
+  icon,
+  title,
+  text
+){
+
+  document.getElementById(
+    "popupIcon"
+  ).textContent=icon;
+
+
+  document.getElementById(
+    "popupTitle"
+  ).textContent=title;
+
+
+  document.getElementById(
+    "popupText"
+  ).textContent=text;
+
+
+  document
+    .getElementById(
+      "popup"
+    )
+    .classList.add("show");
+
+}
+
+
+function closePopup(){
+
+  document
+    .getElementById(
+      "popup"
+    )
+    .classList.remove("show");
+
+}
+
+
+/* =====================================================
+初期起動
+===================================================== */
+
+updateAll();
+
+</script>
+
+</body>
+</html>
