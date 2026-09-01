@@ -2,523 +2,368 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>都道府県すごろく</title>
 
 <style>
 *{
   box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
+  margin:0;
+  padding:0;
 }
 
 html,body{
-  margin:0;
   width:100%;
   height:100%;
   overflow:hidden;
   font-family:
     -apple-system,
     BlinkMacSystemFont,
-    "Noto Sans JP",
     "Hiragino Kaku Gothic ProN",
+    "Yu Gothic",
     Meiryo,
     sans-serif;
-  background:#222;
+  background:#f4f0ff;
 }
 
-button,input,select{
+body{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+button,
+input,
+select{
   font-family:inherit;
 }
 
 button{
   cursor:pointer;
+  border:none;
 }
 
-/* ========================================
-   9:16 メイン画面
-======================================== */
+/* =========================
+   アプリ全体
+========================= */
 
-#app{
+.app{
+  width:100%;
+  max-width:900px;
+  height:100vh;
+  max-height:1000px;
+  background:#fff;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  box-shadow:0 0 30px rgba(0,0,0,.12);
+}
+
+/* =========================
+   ヘッダー
+========================= */
+
+.header{
+  flex:0 0 auto;
+  background:linear-gradient(135deg,#6d28d9,#8b5cf6);
+  color:white;
+  padding:12px 14px;
+  text-align:center;
   position:relative;
-  width:100vw;
-  height:100dvh;
-  overflow:hidden;
-
-  background:
-    linear-gradient(
-      180deg,
-      #fff8fc 0%,
-      #f4f0ff 55%,
-      #eefaff 100%
-    );
 }
 
-/* ========================================
-   タイトル
-======================================== */
-
-#header{
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-
-  height:11dvh;
-  min-height:65px;
-
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-
-  padding:5px 8px;
-
-  background:#fff;
-
-  border-bottom:3px solid #222;
-
-  z-index:50;
-
-  box-shadow:0 2px 8px rgba(0,0,0,.12);
-}
-
-#title{
-  width:100%;
-
-  margin:0;
-
-  text-align:center;
-
-  font-size:clamp(15px,4.8vw,27px);
-  line-height:1.15;
-
-  font-weight:1000;
-
-  color:#111;
-
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-#subtitle{
-  margin-top:4px;
-
-  width:100%;
-
-  text-align:center;
-
-  font-size:clamp(8px,2.5vw,13px);
-
-  color:#666;
-
+.header h1{
+  font-size:clamp(18px,4vw,30px);
   font-weight:900;
-
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  line-height:1.25;
 }
 
-/* ========================================
-   メイン
-======================================== */
+.header p{
+  margin-top:3px;
+  font-size:clamp(11px,2.5vw,16px);
+  opacity:.95;
+}
 
-#main{
+.headerButtons{
   position:absolute;
-
-  top:11dvh;
-  left:0;
-  right:0;
-  bottom:0;
-
-  padding:5px;
-
+  right:8px;
+  top:8px;
   display:flex;
-  flex-direction:column;
-
-  gap:5px;
-
-  overflow:hidden;
-}
-
-/* ========================================
-   操作エリア
-======================================== */
-
-#selectRow{
-  flex:0 0 6%;
-  min-height:38px;
-
-  display:grid;
-  grid-template-columns:1fr 1fr;
-
   gap:5px;
 }
 
-.actionButton{
-  border:0;
-  border-radius:9px;
-
-  background:#222;
+.headerButtons button{
+  background:rgba(255,255,255,.2);
   color:#fff;
-
-  font-size:clamp(9px,2.8vw,14px);
-  font-weight:1000;
-}
-
-/* ========================================
-   選択中
-======================================== */
-
-#selectedBox{
-  flex:0 0 5%;
-  min-height:31px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  background:#fff;
-
+  border:1px solid rgba(255,255,255,.35);
   border-radius:8px;
-
-  box-shadow:0 2px 6px rgba(0,0,0,.07);
-
-  font-size:clamp(8px,2.5vw,13px);
-  font-weight:1000;
+  padding:5px 8px;
+  font-size:11px;
 }
 
-#selectedLabel{
-  color:#777;
-  margin-right:5px;
-}
+/* =========================
+   メイン
+========================= */
 
-#selectedName{
-  max-width:72%;
-
-  overflow:hidden;
-  white-space:nowrap;
-  text-overflow:ellipsis;
-}
-
-/* ========================================
-   すごろく盤面
-======================================== */
-
-#boardBox{
-  flex:1 1 auto;
+.main{
+  flex:1;
   min-height:0;
-
   display:flex;
   flex-direction:column;
-
-  background:#fff;
-
-  border-radius:12px;
-
-  padding:5px;
-
-  box-shadow:0 3px 12px rgba(0,0,0,.10);
-
+  padding:8px;
+  gap:7px;
   overflow:hidden;
 }
 
-#boardHeader{
-  flex:0 0 7%;
-  min-height:25px;
+/* =========================
+   選択中
+========================= */
 
+.selectedBox{
+  flex:0 0 auto;
+  background:#f3e8ff;
+  border:2px solid #8b5cf6;
+  border-radius:10px;
+  padding:6px 10px;
   display:flex;
-  justify-content:center;
   align-items:center;
-
-  font-size:clamp(8px,2.7vw,14px);
-
-  font-weight:1000;
-
-  color:#222;
+  justify-content:space-between;
+  gap:8px;
 }
 
-/* ========================================
-   盤面
-======================================== */
+.selectedLabel{
+  font-size:12px;
+  color:#555;
+}
 
-#board{
+.selectedName{
+  font-size:17px;
+  font-weight:900;
+  color:#6d28d9;
+}
+
+.moveButton{
+  background:#6d28d9;
+  color:#fff;
+  border-radius:9px;
+  padding:8px 12px;
+  font-weight:900;
+  font-size:13px;
+  white-space:nowrap;
+}
+
+.moveButton:active{
+  transform:scale(.96);
+}
+
+/* =========================
+   すごろく盤
+========================= */
+
+.boardWrap{
   flex:1;
-
   min-height:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
 
+.board{
+  width:100%;
+  height:100%;
+  max-height:100%;
   display:grid;
-
   grid-template-columns:repeat(6,1fr);
   grid-template-rows:repeat(5,1fr);
-
   gap:4px;
-
-  overflow:hidden;
+  background:#ddd;
+  border:3px solid #444;
+  border-radius:10px;
+  padding:4px;
 }
 
-/* ========================================
+/* =========================
    マス
-======================================== */
+========================= */
 
 .cell{
-  position:relative;
-
   min-width:0;
   min-height:0;
-
-  background:#fafafa;
-
-  border:2px solid #cfcfcf;
-
-  border-radius:10px;
-
+  position:relative;
+  border:2px solid #777;
+  border-radius:7px;
+  background:#fff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
   overflow:hidden;
-}
-
-.cell.goal{
-  background:#fff0a5;
-
-  border-color:#d4a600;
-}
-
-.cell.start{
-  background:#dff5ff;
-
-  border-color:#168bc4;
+  transition:.2s;
 }
 
 .cellNumber{
   position:absolute;
-
   top:2px;
   left:4px;
-
-  z-index:20;
-
-  color:#666;
-
-  font-size:clamp(7px,2vw,11px);
-
-  font-weight:1000;
+  font-size:clamp(8px,1.7vw,12px);
+  font-weight:900;
+  color:#555;
 }
 
-/* ========================================
-   仕掛け
-======================================== */
-
-.trick{
-  position:absolute;
-
-  top:17px;
-  left:2px;
-  right:2px;
-
-  z-index:15;
-
-  padding:3px 2px;
-
-  border-radius:5px;
-
-  background:#ffe1e1;
-
-  color:#c40000;
-
+.cellTrick{
+  font-size:clamp(7px,1.5vw,11px);
+  font-weight:800;
   text-align:center;
-
-  font-size:clamp(5px,1.65vw,9px);
-
-  font-weight:1000;
-
-  line-height:1.05;
-
-  overflow:hidden;
+  line-height:1.1;
+  padding:2px;
+  margin-top:5px;
 }
 
-/* ========================================
-   コマ置き場
-======================================== */
+.cell.goal{
+  background:#fff7cc;
+  border-color:#eab308;
+}
 
-.cellPieces{
-  position:absolute;
+.cell.start{
+  background:#e0f2fe;
+  border-color:#0284c7;
+}
 
-  left:2px;
-  right:2px;
-
-  top:36%;
-  bottom:2px;
-
+.pieces{
+  width:100%;
   display:flex;
-
   flex-wrap:wrap;
-
-  align-content:center;
-
   justify-content:center;
-
-  gap:3px;
-
-  overflow:hidden;
+  gap:2px;
+  padding:2px;
+  margin-top:2px;
 }
-
-/* ========================================
-   大きめカラフルコマ
-======================================== */
 
 .piece{
-  min-width:47%;
-  max-width:98%;
-
-  padding:5px 6px;
-
-  border:2px solid #fff;
-
-  border-radius:18px;
-
-  color:#fff;
-
-  font-size:clamp(6px,2vw,11px);
-
-  font-weight:1000;
-
-  line-height:1;
-
-  text-align:center;
-
-  white-space:nowrap;
-
+  max-width:90%;
   overflow:hidden;
-
   text-overflow:ellipsis;
-
-  box-shadow:
-    0 2px 5px rgba(0,0,0,.3);
+  white-space:nowrap;
+  background:#6d28d9;
+  color:#fff;
+  border-radius:4px;
+  padding:2px 4px;
+  font-size:clamp(7px,1.4vw,10px);
+  font-weight:900;
+  line-height:1.1;
 }
 
-.piece.active{
-  outline:3px solid #111;
-
-  transform:scale(1.06);
-
-  z-index:30;
-}
-
-/* ========================================
+/* =========================
    ギフト
-======================================== */
+========================= */
 
-#giftBox{
-  flex:0 0 10%;
-  min-height:56px;
-
-  background:#fff;
-
+.giftArea{
+  flex:0 0 auto;
+  background:#faf5ff;
+  border:2px solid #ddd6fe;
   border-radius:10px;
-
-  padding:4px;
-
-  box-shadow:0 2px 7px rgba(0,0,0,.08);
+  padding:6px;
 }
 
-#giftTitle{
-  height:28%;
-
-  display:flex;
-  justify-content:center;
-  align-items:center;
-
-  font-size:clamp(7px,2.3vw,12px);
-
-  font-weight:1000;
+.giftTitle{
+  text-align:center;
+  font-size:12px;
+  font-weight:900;
+  color:#5b21b6;
+  margin-bottom:5px;
 }
 
-#giftButtons{
-  height:72%;
-
+.giftGrid{
   display:grid;
-
   grid-template-columns:repeat(3,1fr);
-
-  gap:4px;
+  gap:5px;
 }
 
 .giftButton{
-  border:0;
-
-  border-radius:8px;
-
-  background:#f0f0f0;
-
-  font-size:clamp(6px,2vw,10px);
-
-  line-height:1.1;
-
-  font-weight:1000;
-}
-
-/* ========================================
-   下部設定
-======================================== */
-
-#bottomButtons{
-  flex:0 0 6%;
-  min-height:38px;
-
-  display:grid;
-
-  grid-template-columns:repeat(4,1fr);
-
-  gap:4px;
-}
-
-.bottomButton{
-  border:0;
-
-  border-radius:8px;
-
+  min-width:0;
+  min-height:45px;
+  border-radius:9px;
   color:#fff;
-
-  font-size:clamp(6px,1.9vw,10px);
-
-  font-weight:1000;
-}
-
-#projectButton{
-  background:#673ab7;
-}
-
-#giftSettingButton{
-  background:#00897b;
-}
-
-#trickSettingButton{
-  background:#e65100;
-}
-
-#resetButton{
-  background:#222;
-}
-
-/* ========================================
-   モーダル
-======================================== */
-
-.modal{
-  position:absolute;
-
-  inset:0;
-
-  z-index:100;
-
-  display:none;
-
+  background:#7c3aed;
+  padding:4px;
+  display:flex;
+  flex-direction:column;
   align-items:center;
   justify-content:center;
+  font-weight:900;
+  line-height:1.05;
+  box-shadow:0 2px 3px rgba(0,0,0,.15);
+}
 
-  padding:10px;
+.giftButton:nth-child(2){
+  background:#ec4899;
+}
 
-  background:rgba(0,0,0,.72);
+.giftButton:nth-child(3){
+  background:#f59e0b;
+}
+
+.giftButton:active{
+  transform:scale(.96);
+}
+
+.giftIcon{
+  font-size:18px;
+}
+
+.giftName{
+  max-width:100%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:10px;
+}
+
+.giftMove{
+  font-size:9px;
+  opacity:.95;
+  margin-top:2px;
+}
+
+/* =========================
+   下部設定
+========================= */
+
+.bottomSettings{
+  flex:0 0 auto;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:5px;
+}
+
+.bottomSettings button{
+  background:#eee;
+  border:1px solid #ccc;
+  border-radius:8px;
+  padding:7px 3px;
+  font-size:10px;
+  font-weight:800;
+  color:#333;
+}
+
+.bottomSettings button:active{
+  transform:scale(.97);
+}
+
+/* =========================
+   モーダル
+========================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
+  padding:12px;
 }
 
 .modal.show{
@@ -526,636 +371,599 @@ button{
 }
 
 .modalBox{
-  width:100%;
-  max-width:440px;
-
-  max-height:95%;
-
+  width:min(94vw,600px);
+  max-height:92vh;
   background:#fff;
-
-  border-radius:17px;
-
-  padding:11px;
-
+  border-radius:16px;
+  overflow:hidden;
   display:flex;
   flex-direction:column;
-
-  overflow:hidden;
+  box-shadow:0 10px 40px rgba(0,0,0,.3);
 }
 
 .modalHeader{
-  flex:0 0 40px;
-
-  display:flex;
-
-  align-items:center;
-  justify-content:space-between;
+  flex:0 0 auto;
+  background:#6d28d9;
+  color:#fff;
+  padding:12px;
+  text-align:center;
+  font-weight:900;
+  font-size:17px;
 }
 
-.modalTitle{
-  font-size:clamp(14px,4.3vw,21px);
-
-  font-weight:1000;
-}
-
-.closeButton{
-  width:34px;
-  height:34px;
-
-  border:0;
-
-  border-radius:50%;
-
-  background:#eee;
-
-  font-size:20px;
-
-  font-weight:1000;
-}
-
-.modalScroll{
+.modalBody{
   flex:1;
-
   min-height:0;
-
-  overflow:auto;
-
-  padding:2px;
+  overflow-y:auto;
+  padding:12px;
 }
 
-.settingLabel{
-  display:block;
-
-  margin:9px 0 4px;
-
-  font-size:10px;
-
-  font-weight:1000;
-}
-
-.input,
-.select{
-  width:100%;
-
-  height:38px;
-
-  border:1px solid #ddd;
-
-  border-radius:8px;
-
-  padding:0 8px;
-
-  background:#fff;
-
-  font-size:11px;
-
-  font-weight:800;
-
-  outline:none;
-}
-
-.row2{
-  display:grid;
-
-  grid-template-columns:1fr 1fr;
-
-  gap:5px;
-}
-
-.modalButtons{
-  flex:0 0 42px;
-
-  margin-top:7px;
-
-  display:grid;
-
-  grid-template-columns:1fr 1fr;
-
-  gap:5px;
-}
-
-.modalButton{
-  border:0;
-
-  border-radius:8px;
-
-  font-size:11px;
-
-  font-weight:1000;
-}
-
-.saveButton{
-  background:#222;
-  color:#fff;
-}
-
-.cancelButton{
-  background:#eee;
-}
-
-/* ========================================
-   コマ選択
-======================================== */
-
-.chooseGrid{
-  display:grid;
-
-  grid-template-columns:repeat(3,1fr);
-
-  gap:5px;
-}
-
-.chooseButton{
-  min-height:46px;
-
-  border:1px solid #ddd;
-
-  border-radius:8px;
-
-  background:#f7f7f7;
-
-  font-size:clamp(7px,2.4vw,12px);
-
-  font-weight:1000;
-}
-
-.chooseButton.current{
-  background:#222;
-
-  color:#fff;
-}
-
-/* ========================================
-   コマ設定
-======================================== */
-
-.pieceInputs{
-  display:grid;
-
-  grid-template-columns:1fr 1fr;
-
-  gap:5px;
-}
-
-.pieceInput{
-  display:grid;
-
-  grid-template-columns:25px 1fr;
-
-  gap:3px;
-}
-
-.pieceNumber{
+.modalFooter{
+  flex:0 0 auto;
   display:flex;
-
-  align-items:center;
-  justify-content:center;
-
-  background:#eee;
-
-  border-radius:6px;
-
-  font-size:9px;
-
-  font-weight:1000;
+  gap:6px;
+  padding:8px;
+  border-top:1px solid #ddd;
 }
 
-/* ========================================
-   ギフト設定
-======================================== */
+.modalFooter button{
+  flex:1;
+  padding:10px;
+  border-radius:9px;
+  font-weight:900;
+}
 
-.giftSettingRow{
-  margin-bottom:10px;
+.saveBtn{
+  background:#6d28d9;
+  color:#fff;
+}
+
+.closeBtn{
+  background:#eee;
+}
+
+/* =========================
+   フォーム
+========================= */
+
+.formGroup{
+  margin-bottom:12px;
+}
+
+.formGroup label{
+  display:block;
+  font-size:12px;
+  font-weight:900;
+  margin-bottom:4px;
+  color:#444;
+}
+
+.formGroup input,
+.formGroup select{
+  width:100%;
+  border:1px solid #bbb;
+  border-radius:8px;
+  padding:9px;
+  font-size:14px;
+  background:#fff;
+}
+
+.giftSetting{
+  border:1px solid #ddd;
+  border-radius:10px;
+  padding:9px;
+  margin-bottom:9px;
+  background:#fafafa;
 }
 
 .giftSettingTitle{
-  margin-bottom:3px;
-
-  font-size:10px;
-
-  font-weight:1000;
-}
-
-.giftSettingInputs{
-  display:grid;
-
-  grid-template-columns:45px 1fr 65px;
-
-  gap:4px;
-}
-
-/* ========================================
-   仕掛け設定
-======================================== */
-
-.trickRow{
+  font-weight:900;
   margin-bottom:7px;
-
-  padding:7px;
-
-  background:#f7f7f7;
-
-  border-radius:8px;
+  color:#5b21b6;
 }
 
-.trickRowTitle{
-  margin-bottom:4px;
-
-  font-size:10px;
-
-  font-weight:1000;
-}
-
-.trickInputs{
+.twoCol{
   display:grid;
-
-  grid-template-columns:42px 1fr 58px;
-
-  gap:4px;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
 }
 
-.trickMessage{
-  margin-top:4px;
+.info{
+  background:#f3e8ff;
+  border-radius:8px;
+  padding:8px;
+  font-size:11px;
+  line-height:1.5;
+  color:#4c1d95;
+  margin-bottom:10px;
 }
 
-.trickDescription{
-  margin-top:3px;
+/* =========================
+   候補選択
+========================= */
 
-  color:#777;
-
-  font-size:8px;
-
-  font-weight:700;
+.pieceGrid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:5px;
 }
 
-/* ========================================
+.pieceSelect{
+  background:#f3f4f6;
+  border:2px solid #ddd;
+  border-radius:8px;
+  padding:8px 3px;
+  font-size:11px;
+  font-weight:800;
+}
+
+.pieceSelect.selected{
+  background:#ede9fe;
+  border-color:#7c3aed;
+  color:#5b21b6;
+}
+
+/* =========================
+   仕掛け設定
+========================= */
+
+.trickSetting{
+  border:1px solid #ddd;
+  border-radius:9px;
+  padding:8px;
+  margin-bottom:7px;
+}
+
+.trickSetting strong{
+  display:block;
+  font-size:12px;
+  margin-bottom:5px;
+}
+
+.trickSetting select,
+.trickSetting input{
+  width:100%;
+  padding:7px;
+  border:1px solid #bbb;
+  border-radius:7px;
+  margin-bottom:5px;
+}
+
+/* =========================
    ポップアップ
-======================================== */
+========================= */
 
-#popup{
-  position:absolute;
-
+.popup{
+  position:fixed;
   inset:0;
-
-  z-index:300;
-
+  z-index:2000;
+  background:rgba(0,0,0,.45);
   display:none;
-
   align-items:center;
   justify-content:center;
-
-  background:rgba(0,0,0,.55);
+  padding:15px;
 }
 
-#popup.show{
+.popup.show{
   display:flex;
 }
 
 .popupBox{
-  width:82%;
-
-  max-width:330px;
-
-  padding:18px 14px;
-
+  width:min(88vw,420px);
   background:#fff;
-
   border-radius:18px;
-
+  padding:20px;
   text-align:center;
-
-  box-shadow:
-    0 8px 30px rgba(0,0,0,.3);
+  box-shadow:0 15px 50px rgba(0,0,0,.3);
 }
 
 .popupIcon{
-  font-size:42px;
+  font-size:48px;
 }
 
 .popupTitle{
-  margin-top:3px;
-
-  font-size:18px;
-
-  font-weight:1000;
+  margin-top:7px;
+  font-size:21px;
+  font-weight:900;
+  color:#5b21b6;
 }
 
 .popupText{
   margin-top:7px;
-
-  color:#555;
-
-  font-size:12px;
-
+  font-size:14px;
   line-height:1.5;
-
-  font-weight:800;
+  white-space:pre-line;
 }
 
-.popupClose{
-  width:100%;
-
-  height:40px;
-
-  margin-top:13px;
-
-  border:0;
-
-  border-radius:9px;
-
-  background:#222;
-
+.popupButton{
+  margin-top:15px;
+  background:#6d28d9;
   color:#fff;
-
-  font-size:12px;
-
-  font-weight:1000;
+  border-radius:9px;
+  padding:10px 25px;
+  font-weight:900;
 }
 
-/* ========================================
-   小さい画面
-======================================== */
+/* =========================
+   サイコロ表示
+========================= */
 
-@media(max-width:340px){
+.diceDisplay{
+  margin:10px auto;
+  width:70px;
+  height:70px;
+  border:3px solid #333;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:42px;
+  font-weight:900;
+  background:#fff;
+  box-shadow:0 3px 8px rgba(0,0,0,.15);
+}
 
-  #header{
-    height:11dvh;
+.diceRolling{
+  animation:diceShake .25s infinite alternate;
+}
+
+@keyframes diceShake{
+  from{
+    transform:rotate(-8deg) scale(1);
+  }
+  to{
+    transform:rotate(8deg) scale(1.08);
+  }
+}
+
+/* =========================
+   レスポンシブ
+========================= */
+
+@media(max-width:600px){
+
+  .header{
+    padding:10px 70px 8px 10px;
   }
 
-  #main{
-    top:11dvh;
+  .header h1{
+    font-size:17px;
+  }
 
-    padding:3px;
+  .header p{
+    font-size:10px;
+  }
 
+  .main{
+    padding:5px;
+    gap:5px;
+  }
+
+  .selectedBox{
+    padding:5px 7px;
+  }
+
+  .selectedName{
+    font-size:14px;
+  }
+
+  .moveButton{
+    font-size:11px;
+    padding:7px 9px;
+  }
+
+  .board{
     gap:3px;
-  }
-
-  #board{
-    gap:2px;
+    padding:3px;
+    border-width:2px;
   }
 
   .cell{
     border-width:1px;
-
-    border-radius:6px;
   }
 
-  .piece{
-    padding:3px 4px;
+  .giftArea{
+    padding:4px;
   }
 
+  .giftButton{
+    min-height:40px;
+  }
+
+  .giftIcon{
+    font-size:16px;
+  }
+
+  .bottomSettings button{
+    font-size:9px;
+    padding:6px 2px;
+  }
 }
 </style>
 </head>
 
-
 <body>
 
-<div id="app">
+<div class="app">
 
-<!-- ======================================
-     タイトル
-====================================== -->
+  <!-- =========================
+       ヘッダー
+  ========================== -->
+  <header class="header">
 
-<header id="header">
-
-  <h1 id="title">
-    🗾 出身県はどこ？県民パワーでGOALを目指せ！
-  </h1>
-
-  <div id="subtitle">
-    指定ギフトでコマを進めよう！
-  </div>
-
-</header>
-
-
-<!-- ======================================
-     メイン
-====================================== -->
-
-<main id="main">
-
-
-  <!-- コマ選択・1マス -->
-  <section id="selectRow">
-
-    <button
-      class="actionButton"
-      onclick="openChooseModal()">
-
-      🎯 コマを選ぶ
-
-    </button>
-
-
-    <button
-      class="actionButton"
-      onclick="moveSelected(1,'🎲')">
-
-      🎲 1マス進む
-
-    </button>
-
-  </section>
-
-
-  <!-- 選択中 -->
-  <div id="selectedBox">
-
-    <span id="selectedLabel">
-      選択中：
-    </span>
-
-    <span id="selectedName">
-      コマを選んでください
-    </span>
-
-  </div>
-
-
-  <!-- ====================================
-       すごろく
-  ===================================== -->
-
-  <section id="boardBox">
-
-    <div id="boardHeader">
-      🏁 GOALまであと30マス
+    <div class="headerButtons">
+      <button onclick="openProjectSettings()">⚙️ 設定</button>
     </div>
 
-    <div id="board"></div>
+    <h1 id="titleText">
+      🗾 出身県はどこ？県民パワーでGOALを目指せ！
+    </h1>
 
-  </section>
+    <p id="subtitleText">
+      指定ギフトでコマを進めよう！
+    </p>
+
+  </header>
 
 
-  <!-- ====================================
-       ギフト
-  ===================================== -->
+  <main class="main">
 
-  <section id="giftBox">
+    <!-- =========================
+         選択中
+    ========================== -->
 
-    <div id="giftTitle">
-      🎁 指定ギフトが来たらコマを進めよう！
+    <div class="selectedBox">
+
+      <div>
+        <div class="selectedLabel">現在選択中</div>
+        <div class="selectedName" id="selectedName">
+          未選択
+        </div>
+      </div>
+
+      <button class="moveButton" onclick="moveSelected(1,'🎲')">
+        🎲 1マス進む
+      </button>
+
     </div>
 
-    <div id="giftButtons"></div>
 
-  </section>
+    <!-- =========================
+         すごろく盤
+    ========================== -->
 
+    <div class="boardWrap">
 
-  <!-- ====================================
-       設定
-  ===================================== -->
+      <div class="board" id="board"></div>
 
-  <section id="bottomButtons">
-
-    <button
-      id="projectButton"
-      class="bottomButton"
-      onclick="openProjectModal()">
-
-      ⚙️ 企画
-
-    </button>
+    </div>
 
 
-    <button
-      id="giftSettingButton"
-      class="bottomButton"
-      onclick="openGiftModal()">
+    <!-- =========================
+         ギフト
+    ========================== -->
 
-      🎁 ギフト
+    <section class="giftArea">
 
-    </button>
+      <div class="giftTitle">
+        🎁 指定ギフトでコマを進めよう！
+      </div>
 
+      <div class="giftGrid" id="giftGrid"></div>
 
-    <button
-      id="trickSettingButton"
-      class="bottomButton"
-      onclick="openTrickModal()">
-
-      💥 仕掛け
-
-    </button>
+    </section>
 
 
-    <button
-      id="resetButton"
-      class="bottomButton"
-      onclick="resetGame()">
+    <!-- =========================
+         下部設定
+    ========================== -->
 
-      🔄 リセット
+    <div class="bottomSettings">
 
-    </button>
+      <button onclick="openPieceModal()">
+        🗾 コマを選ぶ
+      </button>
 
-  </section>
+      <button onclick="openGiftSettings()">
+        🎁 ギフト設定
+      </button>
 
-</main>
+      <button onclick="openTrickSettings()">
+        ⭐ 仕掛け設定
+      </button>
+
+      <button onclick="resetGame()">
+        🔄 リセット
+      </button>
+
+    </div>
+
+  </main>
+
+</div>
 
 
-<!-- ======================================
-     企画設定
-====================================== -->
+<!-- =====================================================
+     コマ選択モーダル
+===================================================== -->
 
-<div
-  id="projectModal"
-  class="modal">
+<div class="modal" id="pieceModal">
 
   <div class="modalBox">
 
     <div class="modalHeader">
+      🗾 コマを選択
+    </div>
 
-      <div class="modalTitle">
-        ⚙️ 企画設定
+    <div class="modalBody">
+
+      <div class="info">
+        進めたい都道府県をタップして選択してください。
       </div>
 
-      <button
-        class="closeButton"
-        onclick="closeProjectModal()">
+      <div class="pieceGrid" id="pieceGrid"></div>
 
-        ×
+    </div>
 
+    <div class="modalFooter">
+
+      <button class="closeBtn" onclick="closeModal('pieceModal')">
+        閉じる
       </button>
 
     </div>
 
+  </div>
 
-    <div class="modalScroll">
-
-      <label class="settingLabel">
-        企画タイトル
-      </label>
-
-      <input
-        id="titleInput"
-        class="input"
-        type="text">
+</div>
 
 
-      <label class="settingLabel">
-        サブタイトル
-      </label>
+<!-- =====================================================
+     ギフト設定モーダル
+===================================================== -->
 
-      <input
-        id="subtitleInput"
-        class="input"
-        type="text">
+<div class="modal" id="giftModal">
+
+  <div class="modalBox">
+
+    <div class="modalHeader">
+      🎁 ギフト設定
+    </div>
+
+    <div class="modalBody">
+
+      <div class="info">
+        各ギフトについて「固定マス」または「サイコロ」を選べます。<br>
+        サイコロを選んだ場合は、指定回数サイコロを振り、出た目の合計だけコマが進みます。
+      </div>
+
+      <div id="giftSettingsList"></div>
+
+    </div>
+
+    <div class="modalFooter">
+
+      <button class="closeBtn" onclick="closeModal('giftModal')">
+        キャンセル
+      </button>
+
+      <button class="saveBtn" onclick="saveGiftSettings()">
+        保存する
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
 
 
-      <label class="settingLabel">
-        コマ数 ／ GOAL
-      </label>
+<!-- =====================================================
+     仕掛け設定モーダル
+===================================================== -->
 
-      <div class="row2">
+<div class="modal" id="trickModal">
+
+  <div class="modalBox">
+
+    <div class="modalHeader">
+      ⭐ マスの仕掛け設定
+    </div>
+
+    <div class="modalBody">
+
+      <div class="info">
+        マスごとに仕掛けを設定できます。
+      </div>
+
+      <div id="trickSettingsList"></div>
+
+    </div>
+
+    <div class="modalFooter">
+
+      <button class="closeBtn" onclick="closeModal('trickModal')">
+        キャンセル
+      </button>
+
+      <button class="saveBtn" onclick="saveTrickSettings()">
+        保存する
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     プロジェクト設定
+===================================================== -->
+
+<div class="modal" id="projectModal">
+
+  <div class="modalBox">
+
+    <div class="modalHeader">
+      ⚙️ プロジェクト設定
+    </div>
+
+    <div class="modalBody">
+
+      <div class="formGroup">
+
+        <label>
+          タイトル
+        </label>
 
         <input
-          id="pieceCountInput"
-          class="input"
-          type="number"
-          min="1"
-          max="47"
-          onchange="buildPieceInputs()">
+          id="projectTitle"
+          type="text"
+        >
+
+      </div>
+
+
+      <div class="formGroup">
+
+        <label>
+          サブタイトル
+        </label>
 
         <input
-          id="goalInput"
-          class="input"
+          id="projectSubtitle"
+          type="text"
+        >
+
+      </div>
+
+
+      <div class="formGroup">
+
+        <label>
+          GOALマス
+        </label>
+
+        <input
+          id="projectGoal"
           type="number"
           min="1"
-          max="30">
+          max="99"
+        >
 
-      </div>
-
-
-      <label class="settingLabel">
-        コマの名称
-      </label>
-
-      <div
-        id="pieceInputs"
-        class="pieceInputs">
       </div>
 
     </div>
 
+    <div class="modalFooter">
 
-    <div class="modalButtons">
-
-      <button
-        class="modalButton saveButton"
-        onclick="saveProjectSettings()">
-
-        保存
-
-      </button>
-
-
-      <button
-        class="modalButton cancelButton"
-        onclick="closeProjectModal()">
-
+      <button class="closeBtn" onclick="closeModal('projectModal')">
         キャンセル
+      </button>
 
+      <button class="saveBtn" onclick="saveProjectSettings()">
+        保存する
       </button>
 
     </div>
@@ -1165,232 +973,31 @@ button{
 </div>
 
 
-<!-- ======================================
-     コマ選択
-====================================== -->
-
-<div
-  id="chooseModal"
-  class="modal">
-
-  <div
-    class="modalBox"
-    style="height:90%;">
-
-    <div class="modalHeader">
-
-      <div class="modalTitle">
-        🎯 コマを選ぶ
-      </div>
-
-      <button
-        class="closeButton"
-        onclick="closeChooseModal()">
-
-        ×
-
-      </button>
-
-    </div>
-
-
-    <div class="modalScroll">
-
-      <div
-        id="chooseGrid"
-        class="chooseGrid">
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- ======================================
-     ギフト設定
-====================================== -->
-
-<div
-  id="giftModal"
-  class="modal">
-
-  <div
-    class="modalBox"
-    style="height:90%;">
-
-    <div class="modalHeader">
-
-      <div class="modalTitle">
-        🎁 ギフト設定
-      </div>
-
-      <button
-        class="closeButton"
-        onclick="closeGiftModal()">
-
-        ×
-
-      </button>
-
-    </div>
-
-
-    <div
-      id="giftSettingRows"
-      class="modalScroll">
-    </div>
-
-
-    <div class="modalButtons">
-
-      <button
-        class="modalButton saveButton"
-        onclick="saveGiftSettings()">
-
-        保存
-
-      </button>
-
-
-      <button
-        class="modalButton cancelButton"
-        onclick="closeGiftModal()">
-
-        キャンセル
-
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- ======================================
-     仕掛け設定
-====================================== -->
-
-<div
-  id="trickModal"
-  class="modal">
-
-  <div
-    class="modalBox"
-    style="height:94%;">
-
-    <div class="modalHeader">
-
-      <div class="modalTitle">
-        💥 仕掛けマス設定
-      </div>
-
-      <button
-        class="closeButton"
-        onclick="closeTrickModal()">
-
-        ×
-
-      </button>
-
-    </div>
-
-
-    <div class="modalScroll">
-
-      <div
-        style="
-        padding:8px;
-        background:#fff4e8;
-        border-radius:8px;
-        margin-bottom:7px;
-        font-size:9px;
-        font-weight:800;
-        line-height:1.45;
-        ">
-
-        <b>仕掛けを設定したいマスだけON。</b><br>
-
-        「表示だけ」の仕掛けはコマを動かさず、
-        メッセージだけ表示します。<br>
-
-        「一つ前の県」は、そのコマより前の位置にいる
-        一番近い県が対象です。
-
-      </div>
-
-
-      <div id="trickSettingRows"></div>
-
-    </div>
-
-
-    <div class="modalButtons">
-
-      <button
-        class="modalButton saveButton"
-        onclick="saveTrickSettings()">
-
-        保存
-
-      </button>
-
-
-      <button
-        class="modalButton cancelButton"
-        onclick="closeTrickModal()">
-
-        キャンセル
-
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- ======================================
+<!-- =====================================================
      ポップアップ
-====================================== -->
+===================================================== -->
 
-<div id="popup">
+<div class="popup" id="popup">
 
   <div class="popupBox">
 
-    <div
-      id="popupIcon"
-      class="popupIcon">
-
-      🎁
-
+    <div class="popupIcon" id="popupIcon">
+      🎲
     </div>
 
-
-    <div
-      id="popupTitle"
-      class="popupTitle">
-
-      コマが進んだ！
-
+    <div class="popupTitle" id="popupTitle">
+      サイコロ
     </div>
 
-
-    <div
-      id="popupText"
-      class="popupText">
+    <div class="diceDisplay" id="diceDisplay">
+      🎲
     </div>
 
+    <div class="popupText" id="popupText">
+    </div>
 
-    <button
-      class="popupClose"
-      onclick="closePopup()">
-
+    <button class="popupButton" onclick="closePopup()">
       閉じる
-
     </button>
 
   </div>
@@ -1400,34 +1007,31 @@ button{
 
 <script>
 
-/* ==================================================
+/* =====================================================
    基本設定
-================================================== */
+===================================================== */
 
-let projectTitle =
+let title =
   "🗾 出身県はどこ？県民パワーでGOALを目指せ！";
 
-let projectSubtitle =
+let subtitle =
   "指定ギフトでコマを進めよう！";
 
-let GOAL=30;
+let GOAL = 30;
 
 
-/* ==================================================
-   47都道府県
-================================================== */
+/* =====================================================
+   都道府県
+===================================================== */
 
-let pieces=[
-
+const prefectures = [
   "北海道",
-
   "青森県",
   "岩手県",
   "宮城県",
   "秋田県",
   "山形県",
   "福島県",
-
   "茨城県",
   "栃木県",
   "群馬県",
@@ -1435,7 +1039,6 @@ let pieces=[
   "千葉県",
   "東京都",
   "神奈川県",
-
   "新潟県",
   "富山県",
   "石川県",
@@ -1445,7 +1048,6 @@ let pieces=[
   "岐阜県",
   "静岡県",
   "愛知県",
-
   "三重県",
   "滋賀県",
   "京都府",
@@ -1453,18 +1055,15 @@ let pieces=[
   "兵庫県",
   "奈良県",
   "和歌山県",
-
   "鳥取県",
   "島根県",
   "岡山県",
   "広島県",
   "山口県",
-
   "徳島県",
   "香川県",
   "愛媛県",
   "高知県",
-
   "福岡県",
   "佐賀県",
   "長崎県",
@@ -1473,339 +1072,204 @@ let pieces=[
   "宮崎県",
   "鹿児島県",
   "沖縄県"
-
 ];
 
 
-/* ==================================================
-   カラフルコマ
-================================================== */
+/* =====================================================
+   コマ位置
+===================================================== */
 
-const colors=[
+let positions = {};
 
-  "#e53935",
-  "#8e24aa",
-  "#3949ab",
-  "#1e88e5",
-  "#00897b",
-  "#43a047",
-  "#7cb342",
-  "#c0ca33",
-  "#f9a825",
-  "#ff8f00",
-  "#fb8c00",
-  "#f4511e",
-  "#d81b60",
-  "#ad1457",
-  "#6d4c41",
-  "#546e7a",
-  "#5e35b1",
-  "#00acc1",
-  "#00838f",
-  "#2e7d32",
-  "#558b2f",
-  "#827717",
-  "#ef6c00",
-  "#bf360c",
-  "#c62828",
-  "#6a1b9a",
-  "#283593",
-  "#1565c0",
-  "#00695c",
-  "#689f38",
-  "#9e9d24",
-  "#ff6f00",
-  "#e65100",
-  "#b71c1c",
-  "#880e4f",
-  "#4527a0",
-  "#311b92",
-  "#0277bd",
-  "#00838f",
-  "#00695c",
-  "#33691e",
-  "#827717",
-  "#ff8f00",
-  "#e65100",
-  "#4e342e",
-  "#3949ab",
-  "#00897b"
-
-];
+prefectures.forEach(name=>{
+  positions[name] = 0;
+});
 
 
-/* ==================================================
-   位置
-================================================== */
-
-let positions={};
-
-let selectedPiece=null;
+let selectedPiece = null;
 
 
-/* ==================================================
-   仕掛け
-================================================== */
+/* =====================================================
+   ギフト設定
+=====================================================
 
-let tricks={};
+   type:
+   fixed = 固定マス
+   dice  = サイコロ
 
+===================================================== */
 
-/* ==================================================
-   ギフト
-================================================== */
-
-let gifts=[
+let gifts = [
 
   {
     icon:"❤️",
     name:"ハートミー",
-    move:1
+    type:"fixed",
+    move:1,
+    diceCount:1
   },
 
   {
     icon:"🍩",
     name:"ドーナツ",
-    move:3
+    type:"fixed",
+    move:3,
+    diceCount:1
   },
 
   {
     icon:"🎁",
     name:"指定ギフト",
-    move:5
+    type:"fixed",
+    move:5,
+    diceCount:1
   },
 
   {
     icon:"⭐",
     name:"スペシャル",
-    move:10
+    type:"fixed",
+    move:10,
+    diceCount:1
   },
 
   {
     icon:"🌟",
     name:"特大ギフト",
-    move:20
+    type:"fixed",
+    move:20,
+    diceCount:1
   }
 
 ];
 
 
-/* ==================================================
-   初期化
-================================================== */
+/* =====================================================
+   マスの仕掛け
+===================================================== */
 
-function initializePositions(){
+let tricks = {};
 
-  positions={};
+for(let i=1;i<=99;i++){
 
-  pieces.forEach(function(name){
-
-    positions[name]=0;
-
-  });
-
-}
-
-
-function initializeTricks(){
-
-  tricks={};
-
-  for(
-    let i=1;
-    i<=GOAL;
-    i++
-  ){
-
-    tricks[i]={
-
-      enabled:false,
-
-      type:"none",
-
-      value:2,
-
-      text:""
-
-    };
-
-  }
+  tricks[i] = {
+    type:"none",
+    value:0
+  };
 
 }
 
 
-/* ==================================================
-   HTMLエスケープ
-================================================== */
+/*
+  仕掛けタイプ
 
-function escapeHTML(str){
-
-  return String(str)
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
-
-
-/* ==================================================
-   タイトル
-================================================== */
-
-function updateTitle(){
-
-  document.getElementById("title")
-    .textContent=projectTitle;
-
-  document.getElementById("subtitle")
-    .textContent=projectSubtitle;
-
-}
+  none
+  forward
+  back
+  start
+  goal
+  again
+  display
+  previousBack
+  previousStart
+  swapPrevious
+  leaderBack
+  lastForward
+*/
 
 
-/* ==================================================
-   盤面作成
-================================================== */
+/* =====================================================
+   初期サンプル仕掛け
+===================================================== */
 
-function createBoard(){
+tricks[5] = {
+  type:"forward",
+  value:2
+};
 
-  const board=
-    document.getElementById("board");
+tricks[8] = {
+  type:"back",
+  value:2
+};
 
-  board.innerHTML="";
+tricks[12] = {
+  type:"again",
+  value:0
+};
 
+tricks[15] = {
+  type:"display",
+  value:0
+};
 
-  for(
-    let i=1;
-    i<=GOAL;
-    i++
-  ){
+tricks[18] = {
+  type:"previousBack",
+  value:2
+};
 
-    const cell=
-      document.createElement("div");
+tricks[21] = {
+  type:"previousStart",
+  value:0
+};
 
-    cell.className="cell";
+tricks[24] = {
+  type:"swapPrevious",
+  value:0
+};
 
-    cell.id="cell-"+i;
+tricks[26] = {
+  type:"leaderBack",
+  value:2
+};
 
-
-    if(i===GOAL){
-
-      cell.classList.add("goal");
-
-    }
-
-
-    if(i===1){
-
-      cell.classList.add("start");
-
-    }
-
-
-    const number=
-      document.createElement("div");
-
-    number.className="cellNumber";
-
-    number.textContent=
-      i===1
-        ? "START"
-        : i;
-
-    cell.appendChild(number);
+tricks[28] = {
+  type:"lastForward",
+  value:2
+};
 
 
-    const trick=
-      tricks[i];
-
-
-    if(
-      trick &&
-      trick.enabled &&
-      trick.type!=="none"
-    ){
-
-      const trickEl=
-        document.createElement("div");
-
-      trickEl.className="trick";
-
-      trickEl.textContent=
-        getTrickDisplay(trick);
-
-      cell.appendChild(trickEl);
-
-    }
-
-
-    const area=
-      document.createElement("div");
-
-    area.className="cellPieces";
-
-    area.id="cellPieces-"+i;
-
-    cell.appendChild(area);
-
-    board.appendChild(cell);
-
-  }
-
-}
-
-
-/* ==================================================
+/* =====================================================
    仕掛け表示
-================================================== */
+===================================================== */
 
-function getTrickDisplay(trick){
+function trickText(trick){
 
-  if(
-    trick.text &&
-    trick.text.trim()
-  ){
-
-    return trick.text.trim();
-
-  }
-
+  if(!trick) return "";
 
   switch(trick.type){
 
     case "forward":
-      return "🚀 +"+trick.value;
+      return "⬆️ "+trick.value+"マス進む";
 
     case "back":
-      return "↩️ -"+trick.value;
+      return "⬇️ "+trick.value+"マス戻る";
 
     case "start":
-      return "💥 START";
+      return "🔵 STARTへ";
 
     case "goal":
-      return "🏆 GOAL";
+      return "🏆 GOALへ";
 
     case "again":
-      return "🔄 もう1回";
+      return "🎲 もう1回";
 
     case "display":
-      return "🎁 お楽しみ";
+      return "🎁 お楽しみ袋";
 
     case "previousBack":
-      return "🗾 前の県 -"+trick.value;
+      return "👥 前の県が "+trick.value+"マス戻る";
 
     case "previousStart":
-      return "💥 前の県→START";
+      return "👥 前の県がSTARTへ";
 
     case "swapPrevious":
-      return "🔁 前の県と交換";
+      return "🔄 前の県と入替";
 
     case "leaderBack":
-      return "🥇 1位 -"+trick.value;
+      return "👑 先頭が "+trick.value+"マス戻る";
 
     case "lastForward":
-      return "🥉 最下位 +"+trick.value;
+      return "🚀 最後尾が "+trick.value+"マス進む";
 
     default:
       return "";
@@ -1815,197 +1279,152 @@ function getTrickDisplay(trick){
 }
 
 
-/* ==================================================
-   コマ描画
-================================================== */
+/* =====================================================
+   盤面描画
+===================================================== */
 
-function renderPieces(){
+function renderBoard(){
 
-  document
-    .querySelectorAll(".cellPieces")
-    .forEach(function(el){
+  const board =
+    document.getElementById("board");
 
-      el.innerHTML="";
+  board.innerHTML = "";
+
+  for(let i=1;i<=GOAL;i++){
+
+    const cell =
+      document.createElement("div");
+
+    cell.className = "cell";
+
+    if(i === 1){
+      cell.classList.add("start");
+    }
+
+    if(i === GOAL){
+      cell.classList.add("goal");
+    }
+
+    const number =
+      document.createElement("div");
+
+    number.className = "cellNumber";
+
+    number.textContent = i;
+
+    cell.appendChild(number);
+
+
+    const trick =
+      tricks[i];
+
+    if(trick && trick.type !== "none"){
+
+      const trickDiv =
+        document.createElement("div");
+
+      trickDiv.className =
+        "cellTrick";
+
+      trickDiv.textContent =
+        trickText(trick);
+
+      cell.appendChild(trickDiv);
+
+    }
+
+
+    const piecesDiv =
+      document.createElement("div");
+
+    piecesDiv.className = "pieces";
+
+
+    prefectures.forEach(name=>{
+
+      if(positions[name] === i){
+
+        const piece =
+          document.createElement("div");
+
+        piece.className = "piece";
+
+        piece.textContent = name;
+
+        piecesDiv.appendChild(piece);
+
+      }
 
     });
 
 
-  pieces.forEach(function(name,index){
+    cell.appendChild(piecesDiv);
 
-    const position=
-      positions[name] || 0;
-
-
-    if(position<=0){
-
-      return;
-
-    }
-
-
-    const area=
-      document.getElementById(
-        "cellPieces-"+position
-      );
-
-
-    if(!area){
-
-      return;
-
-    }
-
-
-    const piece=
-      document.createElement("div");
-
-    piece.className="piece";
-
-
-    if(name===selectedPiece){
-
-      piece.classList.add("active");
-
-    }
-
-
-    piece.textContent=name;
-
-    piece.style.background=
-      colors[index % colors.length];
-
-
-    piece.onclick=function(){
-
-      selectPiece(name);
-
-    };
-
-
-    area.appendChild(piece);
-
-  });
-
-
-  updateBoardHeader();
-
-}
-
-
-/* ==================================================
-   ボードヘッダー
-================================================== */
-
-function updateBoardHeader(){
-
-  if(!selectedPiece){
-
-    document.getElementById("boardHeader")
-      .textContent=
-      "🏁 GOALまであと"+GOAL+"マス";
-
-    return;
+    board.appendChild(cell);
 
   }
 
-
-  const position=
-    positions[selectedPiece] || 0;
+}
 
 
-  const remaining=
-    Math.max(
-      0,
-      GOAL-position
-    );
+/* =====================================================
+   選択中表示
+===================================================== */
 
+function updateSelected(){
 
-  document.getElementById("boardHeader")
-    .textContent=
-    "🎯 "+
-    selectedPiece+
-    " ｜ GOALまであと"+
-    remaining+
-    "マス";
+  const name =
+    document.getElementById("selectedName");
+
+  name.textContent =
+    selectedPiece || "未選択";
 
 }
 
 
-/* ==================================================
-   コマ選択
-================================================== */
+/* =====================================================
+   ギフト描画
+===================================================== */
 
-function selectPiece(name){
+function renderGifts(){
 
-  selectedPiece=name;
+  const grid =
+    document.getElementById("giftGrid");
 
-  document.getElementById(
-    "selectedName"
-  ).textContent=name;
+  grid.innerHTML = "";
 
-  renderPieces();
+  gifts.slice(0,3).forEach((gift,index)=>{
 
-}
-
-
-/* ==================================================
-   コマ選択画面
-================================================== */
-
-function openChooseModal(){
-
-  createChooseButtons();
-
-  document.getElementById(
-    "chooseModal"
-  ).classList.add("show");
-
-}
-
-
-function closeChooseModal(){
-
-  document.getElementById(
-    "chooseModal"
-  ).classList.remove("show");
-
-}
-
-
-function createChooseButtons(){
-
-  const grid=
-    document.getElementById(
-      "chooseGrid"
-    );
-
-  grid.innerHTML="";
-
-
-  pieces.forEach(function(name){
-
-    const button=
+    const button =
       document.createElement("button");
 
-    button.className="chooseButton";
+    button.className =
+      "giftButton";
 
+    let moveText = "";
 
-    if(name===selectedPiece){
+    if(gift.type === "dice"){
 
-      button.classList.add("current");
+      moveText =
+        "🎲 "+Math.max(1,Number(gift.diceCount)||1)+"回";
+
+    }else{
+
+      moveText =
+        "＋"+Math.max(0,Number(gift.move)||0)+"マス";
 
     }
 
 
-    button.textContent=name;
+    button.innerHTML = `
+      <div class="giftIcon">${gift.icon}</div>
+      <div class="giftName">${escapeHtml(gift.name)}</div>
+      <div class="giftMove">${moveText}</div>
+    `;
 
 
-    button.onclick=function(){
-
-      selectPiece(name);
-
-      closeChooseModal();
-
+    button.onclick = ()=>{
+      useGift(index);
     };
 
 
@@ -2016,1433 +1435,1514 @@ function createChooseButtons(){
 }
 
 
-/* ==================================================
-   ギフトボタン
-================================================== */
+/* =====================================================
+   HTMLエスケープ
+===================================================== */
 
-function createGiftButtons(){
+function escapeHtml(text){
 
-  const area=
-    document.getElementById(
-      "giftButtons"
-    );
-
-  area.innerHTML="";
-
-
-  gifts
-    .slice(0,3)
-    .forEach(function(gift){
-
-      const button=
-        document.createElement("button");
-
-      button.className="giftButton";
-
-      button.innerHTML=
-        escapeHTML(gift.icon)+
-        " "+
-        escapeHTML(gift.name)+
-        "<br>＋"+
-        gift.move+
-        "マス";
-
-
-      button.onclick=function(){
-
-        moveSelected(
-          gift.move,
-          gift.icon
-        );
-
-      };
-
-
-      area.appendChild(button);
-
-    });
+  return String(text)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
 
-/* ==================================================
-   コマ移動
-================================================== */
+/* =====================================================
+   ギフト使用
+===================================================== */
 
-function moveSelected(move,icon){
+function useGift(index){
+
+  if(isRollingDice){
+    return;
+  }
 
   if(!selectedPiece){
 
     showPopup(
       "⚠️",
-      "コマを選んでね！",
-      "「🎯 コマを選ぶ」から都道府県を選択してください。"
+      "コマを選んでください",
+      "先に「コマを選ぶ」から都道府県を選択してください。"
     );
 
     return;
+  }
+
+
+  const gift =
+    gifts[index];
+
+
+  if(!gift){
+    return;
+  }
+
+
+  if(gift.type === "dice"){
+
+    rollDiceForGift(gift);
+
+  }else{
+
+    const move =
+      Math.max(
+        0,
+        Number(gift.move) || 0
+      );
+
+    moveSelected(
+      move,
+      gift.icon
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   サイコロ
+===================================================== */
+
+let isRollingDice = false;
+
+
+/*
+  サイコロを指定回数振る
+  → 出た目の合計
+  → コマを合計マス進める
+*/
+
+async function rollDiceForGift(gift){
+
+  if(!selectedPiece){
+    return;
+  }
+
+  if(isRollingDice){
+    return;
+  }
+
+  isRollingDice = true;
+
+
+  const count =
+    Math.max(
+      1,
+      Math.min(
+        20,
+        Number(gift.diceCount) || 1
+      )
+    );
+
+
+  let rolls = [];
+
+
+  showDicePopup();
+
+
+  for(let i=0;i<count;i++){
+
+    const dice =
+      Math.floor(Math.random()*6)+1;
+
+    rolls.push(dice);
+
+
+    const diceDisplay =
+      document.getElementById("diceDisplay");
+
+    const popupText =
+      document.getElementById("popupText");
+
+    const popupTitle =
+      document.getElementById("popupTitle");
+
+
+    popupTitle.textContent =
+      "🎲 "+(i+1)+"回目";
+
+
+    diceDisplay.classList.add(
+      "diceRolling"
+    );
+
+
+    /*
+      少しだけ数字を動かして
+      サイコロを振っている感じにする
+    */
+
+    for(let j=0;j<5;j++){
+
+      diceDisplay.textContent =
+        Math.floor(Math.random()*6)+1;
+
+      await wait(70);
+
+    }
+
+
+    diceDisplay.classList.remove(
+      "diceRolling"
+    );
+
+
+    diceDisplay.textContent =
+      dice;
+
+
+    popupText.textContent =
+      "出た目： "+dice+
+      "\n"+
+      "累計："+rolls.reduce((a,b)=>a+b,0)+"マス";
+
+
+    await wait(450);
 
   }
 
 
-  const oldPosition=
+  const total =
+    rolls.reduce(
+      (sum,num)=>sum+num,
+      0
+    );
+
+
+  closePopup();
+
+
+  await wait(150);
+
+
+  moveSelected(
+    total,
+    "🎲",
+    "出た目："+rolls.join(" ＋ ")+" ＝ "+total+"マス"
+  );
+
+
+  isRollingDice = false;
+
+}
+
+
+function wait(ms){
+
+  return new Promise(
+    resolve=>setTimeout(resolve,ms)
+  );
+
+}
+
+
+/* =====================================================
+   サイコロ用ポップアップ
+===================================================== */
+
+function showDicePopup(){
+
+  const popup =
+    document.getElementById("popup");
+
+  const icon =
+    document.getElementById("popupIcon");
+
+  const title =
+    document.getElementById("popupTitle");
+
+  const text =
+    document.getElementById("popupText");
+
+  const dice =
+    document.getElementById("diceDisplay");
+
+
+  icon.textContent = "🎲";
+
+  title.textContent =
+    "サイコロを振っています！";
+
+  text.textContent =
+    "コマの移動数を決めています。";
+
+  dice.style.display = "flex";
+
+  dice.textContent = "🎲";
+
+  popup.classList.add("show");
+
+}
+
+
+/* =====================================================
+   コマを進める
+===================================================== */
+
+function moveSelected(
+  move,
+  icon="🎲",
+  extraText=""
+){
+
+  if(!selectedPiece){
+
+    showPopup(
+      "⚠️",
+      "コマを選んでください",
+      "先に都道府県を選択してください。"
+    );
+
+    return;
+  }
+
+
+  let current =
     positions[selectedPiece] || 0;
 
 
-  if(oldPosition>=GOAL){
+  let newPosition =
+    current + Number(move);
 
-    showPopup(
-      "🏁",
-      "GOAL済み！",
-      selectedPiece+
-      "はすでにゴールしています。"
-    );
 
-    return;
-
+  if(newPosition < 1){
+    newPosition = 1;
   }
 
 
-  const nextPosition=
-    Math.min(
-      GOAL,
-      oldPosition+
-      Number(move)
-    );
+  if(newPosition >= GOAL){
 
+    positions[selectedPiece] =
+      GOAL;
 
-  positions[selectedPiece]=
-    nextPosition;
-
-
-  renderPieces();
-
-
-  if(nextPosition>=GOAL){
+    renderBoard();
 
     showPopup(
       "🏆",
       "GOAL！",
       selectedPiece+
-      "がゴールしました！"
+      " がゴールしました！"+
+      (extraText ? "\n"+extraText : "")
     );
 
     return;
-
   }
 
 
-  triggerTrick(
-    selectedPiece,
-    nextPosition,
-    icon
-  );
+  positions[selectedPiece] =
+    newPosition;
+
+
+  renderBoard();
+
+
+  let message =
+    selectedPiece+
+    " が "+
+    move+
+    "マス進みました！";
+
+
+  if(extraText){
+    message =
+      extraText+
+      "\n"+
+      message;
+  }
+
+
+  const trick =
+    tricks[newPosition];
+
+
+  if(trick && trick.type !== "none"){
+
+    triggerTrick(
+      selectedPiece,
+      newPosition,
+      trick,
+      icon,
+      message
+    );
+
+  }else{
+
+    showPopup(
+      icon,
+      "コマが進みました！",
+      message
+    );
+
+  }
 
 }
 
 
-/* ==================================================
+/* =====================================================
    仕掛け発動
-================================================== */
+===================================================== */
 
 function triggerTrick(
-  name,
+  piece,
   position,
-  giftIcon
+  trick,
+  giftIcon,
+  sourceText=""
 ){
-
-  const trick=
-    tricks[position];
-
-
-  if(
-    !trick ||
-    !trick.enabled ||
-    trick.type==="none"
-  ){
-
-    showPopup(
-      giftIcon,
-      "コマが進んだ！",
-      name+
-      "が"+
-      position+
-      "番マスに到着しました。"
-    );
-
-    return;
-
-  }
-
-
-  let message="";
-
-  const popupIcon=
-    getTrickIcon(trick.type);
-
 
   switch(trick.type){
 
-    /* 自分が進む */
+    case "forward":{
 
-    case "forward":
+      const amount =
+        Number(trick.value)||0;
 
-      positions[name]=
+      positions[piece] =
         Math.min(
           GOAL,
-          position+
-          Number(trick.value)
+          positions[piece]+amount
         );
 
-      message=
-        name+
-        "は"+
-        trick.value+
-        "マス進みます！";
+      renderBoard();
+
+      showPopup(
+        "⬆️",
+        "仕掛け発動！",
+        sourceText+
+        "\n\n"+
+        piece+
+        " はさらに "+
+        amount+
+        "マス進みます！"
+      );
 
       break;
+    }
 
 
-    /* 自分が戻る */
+    case "back":{
 
-    case "back":
+      const amount =
+        Number(trick.value)||0;
 
-      positions[name]=
+      positions[piece] =
         Math.max(
-          0,
-          position-
-          Number(trick.value)
+          1,
+          positions[piece]-amount
         );
 
-      message=
-        name+
-        "は"+
-        trick.value+
-        "マス戻ります！";
+      renderBoard();
+
+      showPopup(
+        "⬇️",
+        "仕掛け発動！",
+        sourceText+
+        "\n\n"+
+        piece+
+        " は "+
+        amount+
+        "マス戻ります！"
+      );
 
       break;
+    }
 
 
-    /* START */
+    case "start":{
 
-    case "start":
+      positions[piece] = 1;
 
-      positions[name]=0;
+      renderBoard();
 
-      message=
-        name+
-        "はSTARTに戻ります！";
-
-      break;
-
-
-    /* GOAL */
-
-    case "goal":
-
-      positions[name]=GOAL;
-
-      message=
-        name+
-        "はGOALへ！";
+      showPopup(
+        "🔵",
+        "STARTへ！",
+        sourceText+
+        "\n\n"+
+        piece+
+        " はSTARTへ戻りました。"
+      );
 
       break;
+    }
 
 
-    /* もう一度 */
+    case "goal":{
 
-    case "again":
+      positions[piece] =
+        GOAL;
 
-      message=
-        name+
-        "はもう一度進めます！";
-
-      break;
-
-
-    /* 表示だけ */
-
-    case "display":
-
-      message=
-        name+
-        "にイベント発生！";
-
-      break;
-
-
-    /* 一つ前の県を戻す */
-
-    case "previousBack":
-
-      {
-
-        const previous=
-          findPreviousPiece(name);
-
-
-        if(previous){
-
-          positions[previous]=
-            Math.max(
-              0,
-              positions[previous]-
-              Number(trick.value)
-            );
-
-          message=
-            "一つ前の県「"+
-            previous+
-            "」が"+
-            trick.value+
-            "マス戻ります！";
-
-        }
-        else{
-
-          message=
-            "一つ前の県がいません！";
-
-        }
-
-      }
-
-      break;
-
-
-    /* 一つ前の県をSTART */
-
-    case "previousStart":
-
-      {
-
-        const previous=
-          findPreviousPiece(name);
-
-
-        if(previous){
-
-          positions[previous]=0;
-
-          message=
-            "一つ前の県「"+
-            previous+
-            "」がSTARTに戻ります！";
-
-        }
-        else{
-
-          message=
-            "一つ前の県がいません！";
-
-        }
-
-      }
-
-      break;
-
-
-    /* 一つ前と交換 */
-
-    case "swapPrevious":
-
-      {
-
-        const previous=
-          findPreviousPiece(name);
-
-
-        if(previous){
-
-          const currentPos=
-            positions[name];
-
-          const previousPos=
-            positions[previous];
-
-
-          positions[name]=
-            previousPos;
-
-          positions[previous]=
-            currentPos;
-
-
-          message=
-            name+
-            "と"+
-            previous+
-            "の位置を交換！";
-
-        }
-        else{
-
-          message=
-            "一つ前の県がいません！";
-
-        }
-
-      }
-
-      break;
-
-
-    /* 1位を戻す */
-
-    case "leaderBack":
-
-      {
-
-        const leader=
-          getLeader(name);
-
-
-        if(leader){
-
-          positions[leader]=
-            Math.max(
-              0,
-              positions[leader]-
-              Number(trick.value)
-            );
-
-
-          message=
-            "1位の「"+
-            leader+
-            "」が"+
-            trick.value+
-            "マス戻ります！";
-
-        }
-        else{
-
-          message=
-            "1位の県がいません！";
-
-        }
-
-      }
-
-      break;
-
-
-    /* 最下位を進める */
-
-    case "lastForward":
-
-      {
-
-        const last=
-          getLast(name);
-
-
-        if(last){
-
-          positions[last]=
-            Math.min(
-              GOAL,
-              positions[last]+
-              Number(trick.value)
-            );
-
-
-          message=
-            "最下位の「"+
-            last+
-            "」が"+
-            trick.value+
-            "マス進みます！";
-
-        }
-        else{
-
-          message=
-            "最下位の県がいません！";
-
-        }
-
-      }
-
-      break;
-
-  }
-
-
-  renderPieces();
-
-
-  const displayText=
-    trick.text &&
-    trick.text.trim()
-      ? trick.text.trim()
-      : getTrickDisplay(trick);
-
-
-  showPopup(
-    popupIcon,
-    displayText,
-    message
-  );
-
-
-  if(
-    positions[name]>=GOAL &&
-    trick.type!=="display"
-  ){
-
-    setTimeout(function(){
+      renderBoard();
 
       showPopup(
         "🏆",
         "GOAL！",
-        name+
-        "がGOALしました！"
+        sourceText+
+        "\n\n"+
+        piece+
+        " がゴールしました！"
       );
 
-    },400);
-
-  }
-
-}
+      break;
+    }
 
 
-/* ==================================================
-   前の県
-================================================== */
+    case "again":{
 
-function findPreviousPiece(name){
+      showPopup(
+        "🎲",
+        "もう1回！",
+        sourceText+
+        "\n\n"+
+        piece+
+        " はもう一度進めます！"
+      );
 
-  const current=
-    positions[name] || 0;
+      break;
+    }
 
 
-  const candidates=
-    pieces
-      .filter(function(piece){
+    case "display":{
 
-        return(
-          piece!==name &&
-          positions[piece]>0 &&
-          positions[piece]<current
+      showPopup(
+        "🎁",
+        "お楽しみ袋！",
+        sourceText+
+        "\n\n"+
+        "お楽しみ袋が表示されました！"
+      );
+
+      break;
+    }
+
+
+    case "previousBack":{
+
+      const index =
+        prefectures.indexOf(piece);
+
+      if(index > 0){
+
+        const previous =
+          prefectures[index-1];
+
+        const amount =
+          Number(trick.value)||0;
+
+        positions[previous] =
+          Math.max(
+            1,
+            positions[previous]-amount
+          );
+
+        renderBoard();
+
+        showPopup(
+          "👥",
+          "前の県が戻ります！",
+          sourceText+
+          "\n\n"+
+          previous+
+          " が "+
+          amount+
+          "マス戻りました。"
         );
 
-      })
-      .sort(function(a,b){
+      }else{
 
-        return(
-          positions[b]-
-          positions[a]
+        showPopup(
+          "👥",
+          "仕掛け発動！",
+          sourceText
         );
+
+      }
+
+      break;
+    }
+
+
+    case "previousStart":{
+
+      const index =
+        prefectures.indexOf(piece);
+
+      if(index > 0){
+
+        const previous =
+          prefectures[index-1];
+
+        positions[previous] = 1;
+
+        renderBoard();
+
+        showPopup(
+          "🔵",
+          "前の県がSTARTへ！",
+          sourceText+
+          "\n\n"+
+          previous+
+          " がSTARTへ戻りました。"
+        );
+
+      }else{
+
+        showPopup(
+          "👥",
+          "仕掛け発動！",
+          sourceText
+        );
+
+      }
+
+      break;
+    }
+
+
+    case "swapPrevious":{
+
+      const index =
+        prefectures.indexOf(piece);
+
+      if(index > 0){
+
+        const previous =
+          prefectures[index-1];
+
+        const temp =
+          positions[piece];
+
+        positions[piece] =
+          positions[previous];
+
+        positions[previous] =
+          temp;
+
+        renderBoard();
+
+        showPopup(
+          "🔄",
+          "位置入れ替え！",
+          sourceText+
+          "\n\n"+
+          piece+
+          " と "+
+          previous+
+          " の位置が入れ替わりました！"
+        );
+
+      }else{
+
+        showPopup(
+          "🔄",
+          "仕掛け発動！",
+          sourceText
+        );
+
+      }
+
+      break;
+    }
+
+
+    case "leaderBack":{
+
+      let leader = null;
+      let leaderPosition = -1;
+
+
+      prefectures.forEach(name=>{
+
+        const pos =
+          positions[name] || 0;
+
+        if(pos > leaderPosition){
+
+          leaderPosition = pos;
+          leader = name;
+
+        }
 
       });
 
 
-  return candidates.length
-    ? candidates[0]
-    : null;
+      if(leader){
 
-}
+        const amount =
+          Number(trick.value)||0;
 
+        positions[leader] =
+          Math.max(
+            1,
+            positions[leader]-amount
+          );
 
-/* ==================================================
-   1位
-================================================== */
+        renderBoard();
 
-function getLeader(excludeName){
+        showPopup(
+          "👑",
+          "先頭が戻ります！",
+          sourceText+
+          "\n\n"+
+          leader+
+          " が "+
+          amount+
+          "マス戻りました。"
+        );
 
-  const list=
-    pieces.filter(function(name){
+      }else{
 
-      return name!==excludeName;
+        showPopup(
+          "👑",
+          "仕掛け発動！",
+          sourceText
+        );
 
-    });
+      }
 
-
-  list.sort(function(a,b){
-
-    return(
-      positions[b]-
-      positions[a]
-    );
-
-  });
-
-
-  return list.length
-    ? list[0]
-    : null;
-
-}
-
-
-/* ==================================================
-   最下位
-================================================== */
-
-function getLast(excludeName){
-
-  const list=
-    pieces.filter(function(name){
-
-      return name!==excludeName;
-
-    });
+      break;
+    }
 
 
-  list.sort(function(a,b){
+    case "lastForward":{
 
-    return(
-      positions[a]-
-      positions[b]
-    );
-
-  });
+      let last = null;
+      let lastPosition = Infinity;
 
 
-  return list.length
-    ? list[0]
-    : null;
+      prefectures.forEach(name=>{
 
-}
+        const pos =
+          positions[name] || 0;
+
+        if(pos > 0 && pos < lastPosition){
+
+          lastPosition = pos;
+          last = name;
+
+        }
+
+      });
 
 
-/* ==================================================
-   仕掛けアイコン
-================================================== */
+      if(last){
 
-function getTrickIcon(type){
+        const amount =
+          Number(trick.value)||0;
 
-  switch(type){
+        positions[last] =
+          Math.min(
+            GOAL,
+            positions[last]+amount
+          );
 
-    case "forward":
-      return "🚀";
+        renderBoard();
 
-    case "back":
-      return "↩️";
+        showPopup(
+          "🚀",
+          "最後尾が進みます！",
+          sourceText+
+          "\n\n"+
+          last+
+          " が "+
+          amount+
+          "マス進みました。"
+        );
 
-    case "start":
-      return "💥";
+      }else{
 
-    case "goal":
-      return "🏆";
+        showPopup(
+          "🚀",
+          "仕掛け発動！",
+          sourceText
+        );
 
-    case "again":
-      return "🔄";
+      }
 
-    case "display":
-      return "🎁";
+      break;
+    }
 
-    case "previousBack":
-      return "🗾";
-
-    case "previousStart":
-      return "💥";
-
-    case "swapPrevious":
-      return "🔁";
-
-    case "leaderBack":
-      return "🥇";
-
-    case "lastForward":
-      return "🥉";
 
     default:
-      return "💥";
+
+      showPopup(
+        giftIcon,
+        "コマが進みました！",
+        sourceText
+      );
 
   }
 
 }
 
 
-/* ==================================================
+/* =====================================================
+   コマ選択モーダル
+===================================================== */
+
+function openPieceModal(){
+
+  const grid =
+    document.getElementById("pieceGrid");
+
+  grid.innerHTML = "";
+
+
+  prefectures.forEach(name=>{
+
+    const button =
+      document.createElement("button");
+
+    button.className =
+      "pieceSelect";
+
+
+    if(name === selectedPiece){
+
+      button.classList.add(
+        "selected"
+      );
+
+    }
+
+
+    button.textContent =
+      name;
+
+
+    button.onclick = ()=>{
+
+      selectedPiece =
+        name;
+
+      updateSelected();
+
+      closeModal("pieceModal");
+
+    };
+
+
+    grid.appendChild(button);
+
+  });
+
+
+  openModal("pieceModal");
+
+}
+
+
+/* =====================================================
+   ギフト設定を開く
+===================================================== */
+
+function openGiftSettings(){
+
+  const list =
+    document.getElementById(
+      "giftSettingsList"
+    );
+
+  list.innerHTML = "";
+
+
+  gifts.forEach((gift,index)=>{
+
+    const box =
+      document.createElement("div");
+
+    box.className =
+      "giftSetting";
+
+
+    box.innerHTML = `
+
+      <div class="giftSettingTitle">
+        ${index+1}️⃣ ギフト${index+1}
+      </div>
+
+      <div class="twoCol">
+
+        <div class="formGroup">
+
+          <label>
+            アイコン
+          </label>
+
+          <input
+            id="giftIcon${index}"
+            type="text"
+            value="${escapeHtml(gift.icon)}"
+          >
+
+        </div>
+
+        <div class="formGroup">
+
+          <label>
+            ギフト名
+          </label>
+
+          <input
+            id="giftName${index}"
+            type="text"
+            value="${escapeHtml(gift.name)}"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="formGroup">
+
+        <label>
+          動き方
+        </label>
+
+        <select
+          id="giftType${index}"
+          onchange="updateGiftSettingFields(${index})"
+        >
+
+          <option
+            value="fixed"
+            ${gift.type==="fixed" ? "selected" : ""}
+          >
+            固定マスで進む
+          </option>
+
+          <option
+            value="dice"
+            ${gift.type==="dice" ? "selected" : ""}
+          >
+            サイコロを振る
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div
+        id="giftMoveArea${index}"
+      >
+
+        <div class="formGroup">
+
+          <label>
+            固定移動マス
+          </label>
+
+          <input
+            id="giftMove${index}"
+            type="number"
+            min="0"
+            max="99"
+            value="${Number(gift.move)||0}"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="giftDiceArea${index}"
+      >
+
+        <div class="formGroup">
+
+          <label>
+            サイコロを振る回数
+          </label>
+
+          <input
+            id="giftDice${index}"
+            type="number"
+            min="1"
+            max="20"
+            value="${Number(gift.diceCount)||1}"
+          >
+
+        </div>
+
+      </div>
+
+    `;
+
+
+    list.appendChild(box);
+
+
+    updateGiftSettingFields(index);
+
+  });
+
+
+  openModal("giftModal");
+
+}
+
+
+/* =====================================================
+   ギフト設定フィールド切替
+===================================================== */
+
+function updateGiftSettingFields(index){
+
+  const type =
+    document.getElementById(
+      "giftType"+index
+    )?.value;
+
+
+  const moveArea =
+    document.getElementById(
+      "giftMoveArea"+index
+    );
+
+  const diceArea =
+    document.getElementById(
+      "giftDiceArea"+index
+    );
+
+
+  if(!moveArea || !diceArea){
+    return;
+  }
+
+
+  if(type === "dice"){
+
+    moveArea.style.display =
+      "none";
+
+    diceArea.style.display =
+      "block";
+
+  }else{
+
+    moveArea.style.display =
+      "block";
+
+    diceArea.style.display =
+      "none";
+
+  }
+
+}
+
+
+/* =====================================================
+   ギフト設定保存
+===================================================== */
+
+function saveGiftSettings(){
+
+  gifts.forEach((gift,index)=>{
+
+    const icon =
+      document.getElementById(
+        "giftIcon"+index
+      );
+
+    const name =
+      document.getElementById(
+        "giftName"+index
+      );
+
+    const type =
+      document.getElementById(
+        "giftType"+index
+      );
+
+    const move =
+      document.getElementById(
+        "giftMove"+index
+      );
+
+    const dice =
+      document.getElementById(
+        "giftDice"+index
+      );
+
+
+    gift.icon =
+      icon.value || "🎁";
+
+    gift.name =
+      name.value || "指定ギフト";
+
+    gift.type =
+      type.value;
+
+
+    gift.move =
+      Math.max(
+        0,
+        Number(move.value)||0
+      );
+
+
+    gift.diceCount =
+      Math.max(
+        1,
+        Math.min(
+          20,
+          Number(dice.value)||1
+        )
+      );
+
+  });
+
+
+  renderGifts();
+
+  closeModal("giftModal");
+
+
+  showPopup(
+    "💾",
+    "保存しました！",
+    "ギフト設定を更新しました。"
+  );
+
+}
+
+
+/* =====================================================
+   仕掛け設定
+===================================================== */
+
+function openTrickSettings(){
+
+  const list =
+    document.getElementById(
+      "trickSettingsList"
+    );
+
+  list.innerHTML = "";
+
+
+  for(let i=1;i<=GOAL;i++){
+
+    const trick =
+      tricks[i] || {
+        type:"none",
+        value:0
+      };
+
+
+    const box =
+      document.createElement("div");
+
+    box.className =
+      "trickSetting";
+
+
+    box.innerHTML = `
+
+      <strong>
+        ${i}マス目
+      </strong>
+
+      <select
+        id="trickType${i}"
+      >
+
+        <option
+          value="none"
+          ${trick.type==="none" ? "selected" : ""}
+        >
+          仕掛けなし
+        </option>
+
+        <option
+          value="forward"
+          ${trick.type==="forward" ? "selected" : ""}
+        >
+          ⬆️ 自分が進む
+        </option>
+
+        <option
+          value="back"
+          ${trick.type==="back" ? "selected" : ""}
+        >
+          ⬇️ 自分が戻る
+        </option>
+
+        <option
+          value="start"
+          ${trick.type==="start" ? "selected" : ""}
+        >
+          🔵 STARTへ戻る
+        </option>
+
+        <option
+          value="goal"
+          ${trick.type==="goal" ? "selected" : ""}
+        >
+          🏆 GOALへ
+        </option>
+
+        <option
+          value="again"
+          ${trick.type==="again" ? "selected" : ""}
+        >
+          🎲 もう1回
+        </option>
+
+        <option
+          value="display"
+          ${trick.type==="display" ? "selected" : ""}
+        >
+          🎁 お楽しみ袋を表示
+        </option>
+
+        <option
+          value="previousBack"
+          ${trick.type==="previousBack" ? "selected" : ""}
+        >
+          👥 前の県を戻す
+        </option>
+
+        <option
+          value="previousStart"
+          ${trick.type==="previousStart" ? "selected" : ""}
+        >
+          👥 前の県をSTARTへ
+        </option>
+
+        <option
+          value="swapPrevious"
+          ${trick.type==="swapPrevious" ? "selected" : ""}
+        >
+          🔄 前の県と入れ替え
+        </option>
+
+        <option
+          value="leaderBack"
+          ${trick.type==="leaderBack" ? "selected" : ""}
+        >
+          👑 先頭を戻す
+        </option>
+
+        <option
+          value="lastForward"
+          ${trick.type==="lastForward" ? "selected" : ""}
+        >
+          🚀 最後尾を進める
+        </option>
+
+      </select>
+
+
+      <input
+        id="trickValue${i}"
+        type="number"
+        min="0"
+        max="99"
+        value="${Number(trick.value)||0}"
+        placeholder="移動マス数"
+      >
+
+    `;
+
+
+    list.appendChild(box);
+
+  }
+
+
+  openModal("trickModal");
+
+}
+
+
+/* =====================================================
+   仕掛け保存
+===================================================== */
+
+function saveTrickSettings(){
+
+  for(let i=1;i<=GOAL;i++){
+
+    const type =
+      document.getElementById(
+        "trickType"+i
+      ).value;
+
+
+    const value =
+      Math.max(
+        0,
+        Number(
+          document.getElementById(
+            "trickValue"+i
+          ).value
+        ) || 0
+      );
+
+
+    tricks[i] = {
+      type:type,
+      value:value
+    };
+
+  }
+
+
+  renderBoard();
+
+  closeModal("trickModal");
+
+
+  showPopup(
+    "💾",
+    "保存しました！",
+    "マスの仕掛けを更新しました。"
+  );
+
+}
+
+
+/* =====================================================
+   プロジェクト設定
+===================================================== */
+
+function openProjectSettings(){
+
+  document.getElementById(
+    "projectTitle"
+  ).value = title;
+
+
+  document.getElementById(
+    "projectSubtitle"
+  ).value = subtitle;
+
+
+  document.getElementById(
+    "projectGoal"
+  ).value = GOAL;
+
+
+  openModal("projectModal");
+
+}
+
+
+/* =====================================================
+   プロジェクト設定保存
+===================================================== */
+
+function saveProjectSettings(){
+
+  title =
+    document.getElementById(
+      "projectTitle"
+    ).value ||
+    "都道府県すごろく";
+
+
+  subtitle =
+    document.getElementById(
+      "projectSubtitle"
+    ).value ||
+    "指定ギフトでコマを進めよう！";
+
+
+  let newGoal =
+    Number(
+      document.getElementById(
+        "projectGoal"
+      ).value
+    );
+
+
+  if(!newGoal || newGoal < 1){
+    newGoal = 30;
+  }
+
+
+  newGoal =
+    Math.min(
+      99,
+      Math.floor(newGoal)
+    );
+
+
+  GOAL =
+    newGoal;
+
+
+  document.getElementById(
+    "titleText"
+  ).textContent =
+    title;
+
+
+  document.getElementById(
+    "subtitleText"
+  ).textContent =
+    subtitle;
+
+
+  renderBoard();
+
+  closeModal("projectModal");
+
+
+  showPopup(
+    "💾",
+    "保存しました！",
+    "プロジェクト設定を更新しました。"
+  );
+
+}
+
+
+/* =====================================================
+   モーダル共通
+===================================================== */
+
+function openModal(id){
+
+  document
+    .getElementById(id)
+    .classList.add("show");
+
+}
+
+
+function closeModal(id){
+
+  document
+    .getElementById(id)
+    .classList.remove("show");
+
+}
+
+
+/* =====================================================
    ポップアップ
-================================================== */
+===================================================== */
 
 function showPopup(
   icon,
-  title,
+  titleText,
   text
 ){
 
+  const popup =
+    document.getElementById(
+      "popup"
+    );
+
   document.getElementById(
     "popupIcon"
-  ).textContent=icon;
+  ).textContent =
+    icon;
 
 
   document.getElementById(
     "popupTitle"
-  ).textContent=title;
+  ).textContent =
+    titleText;
 
 
   document.getElementById(
     "popupText"
-  ).textContent=text;
+  ).textContent =
+    text;
 
 
   document.getElementById(
-    "popup"
-  ).classList.add("show");
+    "diceDisplay"
+  ).style.display =
+    icon === "🎲" ? "flex" : "none";
+
+
+  popup.classList.add("show");
 
 }
 
 
 function closePopup(){
 
-  document.getElementById(
-    "popup"
-  ).classList.remove("show");
+  document
+    .getElementById("popup")
+    .classList.remove("show");
 
 }
 
 
-/* ==================================================
-   企画設定
-================================================== */
-
-function openProjectModal(){
-
-  document.getElementById(
-    "titleInput"
-  ).value=projectTitle;
-
-
-  document.getElementById(
-    "subtitleInput"
-  ).value=projectSubtitle;
-
-
-  document.getElementById(
-    "pieceCountInput"
-  ).value=pieces.length;
-
-
-  document.getElementById(
-    "goalInput"
-  ).value=GOAL;
-
-
-  buildPieceInputs();
-
-
-  document.getElementById(
-    "projectModal"
-  ).classList.add("show");
-
-}
-
-
-function closeProjectModal(){
-
-  document.getElementById(
-    "projectModal"
-  ).classList.remove("show");
-
-}
-
-
-/* ==================================================
-   コマ名称
-================================================== */
-
-function buildPieceInputs(){
-
-  let count=
-    Number(
-      document.getElementById(
-        "pieceCountInput"
-      ).value
-    );
-
-
-  count=
-    Math.max(
-      1,
-      Math.min(47,count||1)
-    );
-
-
-  const area=
-    document.getElementById(
-      "pieceInputs"
-    );
-
-  area.innerHTML="";
-
-
-  for(
-    let i=0;
-    i<count;
-    i++
-  ){
-
-    const row=
-      document.createElement("div");
-
-    row.className="pieceInput";
-
-
-    const num=
-      document.createElement("div");
-
-    num.className="pieceNumber";
-
-    num.textContent=i+1;
-
-
-    const input=
-      document.createElement("input");
-
-    input.className="input";
-
-    input.id=
-      "pieceInput-"+i;
-
-    input.type="text";
-
-    input.value=
-      pieces[i] ||
-      "コマ"+(i+1);
-
-
-    row.appendChild(num);
-
-    row.appendChild(input);
-
-    area.appendChild(row);
-
-  }
-
-}
-
-
-/* ==================================================
-   企画保存
-================================================== */
-
-function saveProjectSettings(){
-
-  const title=
-    document.getElementById(
-      "titleInput"
-    ).value.trim();
-
-
-  const subtitle=
-    document.getElementById(
-      "subtitleInput"
-    ).value.trim();
-
-
-  let count=
-    Number(
-      document.getElementById(
-        "pieceCountInput"
-      ).value
-    );
-
-
-  let goal=
-    Number(
-      document.getElementById(
-        "goalInput"
-      ).value
-    );
-
-
-  count=
-    Math.max(
-      1,
-      Math.min(47,count||1)
-    );
-
-
-  goal=
-    Math.max(
-      1,
-      Math.min(30,goal||1)
-    );
-
-
-  const oldPositions=
-    {...positions};
-
-
-  const oldTricks=
-    {...tricks};
-
-
-  const newPieces=[];
-
-
-  for(
-    let i=0;
-    i<count;
-    i++
-  ){
-
-    const input=
-      document.getElementById(
-        "pieceInput-"+i
-      );
-
-
-    let name=
-      input
-        ? input.value.trim()
-        : "";
-
-
-    if(!name){
-
-      name="コマ"+(i+1);
-
-    }
-
-
-    if(newPieces.includes(name)){
-
-      name=
-        name+" "+(i+1);
-
-    }
-
-
-    newPieces.push(name);
-
-  }
-
-
-  projectTitle=
-    title ||
-    "すごろく企画";
-
-
-  projectSubtitle=
-    subtitle ||
-    "指定ギフトでコマを進めよう！";
-
-
-  GOAL=goal;
-
-  pieces=newPieces;
-
-
-  positions={};
-
-
-  pieces.forEach(function(name){
-
-    positions[name]=
-      Math.min(
-        oldPositions[name]||0,
-        GOAL
-      );
-
-  });
-
-
-  tricks={};
-
-
-  for(
-    let i=1;
-    i<=GOAL;
-    i++
-  ){
-
-    tricks[i]=
-      oldTricks[i] ||
-      {
-        enabled:false,
-        type:"none",
-        value:2,
-        text:""
-      };
-
-  }
-
-
-  if(
-    !selectedPiece ||
-    !pieces.includes(selectedPiece)
-  ){
-
-    selectedPiece=null;
-
-    document.getElementById(
-      "selectedName"
-    ).textContent=
-      "コマを選んでください";
-
-  }
-
-
-  closeProjectModal();
-
-  updateAll();
-
-
-  showPopup(
-    "⚙️",
-    "設定完了！",
-    "企画設定を変更しました。"
-  );
-
-}
-
-
-/* ==================================================
-   ギフト設定
-================================================== */
-
-function openGiftModal(){
-
-  const area=
-    document.getElementById(
-      "giftSettingRows"
-    );
-
-  area.innerHTML="";
-
-
-  gifts.forEach(function(gift,index){
-
-    const row=
-      document.createElement("div");
-
-    row.className=
-      "giftSettingRow";
-
-
-    row.innerHTML=
-
-      '<div class="giftSettingTitle">'+
-      "🎁 ギフト "+(index+1)+
-      "</div>"+
-
-      '<div class="giftSettingInputs">'+
-
-      '<input class="input" '+
-      'id="giftIcon-'+index+'" '+
-      'value="'+
-      escapeHTML(gift.icon)+
-      '">'+
-
-      '<input class="input" '+
-      'id="giftName-'+index+'" '+
-      'value="'+
-      escapeHTML(gift.name)+
-      '">'+
-
-      '<input class="input" '+
-      'id="giftMove-'+index+'" '+
-      'type="number" '+
-      'min="0" '+
-      'value="'+
-      gift.move+
-      '">'+
-
-      '</div>';
-
-
-    area.appendChild(row);
-
-  });
-
-
-  document.getElementById(
-    "giftModal"
-  ).classList.add("show");
-
-}
-
-
-function closeGiftModal(){
-
-  document.getElementById(
-    "giftModal"
-  ).classList.remove("show");
-
-}
-
-
-function saveGiftSettings(){
-
-  gifts.forEach(function(gift,index){
-
-    const icon=
-      document.getElementById(
-        "giftIcon-"+index
-      ).value.trim();
-
-
-    const name=
-      document.getElementById(
-        "giftName-"+index
-      ).value.trim();
-
-
-    let move=
-      Number(
-        document.getElementById(
-          "giftMove-"+index
-        ).value
-      );
-
-
-    if(isNaN(move)||move<0){
-
-      move=0;
-
-    }
-
-
-    gift.icon=
-      icon||"🎁";
-
-    gift.name=
-      name||"ギフト";
-
-    gift.move=
-      move;
-
-  });
-
-
-  closeGiftModal();
-
-  createGiftButtons();
-
-
-  showPopup(
-    "🎁",
-    "ギフト設定完了！",
-    "ギフト名と進むマス数を変更しました。"
-  );
-
-}
-
-
-/* ==================================================
-   仕掛け設定
-================================================== */
-
-function openTrickModal(){
-
-  createTrickInputs();
-
-  document.getElementById(
-    "trickModal"
-  ).classList.add("show");
-
-}
-
-
-function closeTrickModal(){
-
-  document.getElementById(
-    "trickModal"
-  ).classList.remove("show");
-
-}
-
-
-/* ==================================================
-   仕掛け入力
-================================================== */
-
-function createTrickInputs(){
-
-  const area=
-    document.getElementById(
-      "trickSettingRows"
-    );
-
-  area.innerHTML="";
-
-
-  for(
-    let i=1;
-    i<=GOAL;
-    i++
-  ){
-
-    if(!tricks[i]){
-
-      tricks[i]={
-        enabled:false,
-        type:"none",
-        value:2,
-        text:""
-      };
-
-    }
-
-
-    const t=
-      tricks[i];
-
-
-    const row=
-      document.createElement("div");
-
-    row.className="trickRow";
-
-
-    row.innerHTML=
-
-      '<div class="trickRowTitle">'+
-      "マス "+i+
-      "</div>"+
-
-      '<div class="trickInputs">'+
-
-      '<select class="select" '+
-      'id="trickEnabled-'+i+'">'+
-
-      '<option value="off">OFF</option>'+
-      '<option value="on">ON</option>'+
-
-      '</select>'+
-
-      '<select class="select" '+
-      'id="trickType-'+i+'">'+
-
-      '<option value="none">'+
-      "仕掛けなし"+
-      "</option>"+
-
-      '<option value="forward">'+
-      "🚀 自分が○マス進む"+
-      "</option>"+
-
-      '<option value="back">'+
-      "↩️ 自分が○マス戻る"+
-      "</option>"+
-
-      '<option value="start">'+
-      "💥 自分がSTARTへ"+
-      "</option>"+
-
-      '<option value="goal">'+
-      "🏆 自分がGOALへ"+
-      "</option>"+
-
-      '<option value="again">'+
-      "🔄 もう一度進む"+
-      "</option>"+
-
-      '<option value="display">'+
-      "🎁 表示だけ・動かない"+
-      "</option>"+
-
-      '<option value="previousBack">'+
-      "🗾 一つ前の県を○マス戻す"+
-      "</option>"+
-
-      '<option value="previousStart">'+
-      "💥 一つ前の県をSTARTへ"+
-      "</option>"+
-
-      '<option value="swapPrevious">'+
-      "🔁 一つ前の県と位置交換"+
-      "</option>"+
-
-      '<option value="leaderBack">'+
-      "🥇 1位の県を○マス戻す"+
-      "</option>"+
-
-      '<option value="lastForward">'+
-      "🥉 最下位の県を○マス進める"+
-      "</option>"+
-
-      '</select>'+
-
-      '<input class="input" '+
-      'id="trickValue-'+i+'" '+
-      'type="number" '+
-      'min="1" '+
-      'max="100" '+
-      'value="'+
-      t.value+
-      '">'+
-
-      '</div>'+
-
-      '<input class="input trickMessage" '+
-      'id="trickText-'+i+'" '+
-      'placeholder="表示文字（任意）" '+
-      'value="'+
-      escapeHTML(t.text)+
-      '">';
-
-
-    area.appendChild(row);
-
-
-    document.getElementById(
-      "trickEnabled-"+i
-    ).value=
-      t.enabled
-        ? "on"
-        : "off";
-
-
-    document.getElementById(
-      "trickType-"+i
-    ).value=
-      t.type;
-
-  }
-
-}
-
-
-/* ==================================================
-   仕掛け保存
-================================================== */
-
-function saveTrickSettings(){
-
-  const newTricks={};
-
-
-  for(
-    let i=1;
-    i<=GOAL;
-    i++
-  ){
-
-    const enabled=
-      document.getElementById(
-        "trickEnabled-"+i
-      ).value==="on";
-
-
-    const type=
-      document.getElementById(
-        "trickType-"+i
-      ).value;
-
-
-    let value=
-      Number(
-        document.getElementById(
-          "trickValue-"+i
-        ).value
-      );
-
-
-    if(!value||value<1){
-
-      value=1;
-
-    }
-
-
-    const text=
-      document.getElementById(
-        "trickText-"+i
-      ).value.trim();
-
-
-    newTricks[i]={
-
-      enabled:
-        enabled &&
-        type!=="none",
-
-      type:type,
-
-      value:value,
-
-      text:text
-
-    };
-
-  }
-
-
-  tricks=newTricks;
-
-
-  closeTrickModal();
-
-  updateAll();
-
-
-  showPopup(
-    "💥",
-    "仕掛け設定完了！",
-    "仕掛けマスを更新しました。"
-  );
-
-}
-
-
-/* ==================================================
+/* =====================================================
    リセット
-================================================== */
+===================================================== */
 
 function resetGame(){
 
   if(
     !confirm(
-      "全てのコマをSTARTに戻しますか？"
+      "すべてのコマをSTARTに戻しますか？"
     )
   ){
-
     return;
-
   }
 
 
-  pieces.forEach(function(name){
+  prefectures.forEach(name=>{
 
-    positions[name]=0;
+    positions[name] = 0;
 
   });
 
 
-  updateAll();
+  selectedPiece = null;
+
+  updateSelected();
+
+  renderBoard();
 
 
   showPopup(
     "🔄",
-    "リセット完了",
-    "全てのコマがSTARTに戻りました。"
+    "リセットしました！",
+    "すべてのコマをSTART前に戻しました。"
   );
 
 }
 
 
-/* ==================================================
-   全更新
-================================================== */
+/* =====================================================
+   初期化
+===================================================== */
 
-function updateAll(){
-
-  updateTitle();
-
-  createBoard();
-
-  renderPieces();
-
-  createGiftButtons();
-
-}
+document.getElementById(
+  "titleText"
+).textContent =
+  title;
 
 
-/* ==================================================
-   起動
-================================================== */
+document.getElementById(
+  "subtitleText"
+).textContent =
+  subtitle;
 
-initializePositions();
 
-initializeTricks();
+renderBoard();
 
-updateAll();
+renderGifts();
+
+updateSelected();
 
 </script>
 
