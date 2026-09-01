@@ -31,10 +31,6 @@ button,input,select{
   font-family:inherit;
 }
 
-/* =========================
-   全体
-========================= */
-
 .app{
   width:100%;
   height:100dvh;
@@ -139,6 +135,7 @@ button,input,select{
   flex:0 0 auto;
   background:#6d28d9;
   color:#fff;
+  border:0;
   border-radius:7px;
   padding:7px 10px;
   font-size:10px;
@@ -146,7 +143,7 @@ button,input,select{
 }
 
 /* =========================
-   すごろく盤
+   盤面
 ========================= */
 
 .boardWrap{
@@ -169,10 +166,6 @@ button,input,select{
   border-radius:8px;
   background:#d4d4d4;
 }
-
-/* =========================
-   マス
-========================= */
 
 .cell{
   min-width:0;
@@ -274,6 +267,7 @@ button,input,select{
 .giftButton{
   min-width:0;
   min-height:0;
+  border:0;
   border-radius:6px;
   color:#fff;
   background:#7c3aed;
@@ -400,16 +394,14 @@ button,input,select{
 
 .closeBtn{
   background:#eee;
+  border:1px solid #ccc;
 }
 
 .saveBtn{
   background:#6d28d9;
   color:#fff;
+  border:0;
 }
-
-/* =========================
-   コマ選択
-========================= */
 
 .info{
   background:#f3e8ff;
@@ -442,9 +434,26 @@ button,input,select{
   color:#5b21b6;
 }
 
-/* =========================
-   フォーム
-========================= */
+.giftSetting{
+  border:1px solid #ddd;
+  border-radius:8px;
+  padding:8px;
+  margin-bottom:7px;
+  background:#fafafa;
+}
+
+.giftSettingTitle{
+  color:#5b21b6;
+  font-weight:900;
+  font-size:12px;
+  margin-bottom:5px;
+}
+
+.twoCol{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:5px;
+}
 
 .formGroup{
   margin-bottom:7px;
@@ -465,35 +474,6 @@ button,input,select{
   padding:7px;
   font-size:12px;
 }
-
-.twoCol{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:5px;
-}
-
-/* =========================
-   ギフト設定
-========================= */
-
-.giftSetting{
-  border:1px solid #ddd;
-  border-radius:8px;
-  padding:8px;
-  margin-bottom:7px;
-  background:#fafafa;
-}
-
-.giftSettingTitle{
-  color:#5b21b6;
-  font-weight:900;
-  font-size:12px;
-  margin-bottom:5px;
-}
-
-/* =========================
-   仕掛け設定
-========================= */
 
 .trickSetting{
   border:1px solid #ddd;
@@ -568,23 +548,24 @@ button,input,select{
   margin-top:12px;
   background:#6d28d9;
   color:#fff;
+  border:0;
   border-radius:7px;
   padding:9px 24px;
   font-weight:900;
 }
 
-/* =========================
-   大きなサイコロ演出
-========================= */
+/* =================================================
+   ★ サイコロ演出
+================================================= */
 
 .diceOverlay{
   position:fixed;
   inset:0;
-  z-index:3000;
+  z-index:5000;
   display:none;
   align-items:center;
   justify-content:center;
-  background:rgba(0,0,0,.72);
+  background:rgba(0,0,0,.78);
 }
 
 .diceOverlay.show{
@@ -592,46 +573,137 @@ button,input,select{
 }
 
 .diceAnimationBox{
-  width:240px;
+  width:280px;
   text-align:center;
 }
 
+.diceCaption{
+  color:#fff;
+  font-size:18px;
+  font-weight:900;
+  margin-bottom:20px;
+}
+
 .bigDice{
-  width:150px;
-  height:150px;
+  width:170px;
+  height:170px;
   margin:0 auto;
   background:#fff;
   border:7px solid #333;
-  border-radius:25px;
+  border-radius:28px;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:86px;
+  font-size:105px;
   font-weight:900;
-  box-shadow:0 12px 45px rgba(0,0,0,.5);
-  animation:diceShake .12s infinite alternate;
+  color:#222;
+  box-shadow:
+    0 0 0 5px rgba(255,255,255,.2),
+    0 15px 50px rgba(0,0,0,.7);
+}
+
+/* 振っている時 */
+
+.bigDice.rolling{
+  animation:
+    diceRoll .12s infinite alternate,
+    diceJump .24s infinite alternate;
+}
+
+/* 止まった時 */
+
+.bigDice.stopped{
+  animation:diceStop .35s ease-out;
 }
 
 .diceRollingText{
-  margin-top:22px;
+  margin-top:25px;
   color:#fff;
-  font-size:19px;
+  font-size:21px;
+  line-height:1.4;
   font-weight:900;
-  text-shadow:0 2px 5px rgba(0,0,0,.7);
+  text-shadow:0 2px 6px #000;
 }
 
-@keyframes diceShake{
+.diceTotal{
+  margin-top:10px;
+  color:#ffe600;
+  font-size:30px;
+  font-weight:900;
+  text-shadow:0 2px 6px #000;
+}
+
+@keyframes diceRoll{
+
   0%{
-    transform:rotate(-12deg) scale(.92);
+    transform:
+      rotate(-18deg)
+      translateX(-12px)
+      scale(.90);
+  }
+
+  25%{
+    transform:
+      rotate(12deg)
+      translateX(12px)
+      scale(1.08);
   }
 
   50%{
-    transform:rotate(0deg) scale(1.05);
+    transform:
+      rotate(-8deg)
+      translateX(-8px)
+      scale(.96);
+  }
+
+  75%{
+    transform:
+      rotate(18deg)
+      translateX(10px)
+      scale(1.10);
   }
 
   100%{
-    transform:rotate(12deg) scale(.92);
+    transform:
+      rotate(-15deg)
+      translateX(-10px)
+      scale(.92);
   }
+
+}
+
+@keyframes diceJump{
+
+  0%{
+    margin-top:0;
+  }
+
+  100%{
+    margin-top:-16px;
+  }
+
+}
+
+@keyframes diceStop{
+
+  0%{
+    transform:
+      scale(1.35)
+      rotate(20deg);
+  }
+
+  60%{
+    transform:
+      scale(.92)
+      rotate(-5deg);
+  }
+
+  100%{
+    transform:
+      scale(1)
+      rotate(0deg);
+  }
+
 }
 
 /* =========================
@@ -686,14 +758,28 @@ button,input,select{
   }
 
   .bigDice{
-    width:130px;
-    height:130px;
-    font-size:74px;
+    width:145px;
+    height:145px;
+    font-size:88px;
+    border-radius:24px;
+  }
+
+  .diceAnimationBox{
+    width:250px;
+  }
+
+  .diceCaption{
+    font-size:16px;
   }
 
   .diceRollingText{
-    font-size:16px;
+    font-size:17px;
   }
+
+  .diceTotal{
+    font-size:25px;
+  }
+
 }
 </style>
 </head>
@@ -702,9 +788,7 @@ button,input,select{
 
 <div class="app">
 
-  <!-- =========================
-       ヘッダー
-  ========================== -->
+  <!-- ヘッダー -->
 
   <header class="header">
 
@@ -727,13 +811,12 @@ button,input,select{
 
   <main class="main">
 
-    <!-- =========================
-         選択中
-    ========================== -->
+    <!-- 選択中 -->
 
     <div class="selectedBox">
 
       <div>
+
         <div class="selectedLabel">
           現在選択中
         </div>
@@ -742,6 +825,7 @@ button,input,select{
              id="selectedName">
           未選択
         </div>
+
       </div>
 
       <button class="moveButton"
@@ -752,9 +836,7 @@ button,input,select{
     </div>
 
 
-    <!-- =========================
-         盤面
-    ========================== -->
+    <!-- 盤面 -->
 
     <div class="boardWrap">
 
@@ -765,9 +847,7 @@ button,input,select{
     </div>
 
 
-    <!-- =========================
-         ギフト
-    ========================== -->
+    <!-- ギフト -->
 
     <section class="giftArea">
 
@@ -782,9 +862,7 @@ button,input,select{
     </section>
 
 
-    <!-- =========================
-         操作ボタン
-    ========================== -->
+    <!-- 設定 -->
 
     <div class="bottomSettings">
 
@@ -811,9 +889,9 @@ button,input,select{
 </div>
 
 
-<!-- =====================================================
+<!-- =================================================
      コマ選択
-===================================================== -->
+================================================= -->
 
 <div class="modal"
      id="pieceModal">
@@ -850,9 +928,9 @@ button,input,select{
 </div>
 
 
-<!-- =====================================================
+<!-- =================================================
      ギフト設定
-===================================================== -->
+================================================= -->
 
 <div class="modal"
      id="giftModal">
@@ -894,9 +972,9 @@ button,input,select{
 </div>
 
 
-<!-- =====================================================
+<!-- =================================================
      仕掛け設定
-===================================================== -->
+================================================= -->
 
 <div class="modal"
      id="trickModal">
@@ -937,9 +1015,9 @@ button,input,select{
 </div>
 
 
-<!-- =====================================================
+<!-- =================================================
      プロジェクト設定
-===================================================== -->
+================================================= -->
 
 <div class="modal"
      id="projectModal">
@@ -1002,9 +1080,9 @@ button,input,select{
 </div>
 
 
-<!-- =====================================================
+<!-- =================================================
      通常ポップアップ
-===================================================== -->
+================================================= -->
 
 <div class="popup"
      id="popup">
@@ -1035,23 +1113,32 @@ button,input,select{
 </div>
 
 
-<!-- =====================================================
-     サイコロ中央演出
-===================================================== -->
+<!-- =================================================
+     ★ 大きなサイコロ演出
+================================================= -->
 
 <div class="diceOverlay"
      id="diceOverlay">
 
   <div class="diceAnimationBox">
 
-    <div class="bigDice"
+    <div class="diceCaption"
+         id="diceCaption">
+      🎲 サイコロを振っています！
+    </div>
+
+    <div class="bigDice rolling"
          id="bigDice">
-      🎲
+      1
     </div>
 
     <div class="diceRollingText"
          id="diceRollingText">
       サイコロを振っています！
+    </div>
+
+    <div class="diceTotal"
+         id="diceTotal">
     </div>
 
   </div>
@@ -1061,9 +1148,9 @@ button,input,select{
 
 <script>
 
-/* =====================================================
+/* =================================================
    基本設定
-===================================================== */
+================================================= */
 
 let title =
   "🗾 出身県はどこ？県民パワーでGOALを目指せ！";
@@ -1074,11 +1161,12 @@ let subtitle =
 let GOAL = 30;
 
 
-/* =====================================================
+/* =================================================
    都道府県
-===================================================== */
+================================================= */
 
 const prefectures = [
+
   "北海道","青森県","岩手県","宮城県","秋田県",
   "山形県","福島県","茨城県","栃木県","群馬県",
   "埼玉県","千葉県","東京都","神奈川県","新潟県",
@@ -1089,12 +1177,13 @@ const prefectures = [
   "徳島県","香川県","愛媛県","高知県","福岡県",
   "佐賀県","長崎県","熊本県","大分県","宮崎県",
   "鹿児島県","沖縄県"
+
 ];
 
 
-/* =====================================================
-   コマ位置
-===================================================== */
+/* =================================================
+   位置
+================================================= */
 
 let positions = {};
 
@@ -1105,9 +1194,9 @@ prefectures.forEach(name=>{
 let selectedPiece = null;
 
 
-/* =====================================================
-   ギフト設定
-===================================================== */
+/* =================================================
+   ギフト
+================================================= */
 
 let gifts = [
 
@@ -1154,9 +1243,9 @@ let gifts = [
 ];
 
 
-/* =====================================================
+/* =================================================
    仕掛け
-===================================================== */
+================================================= */
 
 let tricks = {};
 
@@ -1170,57 +1259,55 @@ for(let i=1;i<=99;i++){
 }
 
 
-/* 初期仕掛け */
-
-tricks[5] = {
+tricks[5]={
   type:"forward",
   value:2
 };
 
-tricks[8] = {
+tricks[8]={
   type:"back",
   value:2
 };
 
-tricks[12] = {
+tricks[12]={
   type:"again",
   value:0
 };
 
-tricks[15] = {
+tricks[15]={
   type:"display",
   value:0
 };
 
-tricks[18] = {
+tricks[18]={
   type:"previousBack",
   value:2
 };
 
-tricks[21] = {
+tricks[21]={
   type:"previousStart",
   value:0
 };
 
-tricks[24] = {
+tricks[24]={
   type:"swapPrevious",
   value:0
 };
 
-tricks[26] = {
+tricks[26]={
   type:"leaderBack",
   value:2
 };
 
-tricks[28] = {
+tricks[28]={
   type:"lastForward",
   value:2
 };
 
 
-/* =====================================================
+/* =================================================
    仕掛け文字
-===================================================== */
+================================================= */
 
 function trickText(trick){
 
@@ -1261,21 +1348,22 @@ function trickText(trick){
 
     default:
       return "";
+
   }
 
 }
 
 
-/* =====================================================
-   盤面描画
-===================================================== */
+/* =================================================
+   盤面
+================================================= */
 
 function renderBoard(){
 
   const board =
     document.getElementById("board");
 
-  board.innerHTML = "";
+  board.innerHTML="";
 
 
   for(let i=1;i<=GOAL;i++){
@@ -1283,7 +1371,7 @@ function renderBoard(){
     const cell =
       document.createElement("div");
 
-    cell.className = "cell";
+    cell.className="cell";
 
 
     if(i===1){
@@ -1298,11 +1386,9 @@ function renderBoard(){
     const number =
       document.createElement("div");
 
-    number.className =
-      "cellNumber";
+    number.className="cellNumber";
 
-    number.textContent =
-      i;
+    number.textContent=i;
 
     cell.appendChild(number);
 
@@ -1311,14 +1397,15 @@ function renderBoard(){
       tricks[i];
 
 
-    if(trick &&
-       trick.type !== "none"){
+    if(
+      trick &&
+      trick.type!=="none"
+    ){
 
       const trickDiv =
         document.createElement("div");
 
-      trickDiv.className =
-        "cellTrick";
+      trickDiv.className="cellTrick";
 
       trickDiv.textContent =
         trickText(trick);
@@ -1331,22 +1418,19 @@ function renderBoard(){
     const piecesDiv =
       document.createElement("div");
 
-    piecesDiv.className =
-      "pieces";
+    piecesDiv.className="pieces";
 
 
     prefectures.forEach(name=>{
 
-      if(positions[name] === i){
+      if(positions[name]===i){
 
         const piece =
           document.createElement("div");
 
-        piece.className =
-          "piece";
+        piece.className="piece";
 
-        piece.textContent =
-          name;
+        piece.textContent=name;
 
         piecesDiv.appendChild(piece);
 
@@ -1364,9 +1448,9 @@ function renderBoard(){
 }
 
 
-/* =====================================================
-   選択中表示
-===================================================== */
+/* =================================================
+   選択中
+================================================= */
 
 function updateSelected(){
 
@@ -1378,81 +1462,9 @@ function updateSelected(){
 }
 
 
-/* =====================================================
-   ギフト表示
-===================================================== */
-
-function renderGifts(){
-
-  const grid =
-    document.getElementById(
-      "giftGrid"
-    );
-
-  grid.innerHTML = "";
-
-
-  gifts.slice(0,3).forEach(
-    (gift,index)=>{
-
-      const button =
-        document.createElement("button");
-
-      button.className =
-        "giftButton";
-
-
-      let actionText;
-
-
-      if(gift.type === "dice"){
-
-        actionText =
-          "🎲×"+
-          Number(gift.diceCount || 1)+
-          "回";
-
-      }else{
-
-        actionText =
-          "＋"+
-          Number(gift.move || 0)+
-          "マス";
-
-      }
-
-
-      button.innerHTML = `
-        <div class="giftIcon">
-          ${escapeHtml(gift.icon)}
-        </div>
-
-        <div class="giftName">
-          ${escapeHtml(gift.name)}
-        </div>
-
-        <div class="giftMove">
-          ${actionText}
-        </div>
-      `;
-
-
-      button.onclick = function(){
-        useGift(index);
-      };
-
-
-      grid.appendChild(button);
-
-    }
-  );
-
-}
-
-
-/* =====================================================
-   エスケープ
-===================================================== */
+/* =================================================
+   HTMLエスケープ
+================================================= */
 
 function escapeHtml(text){
 
@@ -1466,9 +1478,84 @@ function escapeHtml(text){
 }
 
 
-/* =====================================================
+/* =================================================
+   ギフト表示
+================================================= */
+
+function renderGifts(){
+
+  const grid =
+    document.getElementById(
+      "giftGrid"
+    );
+
+  grid.innerHTML="";
+
+
+  gifts.slice(0,3).forEach(
+    (gift,index)=>{
+
+      const button =
+        document.createElement("button");
+
+      button.className="giftButton";
+
+
+      let actionText;
+
+
+      if(gift.type==="dice"){
+
+        actionText =
+          "🎲×"+
+          Number(gift.diceCount||1)+
+          "回";
+
+      }else{
+
+        actionText =
+          "＋"+
+          Number(gift.move||0)+
+          "マス";
+
+      }
+
+
+      button.innerHTML=`
+
+        <div class="giftIcon">
+          ${escapeHtml(gift.icon)}
+        </div>
+
+        <div class="giftName">
+          ${escapeHtml(gift.name)}
+        </div>
+
+        <div class="giftMove">
+          ${actionText}
+        </div>
+
+      `;
+
+
+      button.onclick=function(){
+
+        useGift(index);
+
+      };
+
+
+      grid.appendChild(button);
+
+    }
+  );
+
+}
+
+
+/* =================================================
    ギフト使用
-===================================================== */
+================================================= */
 
 function useGift(index){
 
@@ -1482,7 +1569,7 @@ function useGift(index){
     showPopup(
       "⚠️",
       "コマを選んでください",
-      "先に「🗾 コマを選ぶ」から都道府県を選択してください。"
+      "先に「コマを選ぶ」から都道府県を選択してください。"
     );
 
     return;
@@ -1498,7 +1585,7 @@ function useGift(index){
   }
 
 
-  if(gift.type === "dice"){
+  if(gift.type==="dice"){
 
     rollDiceForGift(gift);
 
@@ -1507,8 +1594,9 @@ function useGift(index){
     const move =
       Math.max(
         0,
-        Number(gift.move) || 0
+        Number(gift.move)||0
       );
+
 
     moveSelected(
       move,
@@ -1520,22 +1608,24 @@ function useGift(index){
 }
 
 
-/* =====================================================
-   サイコロ
-===================================================== */
+/* =================================================
+   ★ ランダムサイコロ
+================================================= */
 
-let isRollingDice = false;
+let isRollingDice=false;
 
 
 async function rollDiceForGift(gift){
 
-  if(!selectedPiece ||
-     isRollingDice){
+  if(
+    !selectedPiece ||
+    isRollingDice
+  ){
     return;
   }
 
 
-  isRollingDice = true;
+  isRollingDice=true;
 
 
   const count =
@@ -1543,42 +1633,90 @@ async function rollDiceForGift(gift){
       1,
       Math.min(
         20,
-        Number(gift.diceCount) || 1
+        Number(gift.diceCount)||1
       )
     );
 
 
-  let rolls = [];
+  const rolls=[];
 
 
-  showBigDice();
+  const overlay =
+    document.getElementById(
+      "diceOverlay"
+    );
+
+  const dice =
+    document.getElementById(
+      "bigDice"
+    );
+
+  const rollingText =
+    document.getElementById(
+      "diceRollingText"
+    );
+
+  const totalText =
+    document.getElementById(
+      "diceTotal"
+    );
+
+  const caption =
+    document.getElementById(
+      "diceCaption"
+    );
+
+
+  overlay.classList.add("show");
 
 
   for(let i=0;i<count;i++){
 
-    document.getElementById(
-      "diceRollingText"
-    ).textContent =
-      (i+1)+"回目のサイコロを振っています！";
+    caption.textContent =
+      "🎲 "+(i+1)+"回目";
+
+
+    rollingText.textContent =
+      "サイコロを振っています！";
+
+
+    totalText.textContent="";
+
+
+    dice.classList.remove(
+      "stopped"
+    );
+
+    dice.classList.add(
+      "rolling"
+    );
 
 
     /*
-      サイコロをパラパラ動かす
+      ★ 本当にランダムな目を
+      高速で表示
     */
 
-    for(let j=0;j<12;j++){
+    for(let j=0;j<18;j++){
 
-      document.getElementById(
-        "bigDice"
-      ).textContent =
+      const randomNumber =
         Math.floor(
           Math.random()*6
         )+1;
 
-      await wait(60);
+
+      dice.textContent =
+        randomNumber;
+
+
+      await wait(65);
 
     }
 
+
+    /*
+      ★ 最終結果もランダム
+    */
 
     const result =
       Math.floor(
@@ -1589,22 +1727,44 @@ async function rollDiceForGift(gift){
     rolls.push(result);
 
 
-    document.getElementById(
-      "bigDice"
-    ).textContent =
+    dice.classList.remove(
+      "rolling"
+    );
+
+    dice.classList.add(
+      "stopped"
+    );
+
+
+    dice.textContent =
       result;
 
 
-    document.getElementById(
-      "diceRollingText"
-    ).textContent =
+    rollingText.textContent =
       "🎲 出た目は "+result+"！";
 
 
-    await wait(700);
+    if(count>1){
+
+      totalText.textContent =
+        "現在の合計："+
+
+        rolls.reduce(
+          (sum,num)=>sum+num,
+          0
+        );
+
+    }
+
+
+    await wait(1000);
 
   }
 
+
+  /*
+    ★ 合計
+  */
 
   const total =
     rolls.reduce(
@@ -1613,22 +1773,37 @@ async function rollDiceForGift(gift){
     );
 
 
-  document.getElementById(
-    "bigDice"
-  ).textContent =
+  caption.textContent =
+    "🎉 サイコロ結果";
+
+
+  dice.classList.remove(
+    "rolling"
+  );
+
+  dice.classList.add(
+    "stopped"
+  );
+
+
+  dice.textContent =
     total;
 
 
-  document.getElementById(
-    "diceRollingText"
-  ).textContent =
-    "🎉 合計 "+total+"マス！";
+  rollingText.textContent =
+    "出た目："+rolls.join(" ＋ ");
 
 
-  await wait(900);
+  totalText.textContent =
+    "合計 "+total+"マス！";
 
 
-  hideBigDice();
+  await wait(1300);
+
+
+  overlay.classList.remove(
+    "show"
+  );
 
 
   await wait(150);
@@ -1637,61 +1812,43 @@ async function rollDiceForGift(gift){
   moveSelected(
     total,
     "🎲",
-    "🎲 出た目："+rolls.join(" ＋ ")+" ＝ "+total+"マス"
+    "🎲 出た目："+
+
+    rolls.join(" ＋ ")+
+
+    " ＝ "+
+
+    total+
+
+    "マス"
   );
 
 
-  isRollingDice = false;
+  isRollingDice=false;
 
 }
 
 
-/* =====================================================
-   サイコロ表示
-===================================================== */
-
-function showBigDice(){
-
-  document.getElementById(
-    "bigDice"
-  ).textContent =
-    "🎲";
-
-
-  document.getElementById(
-    "diceRollingText"
-  ).textContent =
-    "サイコロを振っています！";
-
-
-  document.getElementById(
-    "diceOverlay"
-  ).classList.add("show");
-
-}
-
-
-function hideBigDice(){
-
-  document.getElementById(
-    "diceOverlay"
-  ).classList.remove("show");
-
-}
-
+/* =================================================
+   待機
+================================================= */
 
 function wait(ms){
 
   return new Promise(
-    resolve=>setTimeout(resolve,ms)
+    resolve =>
+      setTimeout(
+        resolve,
+        ms
+      )
   );
 
 }
 
 
-/* =====================================================
-   コマを進める
-===================================================== */
+/* =================================================
+   コマ移動
+================================================= */
 
 function moveSelected(
   move,
@@ -1712,24 +1869,23 @@ function moveSelected(
 
 
   const current =
-    positions[selectedPiece] || 0;
+    positions[selectedPiece]||0;
 
 
   let newPosition =
-    current + Number(move);
+    current+Number(move);
 
 
-  if(newPosition < 1){
-    newPosition = 1;
+  if(newPosition<1){
+
+    newPosition=1;
+
   }
 
 
-  /* GOAL */
+  if(newPosition>=GOAL){
 
-  if(newPosition >= GOAL){
-
-    positions[selectedPiece] =
-      GOAL;
+    positions[selectedPiece]=GOAL;
 
     renderBoard();
 
@@ -1739,16 +1895,22 @@ function moveSelected(
       "GOAL！",
       selectedPiece+
       " がゴールしました！"+
-      (extraText ?
-        "\n"+extraText :
-        "")
+      (
+        extraText
+        ?
+        "\n"+extraText
+        :
+        ""
+      )
     );
 
+
     return;
+
   }
 
 
-  positions[selectedPiece] =
+  positions[selectedPiece]=
     newPosition;
 
 
@@ -1776,8 +1938,10 @@ function moveSelected(
     tricks[newPosition];
 
 
-  if(trick &&
-     trick.type !== "none"){
+  if(
+    trick &&
+    trick.type!=="none"
+  ){
 
     triggerTrick(
       selectedPiece,
@@ -1800,16 +1964,16 @@ function moveSelected(
 }
 
 
-/* =====================================================
-   仕掛け発動
-===================================================== */
+/* =================================================
+   仕掛け
+================================================= */
 
 function triggerTrick(
   piece,
   position,
   trick,
   giftIcon,
-  sourceText=""
+  sourceText
 ){
 
   switch(trick.type){
@@ -1819,13 +1983,16 @@ function triggerTrick(
       const amount =
         Number(trick.value)||0;
 
-      positions[piece] =
+
+      positions[piece]=
         Math.min(
           GOAL,
           positions[piece]+amount
         );
 
+
       renderBoard();
+
 
       showPopup(
         "⬆️",
@@ -1838,7 +2005,9 @@ function triggerTrick(
         "マス進みます！"
       );
 
+
       break;
+
     }
 
 
@@ -1847,13 +2016,16 @@ function triggerTrick(
       const amount =
         Number(trick.value)||0;
 
-      positions[piece] =
+
+      positions[piece]=
         Math.max(
           1,
           positions[piece]-amount
         );
 
+
       renderBoard();
+
 
       showPopup(
         "⬇️",
@@ -1866,15 +2038,18 @@ function triggerTrick(
         "マス戻ります！"
       );
 
+
       break;
+
     }
 
 
     case "start":{
 
-      positions[piece] = 1;
+      positions[piece]=1;
 
       renderBoard();
+
 
       showPopup(
         "🔵",
@@ -1885,16 +2060,18 @@ function triggerTrick(
         " はSTARTへ戻りました。"
       );
 
+
       break;
+
     }
 
 
     case "goal":{
 
-      positions[piece] =
-        GOAL;
+      positions[piece]=GOAL;
 
       renderBoard();
+
 
       showPopup(
         "🏆",
@@ -1905,7 +2082,9 @@ function triggerTrick(
         " がゴールしました！"
       );
 
+
       break;
+
     }
 
 
@@ -1920,7 +2099,9 @@ function triggerTrick(
         " はもう一度進めます！"
       );
 
+
       break;
+
     }
 
 
@@ -1934,7 +2115,9 @@ function triggerTrick(
         "お楽しみ袋が表示されました！"
       );
 
+
       break;
+
     }
 
 
@@ -1943,21 +2126,26 @@ function triggerTrick(
       const index =
         prefectures.indexOf(piece);
 
-      if(index > 0){
+
+      if(index>0){
 
         const previous =
           prefectures[index-1];
 
+
         const amount =
           Number(trick.value)||0;
 
-        positions[previous] =
+
+        positions[previous]=
           Math.max(
             1,
             positions[previous]-amount
           );
 
+
         renderBoard();
+
 
         showPopup(
           "👥",
@@ -1980,7 +2168,9 @@ function triggerTrick(
 
       }
 
+
       break;
+
     }
 
 
@@ -1989,14 +2179,17 @@ function triggerTrick(
       const index =
         prefectures.indexOf(piece);
 
-      if(index > 0){
+
+      if(index>0){
 
         const previous =
           prefectures[index-1];
 
-        positions[previous] = 1;
+
+        positions[previous]=1;
 
         renderBoard();
+
 
         showPopup(
           "🔵",
@@ -2017,7 +2210,9 @@ function triggerTrick(
 
       }
 
+
       break;
+
     }
 
 
@@ -2026,21 +2221,27 @@ function triggerTrick(
       const index =
         prefectures.indexOf(piece);
 
-      if(index > 0){
+
+      if(index>0){
 
         const previous =
           prefectures[index-1];
 
+
         const temp =
           positions[piece];
 
-        positions[piece] =
+
+        positions[piece]=
           positions[previous];
 
-        positions[previous] =
+
+        positions[previous]=
           temp;
 
+
         renderBoard();
+
 
         showPopup(
           "🔄",
@@ -2063,25 +2264,30 @@ function triggerTrick(
 
       }
 
+
       break;
+
     }
 
 
     case "leaderBack":{
 
-      let leader = null;
-      let leaderPosition = -1;
+      let leader=null;
+
+      let leaderPosition=-1;
 
 
       prefectures.forEach(name=>{
 
         const pos =
-          positions[name] || 0;
+          positions[name]||0;
 
-        if(pos > leaderPosition){
 
-          leaderPosition = pos;
-          leader = name;
+        if(pos>leaderPosition){
+
+          leaderPosition=pos;
+
+          leader=name;
 
         }
 
@@ -2093,13 +2299,16 @@ function triggerTrick(
         const amount =
           Number(trick.value)||0;
 
-        positions[leader] =
+
+        positions[leader]=
           Math.max(
             1,
             positions[leader]-amount
           );
 
+
         renderBoard();
+
 
         showPopup(
           "👑",
@@ -2122,26 +2331,33 @@ function triggerTrick(
 
       }
 
+
       break;
+
     }
 
 
     case "lastForward":{
 
-      let last = null;
-      let lastPosition = Infinity;
+      let last=null;
+
+      let lastPosition=Infinity;
 
 
       prefectures.forEach(name=>{
 
         const pos =
-          positions[name] || 0;
+          positions[name]||0;
 
-        if(pos > 0 &&
-           pos < lastPosition){
 
-          lastPosition = pos;
-          last = name;
+        if(
+          pos>0 &&
+          pos<lastPosition
+        ){
+
+          lastPosition=pos;
+
+          last=name;
 
         }
 
@@ -2153,13 +2369,16 @@ function triggerTrick(
         const amount =
           Number(trick.value)||0;
 
-        positions[last] =
+
+        positions[last]=
           Math.min(
             GOAL,
             positions[last]+amount
           );
 
+
         renderBoard();
+
 
         showPopup(
           "🚀",
@@ -2182,11 +2401,13 @@ function triggerTrick(
 
       }
 
+
       break;
+
     }
 
 
-    default:
+    default:{
 
       showPopup(
         giftIcon,
@@ -2194,14 +2415,16 @@ function triggerTrick(
         sourceText
       );
 
+    }
+
   }
 
 }
 
 
-/* =====================================================
-   コマ選択モーダル
-===================================================== */
+/* =================================================
+   コマ選択
+================================================= */
 
 function openPieceModal(){
 
@@ -2210,7 +2433,8 @@ function openPieceModal(){
       "pieceGrid"
     );
 
-  grid.innerHTML = "";
+
+  grid.innerHTML="";
 
 
   prefectures.forEach(name=>{
@@ -2218,13 +2442,14 @@ function openPieceModal(){
     const button =
       document.createElement("button");
 
-    button.type = "button";
 
-    button.className =
+    button.type="button";
+
+    button.className=
       "pieceSelect";
 
 
-    if(name === selectedPiece){
+    if(name===selectedPiece){
 
       button.classList.add(
         "selected"
@@ -2233,16 +2458,14 @@ function openPieceModal(){
     }
 
 
-    button.textContent =
-      name;
+    button.textContent=name;
 
 
     button.addEventListener(
       "click",
       function(){
 
-        selectedPiece =
-          name;
+        selectedPiece=name;
 
         updateSelected();
 
@@ -2264,9 +2487,9 @@ function openPieceModal(){
 }
 
 
-/* =====================================================
-   ギフト設定
-===================================================== */
+/* =================================================
+   ギフト設定画面
+================================================= */
 
 function openGiftSettings(){
 
@@ -2275,7 +2498,8 @@ function openGiftSettings(){
       "giftSettingsList"
     );
 
-  list.innerHTML = "";
+
+  list.innerHTML="";
 
 
   gifts.forEach((gift,index)=>{
@@ -2283,11 +2507,12 @@ function openGiftSettings(){
     const box =
       document.createElement("div");
 
-    box.className =
+
+    box.className=
       "giftSetting";
 
 
-    box.innerHTML = `
+    box.innerHTML=`
 
       <div class="giftSettingTitle">
         ${index+1}️⃣ ギフト${index+1}
@@ -2321,6 +2546,7 @@ function openGiftSettings(){
 
       </div>
 
+
       <div class="formGroup">
 
         <label>動き方</label>
@@ -2332,14 +2558,14 @@ function openGiftSettings(){
 
           <option
             value="fixed"
-            ${gift.type==="fixed" ? "selected" : ""}
+            ${gift.type==="fixed"?"selected":""}
           >
             固定マスで進む
           </option>
 
           <option
             value="dice"
-            ${gift.type==="dice" ? "selected" : ""}
+            ${gift.type==="dice"?"selected":""}
           >
             サイコロを振る
           </option>
@@ -2347,6 +2573,7 @@ function openGiftSettings(){
         </select>
 
       </div>
+
 
       <div id="giftMoveArea${index}">
 
@@ -2366,6 +2593,7 @@ function openGiftSettings(){
 
       </div>
 
+
       <div id="giftDiceArea${index}">
 
         <div class="formGroup">
@@ -2383,12 +2611,16 @@ function openGiftSettings(){
         </div>
 
       </div>
+
     `;
 
 
     list.appendChild(box);
 
-    updateGiftSettingFields(index);
+
+    updateGiftSettingFields(
+      index
+    );
 
   });
 
@@ -2398,9 +2630,9 @@ function openGiftSettings(){
 }
 
 
-/* =====================================================
-   ギフト設定切替
-===================================================== */
+/* =================================================
+   ギフト設定表示切替
+================================================= */
 
 function updateGiftSettingFields(index){
 
@@ -2415,32 +2647,35 @@ function updateGiftSettingFields(index){
       "giftMoveArea"+index
     );
 
+
   const diceArea =
     document.getElementById(
       "giftDiceArea"+index
     );
 
 
-  if(!moveArea ||
-     !diceArea){
+  if(
+    !moveArea ||
+    !diceArea
+  ){
     return;
   }
 
 
-  if(type === "dice"){
+  if(type==="dice"){
 
-    moveArea.style.display =
+    moveArea.style.display=
       "none";
 
-    diceArea.style.display =
+    diceArea.style.display=
       "block";
 
   }else{
 
-    moveArea.style.display =
+    moveArea.style.display=
       "block";
 
-    diceArea.style.display =
+    diceArea.style.display=
       "none";
 
   }
@@ -2448,9 +2683,9 @@ function updateGiftSettingFields(index){
 }
 
 
-/* =====================================================
+/* =================================================
    ギフト保存
-===================================================== */
+================================================= */
 
 function saveGiftSettings(){
 
@@ -2459,13 +2694,15 @@ function saveGiftSettings(){
     gift.icon =
       document.getElementById(
         "giftIcon"+index
-      ).value || "🎁";
+      ).value ||
+      "🎁";
 
 
     gift.name =
       document.getElementById(
         "giftName"+index
-      ).value || "指定ギフト";
+      ).value ||
+      "指定ギフト";
 
 
     gift.type =
@@ -2481,7 +2718,7 @@ function saveGiftSettings(){
           document.getElementById(
             "giftMove"+index
           ).value
-        ) || 0
+        )||0
       );
 
 
@@ -2494,7 +2731,7 @@ function saveGiftSettings(){
             document.getElementById(
               "giftDice"+index
             ).value
-          ) || 1
+          )||1
         )
       );
 
@@ -2502,6 +2739,7 @@ function saveGiftSettings(){
 
 
   renderGifts();
+
 
   closeModal("giftModal");
 
@@ -2515,9 +2753,9 @@ function saveGiftSettings(){
 }
 
 
-/* =====================================================
+/* =================================================
    仕掛け設定
-===================================================== */
+================================================= */
 
 function openTrickSettings(){
 
@@ -2526,7 +2764,8 @@ function openTrickSettings(){
       "trickSettingsList"
     );
 
-  list.innerHTML = "";
+
+  list.innerHTML="";
 
 
   for(let i=1;i<=GOAL;i++){
@@ -2541,101 +2780,107 @@ function openTrickSettings(){
     const box =
       document.createElement("div");
 
-    box.className =
+
+    box.className=
       "trickSetting";
 
 
-    box.innerHTML = `
+    box.innerHTML=`
 
-      <strong>${i}マス目</strong>
+      <strong>
+        ${i}マス目
+      </strong>
 
-      <select id="trickType${i}">
+      <select
+        id="trickType${i}"
+      >
 
         <option
           value="none"
-          ${trick.type==="none" ? "selected" : ""}
+          ${trick.type==="none"?"selected":""}
         >
           仕掛けなし
         </option>
 
         <option
           value="forward"
-          ${trick.type==="forward" ? "selected" : ""}
+          ${trick.type==="forward"?"selected":""}
         >
           ⬆️ 自分が進む
         </option>
 
         <option
           value="back"
-          ${trick.type==="back" ? "selected" : ""}
+          ${trick.type==="back"?"selected":""}
         >
           ⬇️ 自分が戻る
         </option>
 
         <option
           value="start"
-          ${trick.type==="start" ? "selected" : ""}
+          ${trick.type==="start"?"selected":""}
         >
           🔵 STARTへ戻る
         </option>
 
         <option
           value="goal"
-          ${trick.type==="goal" ? "selected" : ""}
+          ${trick.type==="goal"?"selected":""}
         >
           🏆 GOALへ
         </option>
 
         <option
           value="again"
-          ${trick.type==="again" ? "selected" : ""}
+          ${trick.type==="again"?"selected":""}
         >
           🎲 もう1回
         </option>
 
         <option
           value="display"
-          ${trick.type==="display" ? "selected" : ""}
+          ${trick.type==="display"?"selected":""}
         >
           🎁 お楽しみ袋を表示
         </option>
 
         <option
           value="previousBack"
-          ${trick.type==="previousBack" ? "selected" : ""}
+          ${trick.type==="previousBack"?"selected":""}
         >
           👥 前の県を戻す
         </option>
 
         <option
           value="previousStart"
-          ${trick.type==="previousStart" ? "selected" : ""}
+          ${trick.type==="previousStart"?"selected":""}
         >
           👥 前の県をSTARTへ
         </option>
 
         <option
           value="swapPrevious"
-          ${trick.type==="swapPrevious" ? "selected" : ""}
+          ${trick.type==="swapPrevious"?"selected":""}
         >
           🔄 前の県と入れ替え
         </option>
 
         <option
           value="leaderBack"
-          ${trick.type==="leaderBack" ? "selected" : ""}
+          ${trick.type==="leaderBack"?"selected":""}
         >
           👑 先頭を戻す
         </option>
 
         <option
           value="lastForward"
-          ${trick.type==="lastForward" ? "selected" : ""}
+          ${trick.type==="lastForward"?"selected":""}
         >
           🚀 最後尾を進める
         </option>
 
       </select>
+
 
       <input
         id="trickValue${i}"
@@ -2645,6 +2890,7 @@ function openTrickSettings(){
         value="${Number(trick.value)||0}"
         placeholder="移動マス数"
       >
+
     `;
 
 
@@ -2658,9 +2904,9 @@ function openTrickSettings(){
 }
 
 
-/* =====================================================
+/* =================================================
    仕掛け保存
-===================================================== */
+================================================= */
 
 function saveTrickSettings(){
 
@@ -2679,11 +2925,11 @@ function saveTrickSettings(){
           document.getElementById(
             "trickValue"+i
           ).value
-        ) || 0
+        )||0
       );
 
 
-    tricks[i] = {
+    tricks[i]={
       type:type,
       value:value
     };
@@ -2692,6 +2938,7 @@ function saveTrickSettings(){
 
 
   renderBoard();
+
 
   closeModal("trickModal");
 
@@ -2705,28 +2952,25 @@ function saveTrickSettings(){
 }
 
 
-/* =====================================================
+/* =================================================
    プロジェクト設定
-===================================================== */
+================================================= */
 
 function openProjectSettings(){
 
   document.getElementById(
     "projectTitle"
-  ).value =
-    title;
+  ).value=title;
 
 
   document.getElementById(
     "projectSubtitle"
-  ).value =
-    subtitle;
+  ).value=subtitle;
 
 
   document.getElementById(
     "projectGoal"
-  ).value =
-    GOAL;
+  ).value=GOAL;
 
 
   openModal("projectModal");
@@ -2734,9 +2978,9 @@ function openProjectSettings(){
 }
 
 
-/* =====================================================
+/* =================================================
    プロジェクト保存
-===================================================== */
+================================================= */
 
 function saveProjectSettings(){
 
@@ -2762,10 +3006,12 @@ function saveProjectSettings(){
     );
 
 
-  if(!newGoal ||
-     newGoal<1){
+  if(
+    !newGoal ||
+    newGoal<1
+  ){
 
-    newGoal = 30;
+    newGoal=30;
 
   }
 
@@ -2779,19 +3025,20 @@ function saveProjectSettings(){
 
   document.getElementById(
     "titleText"
-  ).textContent =
-    title;
+  ).textContent=title;
 
 
   document.getElementById(
     "subtitleText"
-  ).textContent =
-    subtitle;
+  ).textContent=subtitle;
 
 
   renderBoard();
 
-  closeModal("projectModal");
+
+  closeModal(
+    "projectModal"
+  );
 
 
   showPopup(
@@ -2803,9 +3050,9 @@ function saveProjectSettings(){
 }
 
 
-/* =====================================================
+/* =================================================
    モーダル
-===================================================== */
+================================================= */
 
 function openModal(id){
 
@@ -2825,9 +3072,9 @@ function closeModal(id){
 }
 
 
-/* =====================================================
+/* =================================================
    ポップアップ
-===================================================== */
+================================================= */
 
 function showPopup(
   icon,
@@ -2837,20 +3084,17 @@ function showPopup(
 
   document.getElementById(
     "popupIcon"
-  ).textContent =
-    icon;
+  ).textContent=icon;
 
 
   document.getElementById(
     "popupTitle"
-  ).textContent =
-    titleText;
+  ).textContent=titleText;
 
 
   document.getElementById(
     "popupText"
-  ).textContent =
-    text;
+  ).textContent=text;
 
 
   document.getElementById(
@@ -2869,33 +3113,35 @@ function closePopup(){
 }
 
 
-/* =====================================================
+/* =================================================
    リセット
-===================================================== */
+================================================= */
 
 function resetGame(){
 
-  const ok =
-    confirm(
+  if(
+    !confirm(
       "すべてのコマをリセットしますか？"
-    );
+    )
+  ){
 
-
-  if(!ok){
     return;
+
   }
 
 
   prefectures.forEach(name=>{
 
-    positions[name] = 0;
+    positions[name]=0;
 
   });
 
 
-  selectedPiece = null;
+  selectedPiece=null;
+
 
   updateSelected();
+
 
   renderBoard();
 
@@ -2909,20 +3155,18 @@ function resetGame(){
 }
 
 
-/* =====================================================
+/* =================================================
    初期化
-===================================================== */
+================================================= */
 
 document.getElementById(
   "titleText"
-).textContent =
-  title;
+).textContent=title;
 
 
 document.getElementById(
   "subtitleText"
-).textContent =
-  subtitle;
+).textContent=subtitle;
 
 
 renderBoard();
