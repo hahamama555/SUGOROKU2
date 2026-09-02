@@ -236,6 +236,8 @@ button,input,select{
   font-weight:900;
   line-height:1.05;
   box-shadow:0 1px 2px rgba(0,0,0,.25);
+  cursor:pointer;
+  touch-action:manipulation;
 }
 
 /* =========================
@@ -1602,6 +1604,24 @@ function renderBoard(){
         piece.style.backgroundColor=
           pieceData.color;
 
+        /*
+          ★追加
+          盤面上のコマを直接タップして
+          操作するコマを選択できるようにする
+        */
+
+        piece.onclick=function(e){
+
+          e.stopPropagation();
+
+          selectPiece(
+            pieceData.name,
+            true
+          );
+
+        };
+
+
         piecesDiv.appendChild(piece);
 
       }
@@ -1749,7 +1769,10 @@ function renderPieceSelectList(){
    コマを選択
 ================================================= */
 
-function selectPiece(name){
+function selectPiece(
+  name,
+  fromBoard=false
+){
 
   if(
     !pieces.some(
@@ -1770,6 +1793,18 @@ function selectPiece(name){
   renderBoard();
 
 
+  /*
+    盤面を直接タップした場合は
+    モーダルを開かず、そのまま選択。
+  */
+
+  if(fromBoard){
+
+    return;
+
+  }
+
+
   closeModal(
     "pieceModal"
   );
@@ -1780,6 +1815,100 @@ function selectPiece(name){
     "コマを選択しました！",
     name+" を操作します。"
   );
+
+}
+
+
+/* =================================================
+   前のコマを取得
+=================================================
+
+「前のコマ」は、
+
+コマ一覧の1つ前ではなく、
+
+現在盤面上で
+自分より後ろにいるコマのうち
+一番近い位置にいるコマ
+
+を指す。
+
+例：
+
+北海道 20マス
+青森県 17マス
+岩手県 15マス
+宮城県 10マス
+
+北海道の前のコマ
+→ 青森県
+
+青森県の前のコマ
+→ 岩手県
+
+岩手県の前のコマ
+→ 宮城県
+================================================= */
+
+function getPreviousPiece(piece){
+
+  const myPosition =
+    positions[piece] || 0;
+
+
+  let previousPiece=null;
+
+  let previousPosition=-1;
+
+
+  pieces.forEach(pieceData=>{
+
+    const name=
+      pieceData.name;
+
+
+    if(
+      name===piece
+    ){
+      return;
+    }
+
+
+    const position=
+      positions[name] || 0;
+
+
+    /*
+      自分より後ろにいるコマだけ。
+
+      position > 0
+      → START前のコマは対象外
+
+      position < myPosition
+      → 自分より後ろ
+
+      position > previousPosition
+      → その中で一番近いコマ
+    */
+
+    if(
+      position>0 &&
+      position<myPosition &&
+      position>previousPosition
+    ){
+
+      previousPosition=
+        position;
+
+      previousPiece=
+        name;
+
+    }
+
+  });
+
+
+  return previousPiece;
 
 }
 
@@ -2873,23 +3002,25 @@ function triggerTrick(
     }
 
 
+    /* =================================================
+       ★修正
+       前のコマ −2
+
+       コマ一覧の1つ前ではなく、
+       現在位置で自分より1つ後ろのコマ
+    ================================================= */
+
     case "previousBack":{
 
-      const index=
-        pieces.findIndex(
-          p=>p.name===piece
+      const previous=
+        getPreviousPiece(
+          piece
         );
 
 
       if(
-        index>0
+        previous
       ){
-
-        const previous=
-          pieces[
-            index-1
-          ].name;
-
 
         const amount=
           Number(
@@ -2923,8 +3054,10 @@ function triggerTrick(
 
         showPopup(
           "👥",
-          "仕掛け発動！",
-          sourceText
+          "前のコマはいません",
+          sourceText+
+          "\n\n"+
+          "自分より後ろにいるコマがいません。"
         );
 
       }
@@ -2935,23 +3068,22 @@ function triggerTrick(
     }
 
 
+    /* =================================================
+       ★修正
+       前のコマ START
+    ================================================= */
+
     case "previousStart":{
 
-      const index=
-        pieces.findIndex(
-          p=>p.name===piece
+      const previous=
+        getPreviousPiece(
+          piece
         );
 
 
       if(
-        index>0
+        previous
       ){
-
-        const previous=
-          pieces[
-            index-1
-          ].name;
-
 
         positions[previous]=1;
 
@@ -2972,8 +3104,10 @@ function triggerTrick(
 
         showPopup(
           "👥",
-          "仕掛け発動！",
-          sourceText
+          "前のコマはいません",
+          sourceText+
+          "\n\n"+
+          "自分より後ろにいるコマがいません。"
         );
 
       }
@@ -2984,23 +3118,22 @@ function triggerTrick(
     }
 
 
+    /* =================================================
+       ★修正
+       前のコマと入替
+    ================================================= */
+
     case "swapPrevious":{
 
-      const index=
-        pieces.findIndex(
-          p=>p.name===piece
+      const previous=
+        getPreviousPiece(
+          piece
         );
 
 
       if(
-        index>0
+        previous
       ){
-
-        const previous=
-          pieces[
-            index-1
-          ].name;
-
 
         const temp=
           positions[piece];
@@ -3031,9 +3164,11 @@ function triggerTrick(
       }else{
 
         showPopup(
-          "🔄",
-          "仕掛け発動！",
-          sourceText
+          "👥",
+          "前のコマはいません",
+          sourceText+
+          "\n\n"+
+          "自分より後ろにいるコマがいません。"
         );
 
       }
